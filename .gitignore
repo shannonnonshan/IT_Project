@@ -1,0 +1,4 @@
+# Mặc định bỏ qua node_modules và các file log
+node_modules/
+*.log
+.env
