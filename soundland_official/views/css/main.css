@@ -1,7 +1,18 @@
+/* Thêm vào tệp CSS của bạn */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+#body-div{
+    padding: 0px;
+    background: linear-gradient(to left, #1A1C3D, #234B9C);
+}
 #nav-left {
     background: linear-gradient(to bottom, #1A1C3D, #234B9C) !important;
-    padding: 20px;
     gap: 10px;
+    width: 100%;
+    
 }
 
 #nav-left h5 {
@@ -16,6 +27,9 @@
     padding: 10px;
     text-decoration: none;
     gap: 20px;
+    width: 100%;
+    text-align: left;
+    padding-left: 20px;
 }
 
 #nav-left a:hover {
@@ -29,10 +43,6 @@
     font-size: 10px;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
-}
 
 #nav-left img {
     border-radius: 50px;
@@ -40,39 +50,42 @@ body {
     height: 50px;
 }
 
-#nav-left #account {
+#nav-left #accountinf {
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#header-right{
+    margin: 25px;
+}
+#account h5,
+#account small {
+    margin: 0px;
+    padding: 0px;
+}
+
+#nav-left #account {
+    display: flex-row;
     justify-content: center;
     align-items: center;
-    padding: 20px;
     padding-top: 0px;
     gap: 10px;
 }
 
 #nav-left #return {
-    display: flex;
-    justify-content: end;
-    color: white;
-}
-
-#body-left {
-    background-color: #1A1C3D;
-}
-
-#body-left #header {
-    display: flex;
-    justify-content: space-between;
+    align-self: flex-end;
     padding: 20px;
+    color: white;
+    cursor: pointer;
 }
 
-#searchSongs {
-    width: 500px;
+#nav-left .nav-link {
+    width: 100%;
+    text-align: left;
+    padding-left: 20px;
 }
 
-#searchform {
-    padding: 0px;
-
-}
 
 #search {
     padding: 0px;
@@ -80,31 +93,25 @@ body {
 }
 
 
-#footer {
-    background-color: #000;
-    /* Đặt màu nền footer là màu đen */
-    border-top: 1px solid #444;
-    /* Đường viền trên có màu xám nhạt */
+#footer-music {
+    height: 100px;
+    background-color: #000000;
     padding: 20px;
+    border-top-left-radius: 80px;
+    border-top-right-radius: 80px;
     /* Padding cho footer */
 }
 
 .album-cover {
-    width: 60px;
-    /* Chiều rộng cho hình ảnh album */
-    height: 60px;
-    /* Chiều cao tự động để giữ tỷ lệ */
-    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
     /* Bo góc cho hình ảnh */
 }
 
 .title-music {
-    display: flex;
-    /* Sử dụng Flexbox cho tiêu đề */
-    flex-direction: column;
-    /* Xếp tiêu đề theo cột */
+    gap: 5px;
     color: #fff;
-    /* Màu chữ trắng cho tiêu đề */
 }
 
 .title-music span {
@@ -149,4 +156,23 @@ body {
 .time-info {
     color: #fff;
     /* Màu chữ trắng cho thời gian */
+}
+
+#card-right {
+    background-color: #1A1C3D;
+}
+
+#music-inf{
+    margin-left: 30px;
+    gap: 20px;
+}
+
+.component-player{
+    width: 50px;
+    height: 50px;
+}
+
+#progress-bar{
+    width: 700px !important; 
+    height: 5px !important;
 }
