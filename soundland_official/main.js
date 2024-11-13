@@ -1,14 +1,17 @@
 import express from 'express';
-import {dirname} from 'path';
-import {fileURLToPath} from 'url';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
 
-const _dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
 const app = express();
+
 app.use(express.urlencoded({
-    extended:true
+    extended: true
 }));
+
+// Thiết lập Handlebars làm view engine
 app.engine('hbs', engine({
     extname: 'hbs',
     defaultLayout: 'main',
@@ -16,7 +19,16 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-app.listen(3000,function()
-{
-    console.log('ecApp us running at http://localhost:3000');
+// Cấu hình đường dẫn cho các file tĩnh (CSS, hình ảnh, v.v.)
+app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
+app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
+
+// Route chính
+app.get('/', function (req, res) {
+    res.render('home');  // render view 'home.hbs'
+});
+
+// Khởi động server
+app.listen(3000, function () {
+    console.log('App is running at http://localhost:3000');
 });
