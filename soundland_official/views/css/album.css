@@ -20,11 +20,18 @@ body {
 
 }
 
-.playlist-cover {
+.playlist-cover-header {
     width: 120px;
     height: 120px;
     border-radius: 10px;
     margin-right: 20px;
+}
+
+.playlist-cover {
+    width: 60px; /* Thay đổi kích thước chiều rộng ảnh */
+    height: auto; /* Tự động điều chỉnh chiều cao dựa trên tỷ lệ */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    margin-right: 10px; /* Khoảng cách giữa ảnh và tên bài hát */
 }
 
 .playlist-info {
