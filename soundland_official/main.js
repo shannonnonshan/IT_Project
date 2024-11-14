@@ -28,6 +28,10 @@ app.get('/', function (req, res) {
     res.render('home');  // render view 'home.hbs'
 });
 
+app.get('/album', function (req, res) {
+    res.render('album');
+});
+
 // Khởi động server
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
