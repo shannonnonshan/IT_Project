@@ -2,8 +2,9 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
-
-const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
+import userProfileService from './service/userProfile.service.js';
+import accountRouter from './routes/account.route.js'
+const _dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -18,21 +19,16 @@ app.engine('hbs', engine({
 }));
 app.set('view engine', 'hbs');
 app.set('views', './views');
+app.use('/static', express.static('static'));
 
-// Cấu hình đường dẫn cho các file tĩnh (CSS, hình ảnh, v.v.)
-app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
-app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
+app.get('/', function(req,res)
+{
+// res.send('hello world');
+    res.render('home');
+});
+app.use('/account',accountRouter)
 
-// Route chính
-app.get('/', function (req, res) {
-    res.render('home');  // render view 'home.hbs'
-});
-app.get('/signup', function (req, res) {
-    res.render('vwSignUp/sign-up', {
-        layout: 'sign-up'  // Sử dụng layout signUpLayout cho trang đăng ký
-    });
-});
-// Khởi động server
-app.listen(3000, function () {
-    console.log('App is running at http://localhost:3000');
+app.listen(3000,function()
+{
+    console.log('ecApp us running at http://localhost:3000');
 });
