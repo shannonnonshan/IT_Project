@@ -1,15 +1,15 @@
 <div class="flex fex-row">
-  <div class="w-[50%] h-[1000px] ml-auto mr-0
+  <div class="w-[50%]
   bg-[linear-gradient(180deg,_#37266A_18%,_#5150B1_47%,_#3A397E_76%)] 
-  rounded-[20px] flex flex-col overflow-y-auto"
-  style=" -ms-overflow-style: none; scrollbar-width: none;">
-  <div class="flex flex-row justify-around mt-[10%] px-5">
+  rounded-[20px] flex flex-col h-[100vh] justify-between">
+  <div class="overflow-y-auto max-h-[75vh] w-full px-2 mt-5" style=" -ms-overflow-style: none; scrollbar-width: none;">
+  <div class="flex flex-row mt-[3%] px-5">
       {{!-- phần 1 --}}
       <div>
         {{!-- ảnh ava --}}
         <img src="/static/imgs/avatar.jpg" alt=""  class='rounded-full object-cover w-[220px] h-[220px]'>
       </div>
-      <div class="flex flex-col justify-center">
+      <div class="flex flex-col justify-center ml-5">
         {{!-- tên, lượng follower --}}
         <span class="block text-[36px] text-white font-normal font-spartan">
             Hồ sơ
@@ -31,7 +31,7 @@
       </div>
   </div>
   <div class="flex flex-col mt-3">
-      <div class="flex flex-row justify-between px-5">  
+      <div class="flex flex-row gap-10 px-5">  
           <div>
             <span class="block text-[20px] text-white  font-bold font-spartan">
             Nghệ sỹ hàng đầu tháng này
@@ -47,10 +47,10 @@
             </button>
           </div>
       </div>
-      <div class="flex flex-row overflow-x-auto mt-8 mx-auto w-[100%] px-2"
+      <div class="flex flex-row overflow-x-auto mt-8 max-w-[100%]"
       style=" -ms-overflow-style: none; scrollbar-width: none; ">
           {{#each this.artists}}
-                <div class="w-[26%] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
+                <div class="w-[200px] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
                   <img class="w-[100px] h-[100px] rounded-full self-center mb-2" src="{{ArtistPic}}" />
                   <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3">{{ArtistName}}</div>
                   <div class="w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">Nghệ sỹ</div>
@@ -74,10 +74,10 @@
             </span>
           </div>
       </div>
-      <div class="flex flex-row overflow-x-auto mt-8 mx-auto w-[100%] px-2"
+      <div class="flex flex-row overflow-x-auto max-w-[100%] mt-8 mb-20"
       style=" -ms-overflow-style: none; scrollbar-width: none; ">
           {{#each this.album}}
-                <div class="w-[26%] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
+                <div class="w-[200px] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
                   <img class="w-[100px] h-[100px] rounded-full self-center mb-2" src="{{AlbumPic}}" />
                   <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3">{{AlbumName}}</div>
                   <div class="w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">Album</div>
@@ -91,10 +91,12 @@
       </div>
   </div>
   </div>
-  <div class="w-[25%] h-[1000px] bg-black rounded-[20px] mx-4">
-    <div id="carouselExampleControlsNoTouching" class="carousel slide mx-2 mt-2 w-[95%] min-h-[700px]" data-bs-touch="false">
+  </div>
+  <div class="w-[30%]  bg-black rounded-[20px] mx-3 px-1" >
+    <div class="overflow-y-auto max-h-[75vh] w-full px-2 mt-3" style=" -ms-overflow-style: none; scrollbar-width: none;">
+    <div id="carouselExampleControlsNoTouching" class="carousel slide mx-auto mt-2 w-[95%] min-h-[700px]" data-bs-touch="false">
     <div class="carousel-inner">
-      <div class="carousel-item active rounded-[20px] bg-violet-300 p-2 h-[650px]">
+      <div class="carousel-item active rounded-[20px] bg-violet-300 p-2 h-[650px] mx-auto">
          <span class="block text-[23px] text-black font-bold font-spartan mx-8 mt-5 pb-5">
             Top Nghệ Sỹ Của Tôi
           </span>
@@ -137,6 +139,7 @@
         <span class="carousel-control-next-icon " aria-hidden="true"></span>
       </button>
       </button>
+    </div>
     </div>
     </div>
   </div>
