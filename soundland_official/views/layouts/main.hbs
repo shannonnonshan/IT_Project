@@ -1,130 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title>Soundland</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="icon" href="/static/imgs/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/main.css">
-
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="/static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" >
+    
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div id="nav-left" class="col-sm-2">
-                <ul class="nav flex-column">
-                    <div>
-                        <div>
-                            <div id="return" class="bi bi-arrow-left nav-link active" aria-current="page" href="#">
+    <div id="body-div" class="container-fluid px-0">
+        <div  class="row no-gutters d-flex flex-row">
+            <div class="col-sm-2 p-0">
+                <div id="nav-left">
+                    <div class="d-flex flex-column align-items-center" style="padding:0px;">
+                        <i id="return" class="bi bi-arrow-left" href="#"></i>
+                        <div id="accountinf" class="d-flex align-items-center mt-3">
+                            <img src="static/imgs/images/apt nền.png" alt="Profile Picture" class="img-fluid rounded-circle"
+                                style="width: 50px; height: 50px; margin-right: 10px;">
+                            <div id="account" class="text-left">
+                                <h5 class="mb-0">Vy Thanh</h5>
+                                <small id="fontaccount" class="text-muted">Logged in 6 days ago</small>
                             </div>
                         </div>
-                        <div id="account">
-                            <div>
-                                <img src="../images/apt nền.png" alt="">
-                            </div>
-                            <div>
-                                <h5>vy thanh</h5>
-                                <div id="fontaccount">Loggin lated 6 days</div>
-                            </div>
-                        </div>
-
-
                     </div>
-                    <div>
-                        <li class="nav-item">
-                            <a class="bi bi-exclude nav-link active" aria-current="page" href="#">Explore</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="bi bi-hearts nav-link active" aria-current="page" href="#">Love</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="bi bi-calendar-event nav-link active" aria-current="page" href="#">Events</a>
-                        </li>
+                    <div class="card-body">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a class="bi bi-exclude nav-link" href="#">Explore</a></li>
+                            <li class="nav-item"><a class="bi bi-hearts nav-link" href="#">Love</a></li>
+                            <li class="nav-item"><a class="bi bi-calendar-event nav-link" href="#">Events</a></li>
+                            <h5>Music</h5>
+                            <li class="nav-item"><a class="bi bi-file-earmark-music-fill nav-link" href="#">Songs</a>
+                            </li>
+                            <li class="nav-item"><a class="bi bi-people-fill nav-link" href="#">Artists</a></li>
+                            <li class="nav-item"><a class="bi bi-vinyl nav-link" href="#">Albums</a></li>
+                            <li class="nav-item"><a class="bi bi-cloud-arrow-up nav-link" href="#">Upload</a></li>
+                            <h5>Your Playlists</h5>
+                            <li class="nav-item"><a class="nav-link" href="#">Love</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Favorites</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Sad Music</a></li>
+                        </ul>
                     </div>
-                    <div>
-                        <h5>Music</h5>
-                        <li class="nav-item">
-                            <a class="bi bi-file-earmark-music-fill nav-link active" aria-current="page"
-                                href="#">Songs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="bi bi-people-fill nav-link active" aria-current="page" href="#">Artists</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="bi bi-vinyl nav-link active" aria-current="page" href="#">Albums</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="bi bi-cloud-arrow-up nav-link active" aria-current="page" href="#">Upload</a>
-                        </li>
-                    </div>
-                    <div>
-                        <h5>Your Playlists</h5>
-                        <li class="nav-item">
-                            <a class="nav-link active">Love</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active">Favorites</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active">Sad Music</a>
-                        </li>
-                    </div>
-                </ul>
+                </div>
             </div>
-            <div id="body-left" class="col-sm-10">
-                <div id="header">
-                    <div id="search" class="navbar bg-light">
-                        <form id="searchform" class="container-fluid">
-                            <div class="input-group">
-                                <span class="bi bi-search input-group-text" id="basic-addon1"></span>
-                                <input id="searchSongs" type="text" class="form-control" placeholder="Search"
-                                    aria-label="Search" aria-describedby="basic-addon1">
-                            </div>
+
+            <!-- Main Content -->
+            <div class="col-sm-10">
+                <div id="card-right" class="card h-100 ">
+                    <div id="header-right" class="d-flex justify-content-between align-items-center">
+                        <form id="searchform" class="input-group w-75">
+                            <span class="bi bi-search input-group-text" id="basic-addon1"></span>
+                            <input id="search-bar" type="text" class="form-control" placeholder="Search"
+                                aria-label="Search" aria-describedby="basic-addon1">
                         </form>
+                        <button type="button" class="btn btn-outline-warning">
+                            <i class="bi bi-bell-fill"></i>
+                            Read More
+                        </button>
+                        
                     </div>
-                    <div>
-                        <button type="button" class="btn btn-outline-warning">Readmore</button>
+                    <div class="card-body">
+                        {{{body}}}
                     </div>
-
-                </div>
-
-                {{!-- Navigator --}}
-                <div id=" body">
-                    {{{body}}}
                 </div>
             </div>
         </div>
-    </div>
-    <div id="footer" class="d-flex align-items-center p-3 bg-dark text-light">
-        <img src="../images/apt nền.png" alt="Album Cover" class="album-cover me-3">
-        <div class="title-music me-3">
-            <span class="font-weight-bold">APT</span>
-            <span class="fontaccount">Rosé, Bruno Mars</span>
-        </div>
-        <div class="player-controls d-flex align-items-center">
-            <button class="bi bi-skip-start-fill btn btn-light"></button>
-            <button class="bi bi-play-circle-fill btn btn-light"></button>
-            <button class="bi bi-skip-end-fill btn btn-light"></button>
-            <span class="time-info">1:43</span>
-            <div class="progress mx-2" role="progressbar" aria-label="Basic example" aria-valuenow="100"
-                aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar" style="width: 100%"></div>
+
+        <!-- Footer Music Player -->
+        <div id="footer-music" class="d-flex align-items-center p-3 text-light">
+            <div id="music-inf" class="d-flex flex-row align-items-center"> 
+                <img src="static/imgs/images/apt nền.png" alt="Album Cover" class="album-cover me-3">
+                <div class="title-music me-3">
+                    <span class="font-weight-bold">APT</span><br>
+                    <small class="fontaccount">Rosé, Bruno Mars</small>
+                </div>
             </div>
-            <span class="time-info">1:43</span>
-            <button class="bi bi-volume-up-fill btn btn-light"></button>
-            <button class="bi bi-shuffle btn btn-light"></button>
-            <button class="bi bi-heart btn btn-light"></button>
-            <button class="bi bi-list btn btn-light"></button>
+            
+            <div class="player-controls d-flex align-items-center ml-auto">
+                <button class="bi bi-skip-start-fill component-player"></button>
+                <button class="bi bi-play-circle-fill component-player"></button>
+                <button class="bi bi-skip-end-fill component-player"></button>
+                <span class="time-info mx-2">1:43</span>
+                <div id="progress-bar" class="progress mx-2" style="width: 200px; max-width:50vh">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+                <span class="time-info mx-2">3:25</span>
+                <button class="bi bi-volume-up-fill component-player"></button>
+                <button class="bi bi-shuffle component-player"></button>
+                <button class="bi bi-heart component-player"></button>
+                <button class="bi bi-list component-player"></button>
+            </div>
         </div>
     </div>
 
-
-
-
-
+    <!-- Script dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
