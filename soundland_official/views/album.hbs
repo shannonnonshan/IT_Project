@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Albums</title>
     <link rel="stylesheet" href="../css/album.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <style>
+        /* CSS mới */
+        .playlist-cover {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="album-header">
@@ -25,157 +33,54 @@
                     <th>#</th>
                     <th>Title</th>
                     <th>Artist</th>
-                    <th>Date added</th>
-                    <th><i class="fas fa-clock"></i></th> <!-- Biểu tượng đồng hồ -->
+                    <th>Date Added</th>
+                    <th><i class="fas fa-clock"></i></th>
                 </tr>
             </thead>
-
-            <tbody>
-            <!-- Sample rows -->
-                <tr>
-                    <td>1</td>
-                    <td>
-                        <img src="./images/apt nền.png" alt="Playlist cover" class="playlist-cover">
-                        Disease
-                    </td>
-                    <td>Rosé, Bruno Mars</td>
-                    <td>6 days ago</td>
-                    <td>3:50</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>
-                        <img src="./images/Buriki_no_Dance _+DEVILA_REMIX.jpg" alt="Playlist cover" class="playlist-cover">
-                        Buriki no Dance +DEVILA REMIX
-                    </td>
-                    <td>AnotherNicoUploader</td>
-                    <td>6 years ago</td>
-                    <td>3:22</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>
-                        <img src="./images/Bad_Never_Looked_So_Good.jpg" alt="Playlist cover" class="playlist-cover">
-                        Bad Never Looked So Good
-                    </td>
-                    <td>PattyCake Productions</td>
-                    <td>5 years ago</td>
-                    <td>4:33</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>
-                        <img src="./images/Alien_Alien.jpg" alt="Playlist cover" class="playlist-cover">
-                        Alien Alien
-                    </td>
-                    <td>AnotherNicoUploader</td>
-                    <td>8 years ago</td>
-                    <td>3:02</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>
-                        <img src="./images/클락션_(Klaxon).jpg" alt="Playlist cover" class="playlist-cover">
-                        클락션 (Klaxon)
-                    </td>
-                    <td>(G)-IDLE</td>
-                    <td>3 months ago</td>
-                    <td>3:06</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>
-                        <img src="./images/Outer_Science.jpg" alt="Playlist cover" class="playlist-cover">
-                        Outer Science
-                    </td>
-                    <td>AnotherNicoUploader</td>
-                    <td>10 years ago</td>
-                    <td>3:36</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>
-                        <img src="./images/Blinding_Lights.jpg" alt="Playlist cover" class="playlist-cover">
-                        Blinding Lights
-                    </td>
-                    <td>The Weeknd</td>
-                    <td>2 years ago</td>
-                    <td>3:20</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>
-                        <img src="./images/Levitating.jpg" alt="Playlist cover" class="playlist-cover">
-                        Levitating
-                    </td>
-                    <td>Dua Lipa ft. DaBaby</td>
-                    <td>1 year ago</td>
-                    <td>3:23</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>
-                        <img src="./images/Good_4_U.jpg" alt="Playlist cover" class="playlist-cover">
-                        Good 4 U
-                    </td>
-                    <td>Olivia Rodrigo</td>
-                    <td>1 year ago</td>
-                    <td>2:58</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>
-                        <img src="./images/Peaches.jpg" alt="Playlist cover" class="playlist-cover">
-                        Peaches
-                    </td>
-                    <td>Justin Bieber ft. Daniel Caesar, Giveon</td>
-                    <td>2 years ago</td>
-                    <td>3:18</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>
-                        <img src="./images/Watermelon_Sugar.jpg" alt="Playlist cover" class="playlist-cover">
-                        Watermelon Sugar
-                    </td>
-                    <td>Harry Styles</td>
-                    <td>2 years ago</td>
-                    <td>2:54</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>
-                        <img src="./images/Save_Your_Tears.jpg" alt="Playlist cover" class="playlist-cover">
-                        Save Your Tears
-                    </td>
-                    <td>The Weeknd</td>
-                    <td>2 years ago</td>
-                    <td>3:35</td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>
-                        <img src="./images/Stay.jpg" alt="Playlist cover" class="playlist-cover">
-                        Stay
-                    </td>
-                    <td>Kid LAROI, Justin Bieber</td>
-                    <td>1 year ago</td>
-                    <td>2:21</td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>
-                        <img src="./images/As_It_Was.jpg" alt="Playlist cover" class="playlist-cover">
-                        As It Was
-                    </td>
-                    <td>Harry Styles</td>
-                    <td>6 months ago</td>
-                    <td>2:47</td>
-                </tr>
-            <!-- Repeat rows as needed -->
+            <tbody id="song-list">
+                <!-- Fake Data will be populated here -->
             </tbody>
         </table>
     </div>
+
+    <script>
+        const fakeData = [
+            { id: 1, title: 'Disease', artist: 'Rosé, Bruno Mars', dateAdded: '6 days ago', duration: '3:50', cover: './images/apt nền.png' },
+            { id: 2, title: 'Buriki no Dance +DEVILA REMIX', artist: 'AnotherNicoUploader', dateAdded: '6 years ago', duration: '3:22', cover: './images/Buriki_no_Dance _+DEVILA_REMIX.jpg' },
+            { id: 3, title: 'Bad Never Looked So Good', artist: 'PattyCake Productions', dateAdded: '5 years ago', duration: '4:33', cover: './images/Bad_Never_Looked_So_Good.jpg' },
+            { id: 4, title: 'Alien Alien', artist: 'AnotherNicoUploader', dateAdded: '8 years ago', duration: '3:02', cover: './images/Alien_Alien.jpg' },
+            { id: 5, title: '클락션 (Klaxon)', artist: '(G)-IDLE', dateAdded: '3 months ago', duration: '3:06', cover: './images/클락션_(Klaxon).jpg' },
+            { id: 6, title: 'Outer Science', artist: 'AnotherNicoUploader', dateAdded: '10 years ago', duration: '3:36', cover: './images/Outer_Science.jpg' },
+            { id: 7, title: 'Blinding Lights', artist: 'The Weeknd', dateAdded: '2 years ago', duration: '3:20', cover: './images/Blinding_Lights.jpg' },
+            { id: 8, title: 'Levitating', artist: 'Dua Lipa ft. DaBaby', dateAdded: '1 year ago', duration: '3:23', cover: './images/Levitating.jpg' },
+            { id: 9, title: 'Good 4 U', artist: 'Olivia Rodrigo', dateAdded: '1 year ago', duration: '2:58', cover: './images/Good_4_U.jpg' },
+            { id: 10, title: 'Peaches', artist: 'Justin Bieber ft. Daniel Caesar, Giveon', dateAdded: '2 years ago', duration: '3:18', cover: './images/Peaches.jpg' },
+            { id: 11, title: 'Watermelon Sugar', artist: 'Harry Styles', dateAdded: '2 years ago', duration: '2:54', cover: './images/Watermelon_Sugar.jpg' },
+            { id: 12, title: 'Save Your Tears', artist: 'The Weeknd', dateAdded: '2 years ago', duration: '3:35', cover: './images/Save_Your_Tears.jpg' },
+            { id: 13, title: 'Stay', artist: 'Kid LAROI, Justin Bieber', dateAdded: '1 year ago', duration: '2:21', cover: './images/Stay.jpg' },
+            { id: 14, title: 'As It Was', artist: 'Harry Styles', dateAdded: '6 months ago', duration: '2:47', cover: './images/As_It_Was.jpg' }
+        ];
+
+        function populateTable() {
+            const songList = document.getElementById('song-list');
+            fakeData.forEach(song => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${song.id}</td>
+                    <td>
+                        <img src="${song.cover}" alt="${song.title} Cover" class="playlist-cover">
+                        ${song.title}
+                    </td>
+                    <td>${song.artist}</td>
+                    <td>${song.dateAdded}</td>
+                    <td>${song.duration}</td>
+                `;
+                songList.appendChild(row);
+            });
+        }
+
+        populateTable();
+    </script>
+
 </body>
 </html>
-

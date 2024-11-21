@@ -247,3 +247,11 @@ body {
     align-items: center;
     gap: 10px;
 }
+
+/* Đảm bảo các ảnh bìa có kích thước đồng nhất */
+.playlist-cover {
+    width: 50px; /* Đặt chiều rộng cố định */
+    height: 50px; /* Đặt chiều cao cố định */
+    object-fit: cover; /* Giữ tỷ lệ ảnh và cắt bớt phần không cần thiết nếu cần */
+    border-radius: 5px; /* Tùy chọn: làm tròn góc ảnh */
+}
