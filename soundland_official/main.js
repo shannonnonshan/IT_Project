@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
 import hbs_sections from 'express-handlebars-sections';
 import accountRouter from './routes/account.route.js'
+import albumServiceRank from './service/albumrank.service.js';  // Using default import
+import albumSongService from './service/album-song.service.js';
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
 const app = express();
