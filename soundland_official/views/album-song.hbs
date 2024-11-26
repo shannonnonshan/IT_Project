@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{album.title}}</title>
+    <link rel="stylesheet" href="/css/album.css">
+</head>
+<body>
+    <main>
+        <!-- Album Details -->
+        <section class="album-details">
+            <img src="{{album.img}}" alt="{{album.title}} by {{album.artist}}" class="album-cover">
+            <div class="album-info">
+                <h1>{{album.title}}</h1>
+                <p>Artist: {{album.artist}}</p>
+                <p>Genre: {{album.details.genre}}</p>
+                <p>Release Date: {{album.details.releaseDate}}</p>
+            </div>
+        </section>
+
+        <!-- Track List -->
+        <section class="track-list">
+            <h2>Tracks</h2>
+            <ul>
+                {{#each album.details.tracks}}
+                <li>
+                    <img src="{{this.cover}}" alt="{{this.title}}" class="track-cover">
+                    <div class="track-info">
+                        <h3>{{this.title}}</h3>
+                        <p>Artist: {{this.artist}}</p>
+                        <p>Duration: {{this.duration}}</p>
+                        <p>Date Added: {{this.dateAdded}}</p>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
+
