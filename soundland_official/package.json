@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "soundland_official",
+  "name": "ecapp",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -12,12 +12,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
+    "bcryptjs": "^2.4.3",
     "express": "^4.21.1",
     "express-handlebars": "^8.0.1",
-    "handlebars": "^4.7.8",
+    "express-handlebars-sections": "^1.0.1",
     "knex": "^3.1.0",
-    "mysql2": "^3.11.3"
+    "moment": "^2.30.1",
+    "mysql2": "^3.11.3",
+    "numeral": "^2.0.6"
   }
 }

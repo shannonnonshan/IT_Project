@@ -2,7 +2,7 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
-
+import { accountRouter} from './routes/account.route.js'
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
 const app = express();
@@ -27,11 +27,9 @@ app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
 app.get('/', function (req, res) {
     res.render('home');  // render view 'home.hbs'
 });
-app.get('/signup', function (req, res) {
-    res.render('vwSignUp/sign-up', {
-        layout: 'sign-up'  // Sử dụng layout signUpLayout cho trang đăng ký
-    });
-});
+
+// Route Account:
+app.use('/account', accountRouter);
 // Khởi động server
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
