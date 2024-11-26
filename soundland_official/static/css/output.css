@@ -554,6 +554,10 @@ video {
   display: none;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -721,6 +725,7 @@ video {
 .w-\[60\%\] {
   width: 60%;
 }
+
 
 .max-w-\[100\%\] {
   max-width: 100%;
