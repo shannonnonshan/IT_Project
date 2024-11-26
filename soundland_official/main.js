@@ -2,82 +2,63 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
-import albumServiceRank from './service/albumrank.service.js';  // Using default import
-import albumSongService from './service/album-song.service.js';
+import albumServiceRank from './service/albumrank.service.js'; // Import album service
 
-const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
+const __dirname = dirname(fileURLToPath(import.meta.url)); // Get __dirname with ES module
 
 const app = express();
 
-app.use(express.urlencoded({
-    extended: true
-}));
+// Middleware to parse URL-encoded data
+app.use(express.urlencoded({ extended: true }));
 
-// Thiết lập Handlebars làm view engine
-app.engine('hbs', engine({
-    extname: 'hbs',
-    defaultLayout: 'main',
-}));
+// Set up Handlebars as the view engine
+app.engine(
+    'hbs',
+    engine({
+        extname: '.hbs', // Use .hbs as the extension
+        defaultLayout: 'main', // Main layout
+        layoutsDir: path.join(__dirname, 'views', 'layouts'), // Layouts directory
+    })
+);
 app.set('view engine', 'hbs');
-app.set('views', './views');
+app.set('views', path.join(__dirname, 'views'));
 
-// Cấu hình đường dẫn cho các file tĩnh (CSS, hình ảnh, v.v.)
+// Static files middleware
 app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
 app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
 
-// Route chính
-app.get('/', function (req, res) {
-    res.render('home');  // render view 'home.hbs'
+// Route for the home page
+app.get('/', (req, res) => {
+    res.render('home'); // Render 'home.hbs'
 });
 
 // Route for album ranking page
-app.get('/albumrank', function (req, res) {
+app.get('/albumrank', (req, res) => {
     // Get album data for this month and last month
     const albumsThisMonth = albumServiceRank.albumThisMonth();
     const albumsLastMonth = albumServiceRank.albumLastMonth();
 
-    res.render('albumrank', {
-        albumsThisMonth,
-        albumsLastMonth
-    });
+    // Render the 'albumrank' view with album data
+    res.render('albumrank', { albumsThisMonth, albumsLastMonth });
 });
 
-// Route for individual album details page
-app.get('/album-song/:title', function (req, res) {
-    const albumTitle = req.params.title;
+// Route for album details (tracks)
+app.get('/album-song/:title', (req, res) => {
+    const { title } = req.params; // Get album title from the URL parameter
+    const allAlbums = [...albumServiceRank.albumThisMonth(), ...albumServiceRank.albumLastMonth()]; // Combine all albums
 
-    // Find album in this month's or last month's list
-    const album = albumServiceRank.albumThisMonth().find(a => a.title === albumTitle) ||
-                  albumServiceRank.albumLastMonth().find(a => a.title === albumTitle);
+    // Find the album that matches the title
+    const album = allAlbums.find(album => album.title === title);
 
     if (album) {
-        // Add default description if not present
-        if (!album.description) {
-            album.description = "Một album đặc biệt với những bài hát được chọn lọc kỹ lưỡng";
-        }
-
-        // Filter songs that belong to the album
-        const songs = albumSongService.albumList().filter(song => song.title === albumTitle);
-
-        res.render('album-song', { album, songs });
+        res.render('album-song', { album }); // Render 'album-song.hbs' with album data
     } else {
-        res.status(404).send('Album not found');
+        res.status(404).send('Album not found'); // Show 404 error if album not found
     }
 });
 
-// Route for viewing all songs (optional page to list all songs)
-app.get('/album-song', function (req, res) {
-    const albums = [
-        ...albumServiceRank.albumThisMonth(),
-        ...albumServiceRank.albumLastMonth()
-    ];
-
-    const allSongs = albums.flatMap(album => album.details.tracks); // Merge all songs from albums
-
-    res.render('album-song', { songs: allSongs }); // Render page with all songs
-});
-
-// Khởi động server
-app.listen(3000, function () {
-    console.log('App is running at http://localhost:3000');
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`App is running at http://localhost:${PORT}`);
 });

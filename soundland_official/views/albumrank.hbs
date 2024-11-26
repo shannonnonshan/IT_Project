@@ -3,53 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Album Rank</title>
-    <link rel="stylesheet" href="/css/albumrank.css">
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600&display=swap" rel="stylesheet"> <!-- Link phông chữ League Spartan -->
+    <title>{{album.title}}</title>
+    <link rel="stylesheet" href="/css/album.css">
 </head>
 <body>
     <main>
-        <section class="album-list">
-            <h2>Album hàng đầu tháng này</h2>
-            <div class="album-grid" id="top-month-albums">
-                {{#each albumsThisMonth}}
-                    <div class="album-item">
-                        <a href="/album-song/{{this.title}}">
-                            <img src="{{this.img}}" alt="{{this.title}} by {{this.artist}}" class="album-cover">
-                        </a>
-                        <div class="album-info">
-                            <h3>{{this.title}}</h3>
-                            <p>{{this.artist}}</p>
-                            {{#if this.details}}
-                                <p>Genre: {{this.details.genre}}</p>
-                                <p>Release Date: {{this.details.releaseDate}}</p>
-                            {{/if}}
-                        </div>
-                    </div>
-                {{/each}}
+        <!-- Album Details Section -->
+        <div class="album-container">
+            <div class="album-header">
+                <!-- Album Cover -->
+                <img src="{{album.img}}" alt="{{album.title}} by {{album.artist}}" class="album-cover">
+                <div class="album-info">
+                    <p class="playlist-type">Public Playlist</p>
+                    <h1 class="album-title">{{album.title}}</h1>
+                    <p class="album-description">{{album.details.description}}</p>
+                </div>
             </div>
-        </section>
 
-        <section class="album-list">
-            <h2>Album hàng đầu tháng trước</h2>
-            <div class="album-grid" id="top-last-month-albums">
-                {{#each albumsLastMonth}}
-                    <div class="album-item">
-                        <a href="/album-song/{{this.title}}">
-                            <img src="{{this.img}}" alt="{{this.title}} by {{this.artist}}" class="album-cover">
-                        </a>
-                        <div class="album-info">
-                            <h3>{{this.title}}</h3>
-                            <p>{{this.artist}}</p>
-                            {{#if this.details}}
-                                <p>Genre: {{this.details.genre}}</p>
-                                <p>Release Date: {{this.details.releaseDate}}</p>
-                            {{/if}}
+            <!-- Track List Section -->
+            <div class="song-list">
+                <div class="song-header">
+                    <span>#</span>
+                    <span>Title</span>
+                    <span>Artist</span>
+                    <span>Album</span>
+                    <span>Date Added</span>
+                    <span>Duration</span>
+                </div>
+                <ul>
+                    {{#each album.details.tracks}}
+                    <li class="song-item">
+                        <span class="song-index">{{@index}}</span>
+                        <img src="{{this.cover}}" alt="{{this.title}}" class="song-cover">
+                        <div class="song-info">
+                            <p class="song-title">{{this.title}}</p>
+                            <p class="song-artist">{{this.artist}}</p>
                         </div>
-                    </div>
-                {{/each}}
+                        <span class="song-album">{{this.album}}</span>
+                        <span class="song-date-added">{{this.dateAdded}}</span>
+                        <span class="song-duration">{{this.duration}}</span>
+                    </li>
+                    {{/each}}
+                </ul>
             </div>
-        </section>
+        </div>
     </main>
 </body>
 </html>
