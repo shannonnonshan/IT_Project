@@ -207,3 +207,7 @@ html,body {
     transition: width 0.5s ease; /* Hiệu ứng mượt khi thanh di chuyển */
 }
 
+.card-body{
+    width: 100%;
+    margin: auto;
+}

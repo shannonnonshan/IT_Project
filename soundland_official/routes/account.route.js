@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
 import accountService from '../services/account.service.js';
+import userProfileService from '../services/userProfile.service.js';
 
 const router = express.Router();
 router.get('/signup', function (req, res) {
@@ -16,10 +17,23 @@ router.get('/signin', function (req, res) {
     });
 });
 
-router.get('/profile', function(req, res){
-    res.render('vwAccount/userProfile', {
-    })
-})
+router.get('/profile', async function(req, res){
+    
+// res.send('hello world');
+    const list = await userProfileService.findAll();
+    const Artistlist = await userProfileService.Artist();
+    const Albumlist = await userProfileService.Album();
+    const UserDashboardlist = await userProfileService.Dashboard();
+    res.render('vwAccount/userProfile', 
+        {
+            list:list,
+            artists:Artistlist,
+            album: Albumlist,
+            userdashboard: UserDashboardlist,
+        });
+    
+});
+
 router.post('/signup', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
