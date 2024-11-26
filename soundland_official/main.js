@@ -18,14 +18,12 @@ app.engine('hbs', engine({
 }));
 app.set('view engine', 'hbs');
 app.set('views', './views');
+app.use('/static', express.static('static'));
 
-// Cấu hình đường dẫn cho các file tĩnh (CSS, hình ảnh, v.v.)
-app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
-app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
-
-// Route chính
-app.get('/', function (req, res) {
-    res.render('home');  // render view 'home.hbs'
+app.get('/', function(req,res)
+{
+// res.send('hello world');
+    res.render('home');
 });
 
 // Route Account:
