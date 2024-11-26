@@ -5,7 +5,6 @@ import { engine } from 'express-handlebars';
 import accountRouter from './routes/account.route.js'
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
-
 const app = express();
 
 app.use(express.urlencoded({
@@ -26,7 +25,8 @@ app.get('/', function(req,res)
 // res.send('hello world');
     res.render('home');
 });
-
+app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
+app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
 
 // Route Account:
 app.use('/account', accountRouter);

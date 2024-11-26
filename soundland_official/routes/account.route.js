@@ -1,4 +1,3 @@
-
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
@@ -6,10 +5,21 @@ import accountService from '../services/account.service.js';
 
 const router = express.Router();
 router.get('/signup', function (req, res) {
-    res.render('vwSignUp/sign-up', {
+    res.render('vwAccount/sign-up', {
         layout: 'sign-up'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
 });
+
+router.get('/signin', function (req, res) {
+    res.render('vwAccount/sign-in', {
+        layout: 'sign-in'  // Sử dụng layout signUpLayout cho trang đăng ký
+    });
+});
+
+router.get('/profile', function(req, res){
+    res.render('vwAccount/userProfile', {
+    })
+})
 router.post('/signup', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
@@ -25,6 +35,7 @@ router.post('/signup', async function (req, res) {
     const ret = await accountService.add(entity);
     res.render('vwAccount/signup');
 })
+
 router.get('/is-available', async function (req, res) {
     const username = req.query.username;
     const user = await accountService.findByUsername(username);
@@ -53,4 +64,6 @@ router.post('/login', async function (req, res) {
      }
 })
 
+//req.session.isAuthenticated = true
+//req.sessoion.authUSer = user;
 export default router;
