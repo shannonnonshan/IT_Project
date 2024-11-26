@@ -2,7 +2,7 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
-import { accountRouter} from './routes/account.route.js'
+import accountRouter from './routes/account.route.js'
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
 const app = express();
