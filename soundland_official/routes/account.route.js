@@ -5,15 +5,15 @@ import accountService from '../services/account.service.js';
 import userProfileService from '../services/userProfile.service.js';
 
 const router = express.Router();
-router.get('/signup', function (req, res) {
-    res.render('vwAccount/sign-up', {
-        layout: 'sign-up'  // Sử dụng layout signUpLayout cho trang đăng ký
+router.get('/signin', function (req, res) {
+    res.render('vwAccount/sign-in', {
+        layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
 });
 
-router.get('/signin', function (req, res) {
-    res.render('vwAccount/sign-in', {
-        layout: 'sign-in'  // Sử dụng layout signUpLayout cho trang đăng ký
+router.get('/signup', function (req, res) {
+    res.render('vwAccount/sign-up', {
+        layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
 });
 

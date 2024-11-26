@@ -586,6 +586,10 @@ video {
   margin-bottom: 5rem;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
 .me-3 {
   margin-inline-end: 0.75rem;
 }
