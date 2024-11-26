@@ -2,9 +2,9 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
-import userProfileService from './service/userProfile.service.js';
 import accountRouter from './routes/account.route.js'
-const _dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
+
 
 const app = express();
 
@@ -26,9 +26,11 @@ app.get('/', function(req,res)
 // res.send('hello world');
     res.render('home');
 });
-app.use('/account',accountRouter)
 
-app.listen(3000,function()
-{
-    console.log('ecApp us running at http://localhost:3000');
+
+// Route Account:
+app.use('/account', accountRouter);
+// Khởi động server
+app.listen(3000, function () {
+    console.log('App is running at http://localhost:3000');
 });
