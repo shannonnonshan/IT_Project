@@ -5,7 +5,7 @@ import accountService from '../services/account.service.js';
 
 const router = express.Router();
 router.get('/signup', function (req, res) {
-    res.render('vwAccouunt/sign-up', {
+    res.render('vwAccount/sign-up', {
         layout: 'sign-up'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
 });

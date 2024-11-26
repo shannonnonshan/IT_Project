@@ -25,6 +25,8 @@ app.get('/', function(req,res)
 // res.send('hello world');
     res.render('home');
 });
+app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
+app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
 
 // Route Account:
 app.use('/account', accountRouter);
