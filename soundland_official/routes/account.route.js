@@ -1,3 +1,4 @@
+
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
@@ -52,6 +53,4 @@ router.post('/login', async function (req, res) {
      }
 })
 
-//req.session.isAuthenticated = true
-//req.sessoion.authUSer = user;
 export default router;
