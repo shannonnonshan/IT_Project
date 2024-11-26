@@ -2,7 +2,7 @@
     <div id="signup-card"class="card-body">
         <div class="card-header d-flex flex-column justify-content-center align-items-center">
             <img id="logo-img" src="../images/universe.jpg" alt="" class="img-fluid rounded-circle">
-            <h1>Đăng nhập vào SoundLand</h1>
+            <h1>Đăng ký vào SoundLand</h1>
         </div>
         <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
             <button type="button" class="btn btn btn-light btn-connect">
@@ -16,25 +16,24 @@
             </button>
             <button type="button" class="btn btn-light btn-connect">Đăng nhập với số điện thoại</button>
             <hr id="line">
-            <div class="mb-2">
-                <h6 class="form-label">Email hoặc tên người dùng</h6>
-                <input type="text" class="form-control btn-input" id="txtEmail" placeholder="Nhập Email của bạn">
+            <div class="mb-2 form-group">
+                <label class="form-label"for="txtUsername">Your Email or UserName</label>
+                <input type="text" name="" id="txtUsername" class="form-control txt-input" placeholder="" aria-describedby="helpId">
             </div>
-            <div class="mb-2">
-                <h6 class="form-label">Mật Khẩu</h6>
-                <input type="password" class="form-control btn-input" id="txtPassword" placeholder="Nhập mật khẩu của bạn">
+            <div class="mb-2 form-group">
+                <label class="form-label"for="txtPassword">Password</label>
+                <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input" placeholder="" aria-describedby="helpId">
             </div>
-            <button type="button" class="btn btn-info btn-connect">Đăng nhập</button>
+            <div class="mb-2 form-group">
+                <label class="form-label"for="txtPassword">Confirm Password</label>
+                <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input" placeholder="" aria-describedby="helpId">
+            </div>
+            <button type="submit" class="btn btn-info btn-connect">Sign Up</button>
+            <div class="d-flex justify-content-center align-items-center gap-10">
+                <label>Bạn đã có tài khoản?</label>
+                <label><a href="/account/signin" class="link-underline-dark link-pw">Đăng nhập</a></label>
+            </div>
             
-            <h6><a href="#" class="mt-5 link-underline-dark link-pw">Bạn quên mật khẩu?</a></h6>
-            <div class="d-flex justify-content-center align-items-center">
-                <h6>Bạn chưa có tài khoản?</h6>
-                <h6><a href="#" class="link-underline-dark link-pw">Đăng kí SoundLand</a></h6>
-            </div>
-            
-        </div>
-        <div class="card-footer text-muted">
-            Footer
         </div>
     </div>
 </div>

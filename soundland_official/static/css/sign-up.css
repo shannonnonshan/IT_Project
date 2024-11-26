@@ -33,6 +33,7 @@ body {
     width: 400px;
     height: 50px;
     border-radius: 50px;
+    font-weight: 500;
 }
 
 #line {
@@ -41,9 +42,10 @@ body {
     margin: 20px auto;
 }
 
-.btn-input {
+.txt-input {
     width: 400px;
-    height: 50px;
+    height: 45px;
+    border-radius: 20px;
 }
 
 .link-pw {
