@@ -1,9 +1,6 @@
-export default
-{
-    AlbumList()
-    {
-        return
-        [
+export default {
+    albumList() {
+        return [
             { id: 1, title: 'Disease', artist: 'Rosé, Bruno Mars', dateAdded: '6 days ago', duration: '3:50', cover: './images/apt nền.png' },
             { id: 2, title: 'Buriki no Dance +DEVILA REMIX', artist: 'AnotherNicoUploader', dateAdded: '6 years ago', duration: '3:22', cover: './images/Buriki_no_Dance _+DEVILA_REMIX.jpg' },
             { id: 3, title: 'Bad Never Looked So Good', artist: 'PattyCake Productions', dateAdded: '5 years ago', duration: '4:33', cover: './images/Bad_Never_Looked_So_Good.jpg' },
@@ -19,5 +16,5 @@ export default
             { id: 13, title: 'Stay', artist: 'Kid LAROI, Justin Bieber', dateAdded: '1 year ago', duration: '2:21', cover: './images/Stay.jpg' },
             { id: 14, title: 'As It Was', artist: 'Harry Styles', dateAdded: '6 months ago', duration: '2:47', cover: './images/As_It_Was.jpg' }
         ];
-    }
+    },
 }

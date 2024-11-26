@@ -2,6 +2,8 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { engine } from 'express-handlebars';
+import albumServiceRank from './service/albumrank.service.js';  // Using default import
+import albumSongService from './service/album-song.service.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
@@ -28,8 +30,51 @@ app.get('/', function (req, res) {
     res.render('home');  // render view 'home.hbs'
 });
 
-app.get('/album', function (req, res) {
-    res.render('album');
+// Route for album ranking page
+app.get('/albumrank', function (req, res) {
+    // Get album data for this month and last month
+    const albumsThisMonth = albumServiceRank.albumThisMonth();
+    const albumsLastMonth = albumServiceRank.albumLastMonth();
+
+    res.render('albumrank', {
+        albumsThisMonth,
+        albumsLastMonth
+    });
+});
+
+// Route for individual album details page
+app.get('/album-song/:title', function (req, res) {
+    const albumTitle = req.params.title;
+
+    // Find album in this month's or last month's list
+    const album = albumServiceRank.albumThisMonth().find(a => a.title === albumTitle) ||
+                  albumServiceRank.albumLastMonth().find(a => a.title === albumTitle);
+
+    if (album) {
+        // Add default description if not present
+        if (!album.description) {
+            album.description = "Một album đặc biệt với những bài hát được chọn lọc kỹ lưỡng";
+        }
+
+        // Filter songs that belong to the album
+        const songs = albumSongService.albumList().filter(song => song.title === albumTitle);
+
+        res.render('album-song', { album, songs });
+    } else {
+        res.status(404).send('Album not found');
+    }
+});
+
+// Route for viewing all songs (optional page to list all songs)
+app.get('/album-song', function (req, res) {
+    const albums = [
+        ...albumServiceRank.albumThisMonth(),
+        ...albumServiceRank.albumLastMonth()
+    ];
+
+    const allSongs = albums.flatMap(album => album.details.tracks); // Merge all songs from albums
+
+    res.render('album-song', { songs: allSongs }); // Render page with all songs
 });
 
 // Khởi động server
