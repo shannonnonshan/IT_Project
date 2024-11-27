@@ -674,8 +674,24 @@ video {
   height: 80px;
 }
 
+.h-full {
+  height: 100%;
+}
+
+.h-\[full\] {
+  height: full;
+}
+
 .max-h-\[75vh\] {
   max-height: 75vh;
+}
+
+.max-h-\[80vh\] {
+  max-height: 80vh;
+}
+
+.max-h-\[100vh\] {
+  max-height: 100vh;
 }
 
 .min-h-\[700px\] {
@@ -922,6 +938,14 @@ video {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-\[60px\] {
+  font-size: 60px;
+}
+
+.text-\[45px\] {
+  font-size: 45px;
 }
 
 .font-bold {
