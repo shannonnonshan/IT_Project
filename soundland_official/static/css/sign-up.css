@@ -1,0 +1,57 @@
+body {
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+.card {
+    min-height: 100vh;
+}
+#card-contain {
+    background: linear-gradient(to bottom, #30303D, #0A0B22);
+}
+
+#signup-card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: black;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 0px;
+    border-radius: 20px;
+}
+
+#logo-img {
+    width: 50px;
+    height: 50px;
+}
+
+#card-btn-connect {
+    gap: 15px;
+}
+
+.btn-connect {
+    width: 400px;
+    height: 50px;
+    border-radius: 50px;
+    font-weight: 500;
+}
+
+#line {
+    border: 1px solid #d2cdcd;
+    width: 50%;
+    margin: 20px auto;
+}
+
+.txt-input {
+    width: 400px;
+    height: 45px;
+    border-radius: 20px;
+}
+
+.link-pw {
+    color: white;
+}
+
+.link-pw:hover {
+    color: white;
+}
