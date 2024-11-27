@@ -10,7 +10,7 @@ html,body {
 }
 .display-card{
     max-width: 100%; /* Đặt chiều rộng tối đa */
-    overflow-y: auto; /* Cho phép cuộn cả hai chiều */
+    overflow-y: auto !important;
     margin-bottom: 0px;
     margin-top: 0px;
     height: auto;
