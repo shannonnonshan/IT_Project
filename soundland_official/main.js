@@ -5,6 +5,7 @@ import { engine } from 'express-handlebars';
 import hbs_sections from 'express-handlebars-sections';
 import accountRouter from './routes/account.route.js'
 import homepageRouter from './routes/homepage.route.js'
+import musicRouter from './routes/music.route.js'
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
 
 const app = express();
@@ -37,6 +38,8 @@ app.use('/home', homepageRouter);
 // Route Account:
 app.use('/account', accountRouter);
 // Khởi động server
+
+app.use('/music', musicRouter);
 app.listen(3000, function () {
     console.log('App is running at http://localhost:3000');
 });

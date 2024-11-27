@@ -638,6 +638,10 @@ video {
   display: flex;
 }
 
+.table {
+  display: table;
+}
+
 .h-8 {
   height: 2rem;
 }
