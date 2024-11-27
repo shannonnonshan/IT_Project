@@ -4,7 +4,7 @@ export default {
             {
                 title: "The Secret of Us",
                 artist: "Rosé, Bruno Mars",
-                img: "./images/apt nền.png",
+                img: "../static/imgs/images/apt.png",
                 details: {
                     genre: "Pop",
                     releaseDate: "2024-11-20",
