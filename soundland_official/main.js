@@ -32,7 +32,7 @@ app.use('/static', express.static('static'));
 
 app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
 app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
-
+app.use('/', homepageRouter);
 app.use('/home', homepageRouter);
 // Route Account:
 app.use('/account', accountRouter);

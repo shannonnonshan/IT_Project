@@ -33,7 +33,11 @@ router.get('/profile', async function(req, res){
         });
     
 });
-
+router.get('/upload', async function(req, res){
+        res.render('vwAccount/uploadSong');
+        
+    });
+    
 router.post('/signup', async function (req, res) {
     const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
     const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
