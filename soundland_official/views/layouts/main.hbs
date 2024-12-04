@@ -15,27 +15,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" >
-
-
     {{{_sections.css}}}
 </head>
 
 <body>
     <div id="body-div" class="container-fluid">
         <div id="test" class="row no-gutters h-100">
-            <div class="col-sm-2 p-0">
+            <div class="col-sm-2 p-0 h-100" style="background: linear-gradient(to bottom, #1A1C3D, #234B9C) !important;">
                 <div id="nav-left">
+                    {{#if auth}}
                     <div class="d-flex flex-column align-items-center" style="padding:0px;">
-                        <i id="return" class="bi bi-arrow-left" href="#"></i>
+                        <form id="frmLogout" action="/account/logout" method="post"></form>
+                        <a href="javascript: $('#frmLogout').submit()">
+                            <i id="frmLogout" class="bi bi-arrow-left"></i>
+                        </a>
+                        
                         <div id="accountinf" class="d-flex align-items-center mt-3">
-                            <img src="static/imgs/images/apt nền.png" alt="Profile Picture" class="img-fluid rounded-circle"
+                            <img src="/static/imgs/avatar.jpg" alt="Profile Picture" class="img-fluid rounded-circle"
                                 style="width: 50px; height: 50px; margin-right: 10px;">
                             <div id="account" class="text-left">
-                                <h5 class="mb-0">Vy Thanh</h5>
+                                <h5 class="mb-0">{{authUser.username}}</h5>
                                 <small id="fontaccount" class="text-muted">Logged in 6 days ago</small>
                             </div>
                         </div>
                     </div>
+                    {{else}}
+                       <div class="d-flex flex-row justify-between">
+                            <a class="nav-link" href="/account/signup">
+                                <i class=""></i>
+                                Sign up
+                            </a>
+                            <a class="nav-link" href="/account/signin">
+                                <i class=""></i>
+                                Sign in
+                            </a>
+                       </div>
+                       {{/if}}
                     <div class="card-body">
                         <ul class="nav flex-column">
                             <li class="nav-item"><a class="bi bi-exclude nav-link" href="#">Explore</a></li>
@@ -79,7 +94,7 @@
         </div>
 
         <!-- Footer Music Player -->
-        <div id="footer-music" class="d-flex justify-content-end align-items-center p-3 text-light">
+        <div id="footer-music" class="d-flex flex-row align-items-center justify-content-between text-light">
             <div id="music-inf" class="d-flex flex-row align-items-center"> 
                 <img src="static/imgs/images/apt nền.png" alt="Album Cover" class="album-cover me-3">
                 <div class="title-music me-3">
@@ -88,8 +103,33 @@
                 </div>
             </div>
             
-            <div class="player-controls d-flex align-items-center ml-auto">
-                <button class="bi bi-skip-start-fill component-player"></button>
+            <div id="player-container">
+                <div id="player" class="d-flex flex-column align-items-center justify-content-center">
+                    <div id="audio-controls">
+                        <button class="amplitude-prev">
+                            <i class="bi bi-skip-start-fill component-player"></i>
+                        </button>
+                        <button class="amplitude-play-pause">
+                            <i class="bi bi-play-circle-fill component-player"></i>
+                        </button>
+                        <button class="amplitude-next">
+                            <i class=" bi bi-skip-end-fill component-player"></i>
+                        </button>
+                    </div>
+                    <div id="progress-bar">
+                        <span class="amplitude-current-time">00:00</span>
+                        <input type="range" 
+                                class="amplitude-song-slider" 
+                                min="0" 
+                                max="100" 
+                                value="0"/>
+                        <span class="amplitude-duration-time">00:00</span>
+                    </div>
+                </div>
+            </div>
+
+                {{!-- <audio src="/static/songs/1/main.mp3" type="audio/mp3" controls></audio> --}}
+                {{!-- <button class="bi bi-skip-start-fill component-player"></button>
                 <button class="bi bi-play-circle-fill component-player"></button>
                 <button class="bi bi-skip-end-fill component-player"></button>
                 <span class="time-info mx-2">1:43</span>
@@ -100,22 +140,52 @@
                 <button class="bi bi-volume-up-fill component-player"></button>
                 <button class="bi bi-shuffle component-player"></button>
                 <button class="bi bi-heart component-player"></button>
-                <button class="bi bi-list component-player"></button>
-            </div>
+                <button class="bi bi-list component-player"></button> --}}
         </div>
     </div>
 
     <!-- Script dependencies -->
     <!-- Script dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.js"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
         integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/amplitudejs@5.3.2/dist/amplitude.min.js"></script>
+    <!-- Link file custom -->
+    <script src="/static/js/audio-player.js"></script>
+    <script>
+        // Lấy các phần tử
+            // Lấy các phần tử
+        console.log('Current Time:', Amplitude.getSongPlayedSeconds());
+        console.log('Duration:', Amplitude.getSongDuration());
+        const progressBar = document.querySelector('.amplitude-song-slider');
+
+        // Hàm cập nhật giá trị của progress bar theo trạng thái bài hát
+        function syncProgressBar() {
+            const currentTime = Amplitude.getSongPlayedSeconds(); // Lấy thời gian hiện tại
+            const duration = Amplitude.getSongDuration(); // Lấy tổng thời lượng bài hát
+
+            // Cập nhật giá trị và giới hạn max của slider
+            progressBar.max = duration;
+            progressBar.value = currentTime;
+
+            // Cập nhật màu gradient
+            const percentage = (currentTime / duration) * 100;
+            progressBar.style.background = `linear-gradient(to right, #1db954 ${percentage}%, #444 ${percentage}%)`;
+        }
+
+        // Gắn sự kiện 'timeupdate' từ Amplitude.js
+        Amplitude.bind('timeupdate', syncProgressBar);
+
+        // Gắn sự kiện 'input' để người dùng kéo thanh tay
+        progressBar.addEventListener('input', function () {
+            const seekTime = progressBar.value; // Giá trị mà người dùng kéo đến
+            Amplitude.setSongPlayedSeconds(seekTime); // Cập nhật thời gian phát
+        });
+    </script>
 </body>
 
 </html>
