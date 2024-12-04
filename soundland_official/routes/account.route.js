@@ -5,7 +5,9 @@ import multer from 'multer';
 import  { v4 as uuidv }  from 'uuid';
 import accountService from '../services/account.service.js';
 import userProfileService from '../services/userProfile.service.js';
-
+import auth from '../middleware/auth.mdw.js';
+import configurePassport from '../passport.config.js';
+import passport from 'passport';
 const router = express.Router();
 
 router.get('/signin', function (req, res) {
@@ -13,8 +15,43 @@ router.get('/signin', function (req, res) {
         layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
 });
+router.post('/signin', async function (req, res) {
+    const user = await accountService.findByUsername(req.body.username);
+    if(!user){
+        return res.render('vwAccount/sign-in', {
+            layout: 'sign-up-layout',
+            showErrors: true
+        }); 
+    }
+    if(!bcrypt.compareSync(req.body.raw_password, user.password)){
+        return res.render('vwAccount/sign-in', {
+            layout: 'sign-up-layout',
+            showErrors: true
+        }); 
+    }
+    req.session.auth = true;
+    req.session.authUser = user;
+    const retUrl = req.session.retUrl || '/'
+    res.redirect(retUrl);
+})
+router.get('/signup', function(req, res){
+    res.render('vwAccount/sign-up', {
+        layout: 'sign-up-layout'
+    });
+});
+router.post('/signup', async function (req, res) {
+    const hash_password = bcrypt.hashSync(req.body.raw_password, 8);
+    const ymd_dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const entity = {
+        username: req.body.username,
+        password: hash_password, 
+        name: req.body.name,
+        email: req.body.email, 
+        dob: ymd_dob,
+        permission: 0
+    }
 
-router.get('/signup', function (req, res) {
+    const ret = await accountService.add(entity);
     res.render('vwAccount/sign-up', {
         layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
     });
@@ -99,25 +136,43 @@ router.get('/is-available', async function (req, res) {
     res.json(false);
 })
 
-
-
-router.get('/login', function(req, res){
-    res.render('vwAccount/login');
+router.post('/logout', auth, function(req, res){
+    req.session.auth = false;
+    req.session.authUser = null;
+    res.redirect(req.headers.referer);
 })
-router.post('/login', async function (req, res) {
-    const user = await userService.findByUsername(req.body.username);
-    if(!user){
-        return res.render('vwAccount/login', {
-            showErrors: true
-        }); 
+
+router.get('/forgot-password', function (req, res) {
+     res.render('vwAccount/forgot-password', {
+        layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
+    });
+})
+router.post('/forgot-password', function(req, res){
+
+})
+
+configurePassport();
+router.get('/signin/githubAuth',
+    passport.authenticate('github'));
+
+router.get('/signin/githubAuth/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  async function (req, res) {
+    // Lấy thông tin user từ session do passport tự lưu
+    const user = req.user; 
+
+    if (!user) {
+      return res.redirect('/login');
     }
-     if(!bcrypt.compareSync(req.body.raw_password, user.password)){
-        return res.render('vwAccount/login', {
-            showErrors: true
-        }); 
-     }
-})
 
-//req.session.isAuthenticated = true
-//req.sessoion.authUSer = user;
+    // Đánh dấu người dùng đã đăng nhập
+    req.session.auth = true;
+    req.session.authUser = user;
+
+    // Chuyển hướng về trang chủ hoặc nơi khác
+    res.redirect('/');
+  }
+);
+
+
 export default router;

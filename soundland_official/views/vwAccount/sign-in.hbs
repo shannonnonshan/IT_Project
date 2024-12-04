@@ -1,44 +1,48 @@
-<div id="card-contain" class="card">
-    <div id="signup-card"class="card-body">
-        <div class="card-header d-flex flex-column justify-content-center align-items-center">
-            <img id="logo-img" src="../images/universe.jpg" alt="" class="img-fluid rounded-circle">
-            <h1>Đăng nhập vào SoundLand</h1>
-        </div>
-        <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
-            {{!-- {{#if showErrors}}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Login Failed!</strong>You should check your infor.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<form action="/account/signin" method="post">
+    <div id="card-contain" class="card">
+        <div id="signup-card" class="card-body">
+            <div class="card-header d-flex flex-column justify-content-center align-items-center">
+                <img id="logo-img" src="../images/universe.jpg" alt="" class="img-fluid rounded-circle">
+                <h1>Đăng nhập vào SoundLand</h1>
             </div>
-            {{/if}} --}}
-            <button type="button" class="btn btn btn-light btn-connect">
-                <i class="bi bi-google"></i> Tiếp tục với Google
-            </button>
-            <button type="button" class="btn btn btn-light btn-connect">
-                <i class="bi bi-facebook"></i> Tiếp tục với Facebook
-            </button>
-            <button type="button" class="btn btn-light btn-connect">
-                <i class="bi bi-apple"></i> Tiếp tục với Apple
-            </button>
-            <button type="button" class="btn btn-light btn-connect">Đăng nhập với số điện thoại</button>
-            <hr id="line">
-            <div class="mb-2 form-group">
-                <label class="form-label"for="txtUsername">Your Email or UserName</label>
-                <input type="text" name="" id="txtUsername" class="form-control txt-input" placeholder="" aria-describedby="helpId">
-            </div>
-            <div class="mb-2 form-group">
-                <label class="form-label"for="txtPassword">Password</label>
-                <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input" placeholder="" aria-describedby="helpId">
-            </div>
-            <a href="/home/homepage" class="btn btn-info btn-connect">Đăng nhập</a>
 
-            
-            <label><a href="#" class="mt-5 link-underline-dark link-pw">Bạn quên mật khẩu?</a></label>
-            <div class="d-flex justify-content-center align-items-center">
-                <label>Bạn chưa có tài khoản?</label>
-                <label><a href="/account/signup" class="link-underline-dark link-pw">Đăng kí SoundLand</a></label>
+            <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
+                {{#if showErrors}}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Login Failed!</strong> Bạn nên kiểm tra lại thông tin.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {{/if}}
+                <button type="button" class="btn btn-light btn-connect" onclick="window.location.href='/account/signin/githubAuth'">
+                    <i class="bi bi-github"></i> Tiếp tục với GitHub
+                </button>
+
+
+                <button type="button" class="btn btn-light btn-connect">
+                    <i class="bi bi-facebook"></i> Tiếp tục với Facebook
+                </button>
+                <button type="button" class="btn btn-light btn-connect">
+                    <i class="bi bi-apple"></i> Tiếp tục với Apple
+                </button>
+                <button type="button" class="btn btn-light btn-connect">Đăng nhập với số điện thoại</button>
+                <hr id="line">
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtUsername">Username</label>
+                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder=""
+                        aria-describedby="helpId">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label" for="txtPassword">Password</label>
+                    <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input"
+                        placeholder="" aria-describedby="helpId">
+                </div>
+                <button type="submit" class="btn btn-info btn-connect">Đăng nhập</button>
+                <label><a href="/account/forgot-password" class="mt-5 link-underline-dark link-pw">Bạn quên mật khẩu?</a></label>
+                <div class="d-flex justify-content-center align-items-center">
+                    <label>Bạn chưa có tài khoản?</label>
+                    <label><a href="/account/signup" class="link-underline-dark link-pw">Đăng kí SoundLand</a></label>
+                </div>
             </div>
-            
         </div>
     </div>
-</div>
+</form>

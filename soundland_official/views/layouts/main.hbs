@@ -23,17 +23,34 @@
         <div id="test" class="row no-gutters h-100">
             <div class="col-sm-2 p-0 h-100" style="background: linear-gradient(to bottom, #1A1C3D, #234B9C) !important;">
                 <div id="nav-left">
+                    {{#if auth}}
                     <div class="d-flex flex-column align-items-center" style="padding:0px;">
-                        <i id="return" class="bi bi-arrow-left" href="#"></i>
+                        <form id="frmLogout" action="/account/logout" method="post"></form>
+                        <a href="javascript: $('#frmLogout').submit()">
+                            <i id="frmLogout" class="bi bi-arrow-left"></i>
+                        </a>
+                        
                         <div id="accountinf" class="d-flex align-items-center mt-3">
-                            <img src="static/imgs/images/apt nền.png" alt="Profile Picture" class="img-fluid rounded-circle"
+                            <img src="/static/imgs/avatar.jpg" alt="Profile Picture" class="img-fluid rounded-circle"
                                 style="width: 50px; height: 50px; margin-right: 10px;">
                             <div id="account" class="text-left">
-                                <h5 class="mb-0">Vy Thanh</h5>
+                                <h5 class="mb-0">{{authUser.username}}</h5>
                                 <small id="fontaccount" class="text-muted">Logged in 6 days ago</small>
                             </div>
                         </div>
                     </div>
+                    {{else}}
+                       <div class="d-flex flex-row justify-between">
+                            <a class="nav-link" href="/account/signup">
+                                <i class=""></i>
+                                Sign up
+                            </a>
+                            <a class="nav-link" href="/account/signin">
+                                <i class=""></i>
+                                Sign in
+                            </a>
+                       </div>
+                       {{/if}}
                     <div class="card-body">
                         <ul class="nav flex-column">
                             <li class="nav-item"><a class="bi bi-exclude nav-link" href="#">Explore</a></li>
@@ -87,7 +104,8 @@
             </div>
             
             <div class="player-controls d-flex align-items-center ml-auto">
-                <button class="bi bi-skip-start-fill component-player"></button>
+                <audio src="" type="audio/mp3" controls></audio>
+                {{!-- <button class="bi bi-skip-start-fill component-player"></button>
                 <button class="bi bi-play-circle-fill component-player"></button>
                 <button class="bi bi-skip-end-fill component-player"></button>
                 <span class="time-info mx-2">1:43</span>
@@ -98,7 +116,7 @@
                 <button class="bi bi-volume-up-fill component-player"></button>
                 <button class="bi bi-shuffle component-player"></button>
                 <button class="bi bi-heart component-player"></button>
-                <button class="bi bi-list component-player"></button>
+                <button class="bi bi-list component-player"></button> --}}
             </div>
         </div>
     </div>
