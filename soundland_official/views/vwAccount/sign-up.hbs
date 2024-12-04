@@ -59,8 +59,8 @@
             <h1>Đăng ký vào SoundLand</h1>
         </div>
         <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
-            <button type="button" class="btn btn btn-light btn-connect">
-                <i class="bi bi-google"></i> Tiếp tục với Google
+            <button type="button" class="btn btn btn-light btn-connect" onclick="window.location.href='/account/signup/githubAuth'">
+                <i class="bi bi-github"></i> Tiếp tục với Github
             </button>
             <button type="button" class="btn btn btn-light btn-connect">
                 <i class="bi bi-facebook"></i> Tiếp tục với Facebook
@@ -72,7 +72,7 @@
             <hr id="line">
             <form id="fmSignup" action="" method="post">
                 <div class="mb-2 form-group">
-                    <label class="form-label"for="txtUsername">Your Email or UserName</label>
+                    <label class="form-label"for="txtUsername">UserName</label>
                     <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">
                 </div>
                 <div class="mb-2 form-group">

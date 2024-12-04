@@ -9,7 +9,7 @@ export default function(req, res, next){
 export function authAdmin(req, res, next){
     if(req.session.auth === false){
         req.session.retUrl = req.originalUrl;
-        return res.redirect('/account/login');
+        return res.redirect('/account/signin');
     }
     next();
 

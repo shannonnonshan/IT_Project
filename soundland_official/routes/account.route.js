@@ -3,8 +3,9 @@ import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
 import accountService from '../services/account.service.js';
 import userProfileService from '../services/userProfile.service.js';
-import auth from '../middleware/auth.mdw.js'
-
+import auth from '../middleware/auth.mdw.js';
+import configurePassport from '../passport.config.js';
+import passport from 'passport';
 const router = express.Router();
 router.get('/signin', function (req, res) {
     res.render('vwAccount/sign-in', {
@@ -85,5 +86,38 @@ router.post('/logout', auth, function(req, res){
     req.session.authUser = null;
     res.redirect(req.headers.referer);
 })
+
+router.get('/forgot-password', function (req, res) {
+     res.render('vwAccount/forgot-password', {
+        layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
+    });
+})
+router.post('/forgot-password', function(req, res){
+
+})
+
+configurePassport();
+router.get('/signin/githubAuth',
+    passport.authenticate('github'));
+
+router.get('/signin/githubAuth/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  async function (req, res) {
+    // Lấy thông tin user từ session do passport tự lưu
+    const user = req.user; 
+
+    if (!user) {
+      return res.redirect('/login');
+    }
+
+    // Đánh dấu người dùng đã đăng nhập
+    req.session.auth = true;
+    req.session.authUser = user;
+
+    // Chuyển hướng về trang chủ hoặc nơi khác
+    res.redirect('/');
+  }
+);
+
 
 export default router;
