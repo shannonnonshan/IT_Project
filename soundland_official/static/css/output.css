@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.15 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -602,10 +602,6 @@ video {
   margin-left: 1.25rem;
 }
 
-.ml-auto {
-  margin-left: auto;
-}
-
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -646,6 +642,8 @@ video {
   display: table;
 }
 
+<<<<<<< HEAD
+=======
 .h-1\/2 {
   height: 50%;
 }
@@ -654,6 +652,7 @@ video {
   height: 33.333333%;
 }
 
+>>>>>>> 3de3c9be083e3370af19146e9ae7531868f52c50
 .h-8 {
   height: 2rem;
 }
@@ -768,6 +767,10 @@ video {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .gap-10 {
@@ -1024,4 +1027,31 @@ video {
 
 /* Ví dụ sử dụng font */
 
+<<<<<<< HEAD
+body {
+  height: auto;
+  overflow: -moz-scrollbars-none;
+  /* Cho trình duyệt Firefox */
+  -ms-overflow-style: none;
+  /* Cho IE và Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  /* Ẩn thanh cuộn cho trình duyệt WebKit */
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+=======
+>>>>>>> 3de3c9be083e3370af19146e9ae7531868f52c50
   
