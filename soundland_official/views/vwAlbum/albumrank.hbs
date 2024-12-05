@@ -1,0 +1,48 @@
+{{#section "css"}}
+    <link href="/static/css/albumrank.css" rel="stylesheet">
+{{/section}}
+
+<main>
+    <section class="album-list">
+        <h2>Album hàng đầu tháng này</h2>
+        <div class="album-grid" id="top-month-albums">
+            {{#each albumsThisMonth}}
+                <div class="album-item">
+                    <a href="/music/album-song/{{this.title}}">
+                        <img src="{{this.img}}" alt="{{this.title}} by {{this.artist}}" class="album-cover">
+                    </a>
+                    <div class="album-info">
+                        <h3>{{this.title}}</h3>
+                        <p>{{this.artist}}</p>
+                        {{#if this.details}}
+                            <p>Genre: {{this.details.genre}}</p>
+                            <p>Release Date: {{this.details.releaseDate}}</p>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="album-list">
+        <h2>Album hàng đầu tháng trước</h2>
+        <div class="album-grid" id="top-last-month-albums">
+            {{#each albumsLastMonth}}
+                <div class="album-item">
+                <a href="album-song/{{this.title}}">
+                    <img src="{{this.img}}" alt="{{this.title}} by {{this.artist}}" class="album-cover">
+                </a>
+                <div class="album-info">
+                    <h3>{{this.title}}</h3>
+                    <p>{{this.artist}}</p>
+                    {{#if this.details}}
+                        <p>Genre: {{this.details.genre}}</p>
+                        <p>Release Date: {{this.details.releaseDate}}</p>
+                    {{/if}}
+                </div>
+            </div>
+
+            {{/each}}
+        </div>
+    </section>
+</main>

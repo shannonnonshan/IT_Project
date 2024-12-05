@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Ví dụ sử dụng font */
+body {
+    height: auto;
+    overflow: -moz-scrollbars-none; /* Cho trình duyệt Firefox */
+    -ms-overflow-style: none; /* Cho IE và Edge */
+  }
+  body::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn cho trình duyệt WebKit */
+  }
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0a0a0a;
+      --foreground: #ededed;
+    }
+  }
+  
+  @layer utilities {
+    .text-balance {
+      text-wrap: balance;
+    }
+  }
+  
