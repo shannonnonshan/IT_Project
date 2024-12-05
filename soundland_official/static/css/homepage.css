@@ -8,8 +8,6 @@
     color: white;
 }
 
-
-
 .card-top-chart::before {
     content: '';
     border-radius: 10px;
