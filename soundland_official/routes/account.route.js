@@ -2,12 +2,12 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
 import multer from 'multer';
-import  { v4 as uuidv }  from 'uuid';
 import accountService from '../services/account.service.js';
 import userProfileService from '../services/userProfile.service.js';
 import auth from '../middleware/auth.mdw.js';
 import configurePassport from '../passport.config.js';
 import passport from 'passport';
+import fs from 'fs';
 const router = express.Router();
 
 router.get('/signin', function (req, res) {
@@ -74,41 +74,85 @@ router.get('/profile', async function(req, res){
     
 });
 router.get('/upload', async function(req, res){
-        res.render('vwAccount/uploadSong');
+    const list = await accountService.findCat();
+    res.render('vwAccount/uploadSong',
+        {list:list},
+    );
 });
 
-// Cấu hình multer với bộ lọc file
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'static/songs');
-        },
-    filename: (req, file, cb) => {
-        const uniqueName = uuidv(); // UUID ngẫu nhiên, không có phần mở rộng
-        cb(null, uniqueName); // Lưu tên file
-    },
-  });
-  
-  // Kiểm tra định dạng file
-  const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/ogg'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true); // Đồng ý upload
-    } else {
-      cb(new Error('Only audio files are allowed!'), false); // Từ chối file
-    }
-  };
-  
-  // Khởi tạo multer với bộ lọc
-  const upload = multer({
+const storage = multer.memoryStorage();
+const uploadFiles = multer({
     storage,
-    fileFilter, // Thêm fileFilter vào cấu hình
-  });
-router.post('/upload',upload.single('FilePath'), async function(req, res){
-    if (!req.file) {
-        return res.status(400).send('No file uploaded.');
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowedAudioTypes = ['audio/mp3', 'audio/mpeg', 'audio/wav'];
+        const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        if (allowedAudioTypes.includes(file.mimetype) || allowedImageTypes.includes(file.mimetype)) {
+            cb(null, true); // Chấp nhận file
+        } else {
+            cb(new Error('Only audio and image files are allowed!'), false); // Từ chối file
+        }
     }
-    const fileUrl = `/static/songs/${req.file.filename}`; 
-    res.render('vwAccount/uploadSong', { fileUrl });
+});
+
+const upload = uploadFiles.fields([
+    { name: 'FilePath', maxCount: 1 }, // Trường cho file âm thanh
+    { name: 'ImagePath', maxCount: 1 } // Trường cho file hình ảnh
+]);
+
+router.post('/upload', upload, async (req, res) => {
+    try {
+        // Kiểm tra file
+        if (!req.files || !req.files.FilePath || !req.files.ImagePath) {
+            return res.status(400).send('Both audio and image files are required.');
+        }
+
+        // Lấy dữ liệu file
+        const audioFile = req.files.FilePath[0]; // Lấy file âm thanh
+        const imageFile = req.files.ImagePath[0]; // Lấy file hình ảnh
+
+        // Xử lý dữ liệu từ form
+        const selectedid = Array.isArray(req.body.catid) ? req.body.catid.join(",") : req.body.catid;
+        console.log( selectedid );
+        const ymd_ReleaseDate = moment(req.body.ReleaseDate, "DD/MM/YY").format('YYYY-MM-DD');
+        const entity = {
+            SongName: req.body.songname,
+            CatID: selectedid,
+            ReleaseDate: ymd_ReleaseDate
+        };
+
+        // Lưu dữ liệu vào database và lấy SongID
+        const ret = await accountService.upload(entity);
+        const SongID = ret.SongID;
+
+        // Tạo thư mục dựa trên SongID
+        const songPath = `./static/songs/${SongID}`;
+        if (!fs.existsSync(songPath)) {
+            fs.mkdirSync(songPath, { recursive: true });
+        }
+        const imagePath = `./static/imgs/song/${SongID}`;
+        if (!fs.existsSync(imagePath)) {
+            fs.mkdirSync(imagePath, { recursive: true });
+        }
+
+        // Lưu file âm thanh
+        const audioFilePath = `${songPath}/main.mp3`;
+        fs.writeFileSync(audioFilePath, audioFile.buffer);
+
+        // Lưu file hình ảnh
+        const imageFilePath = `${imagePath}/cover.jpg`;
+        fs.writeFileSync(imageFilePath, imageFile.buffer);
+
+        // Tạo đường dẫn để render
+        const fileUrl = `/static/songs/${SongID}/main.mp3`;
+        const imageUrl = `/static/imgs/song/${SongID}/cover.jpg`;
+
+        res.render('vwAccount/uploadSong', { fileUrl, imageUrl });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error processing upload.');
+    }
 });
     
 router.post('/signup', async function (req, res) {
@@ -163,7 +207,7 @@ router.get('/signin/githubAuth/callback',
 
     if (!user) {
       return res.redirect('/login');
-    }
+     }
 
     // Đánh dấu người dùng đã đăng nhập
     req.session.auth = true;
