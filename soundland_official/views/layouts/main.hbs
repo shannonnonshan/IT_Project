@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<html lang="en">
-
 <head>
     <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -98,10 +96,10 @@
         <!-- Footer Music Player -->
         <div id="footer-music" class="d-flex flex-row align-items-center justify-content-between text-light">
             <div id="music-inf" class="d-flex flex-row align-items-center"> 
-                <img src="static/imgs/song/{{id_song}}/main.jpg" alt="Album Cover" class="album-cover me-3">
+                <img id="music-cover" src="" alt="Album Cover" class="album-cover me-3">
                 <div class="title-music me-3">
-                    <span class="font-weight-bold">{{songname}}APT</span><br>
-                    <small class="fontaccount">{{artist}}ROSE, BRUNOR MARS</small>
+                    <span id="song-name" class="font-weight-bold text-uppercase"></span><br>
+                    <small id="artist-name" class="fontaccount text-uppercase"></small>
                 </div>
             </div>
             
@@ -148,23 +146,32 @@
     <script src="/static/js/audio-player.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        
+    </script>
+    <script>
         const playPauseButton = document.getElementById('playPauseButton');
         const playPauseIcon = document.getElementById('playPauseIcon');
-
         let isPlaying = false;
 
         playPauseButton.addEventListener('click', () => {
             if (isPlaying) {
-                playPauseIcon.classList.remove('bi-pause-circle-fill');
-                playPauseIcon.classList.add('bi-play-circle-fill');
-                Amplitude.pause();
+                // Khi bài hát đang phát, dừng bài hát
+                playPauseIcon.classList.remove('bi-play-circle-fill'); // Remove biểu tượng pause
+                playPauseIcon.classList.add('bi-pause-circle-fill'); // Thêm biểu tượng play
+                Amplitude.pause();  // Dừng bài hát khi đang phát
             } else {
-                playPauseIcon.classList.remove('bi-play-circle-fill');
-                playPauseIcon.classList.add('bi-pause-circle-fill');
-                Amplitude.play();
+                // Khi bài hát đang dừng, phát bài hát
+                playPauseIcon.classList.remove('bi-pause-circle-fill'); // Remove biểu tượng play
+                playPauseIcon.classList.add('bi-play-circle-fill'); // Thêm biểu tượng pause
+                Amplitude.play();  // Phát bài hát khi đang dừng
             }
+
+            // Đảo trạng thái của isPlaying sau mỗi lần nhấn
             isPlaying = !isPlaying;
         });
+
+
+
     </script>
     <script>
         // Hàm cập nhật giá trị của progress bar theo trạng thái bài hát
@@ -243,9 +250,7 @@
                             // Gửi form logout
                             document.getElementById('frmLogout').submit();
                             Swal.fire(
-                                'Logged out!',
-                                'You have been logged out successfully.',
-                                'success'
+                                'Logged out!'
                             );
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             // Nếu người dùng chọn "Cancel"
@@ -257,15 +262,30 @@
                         }
                     });
                 });
-
     </script>
+    <script>
+        function updateSongInfo() {
+                console.log("Updating song info...");
 
+                // Access the active song using Amplitude.active_song (not getActiveSong)
+                const song = Amplitude.getActiveSongMetadata(); // Accessing active_song directly
+                console.log(song);
+                if (!song) {
+                    console.error('No active song found!');
+                    return;
+                }
 
+                console.log('Current active song:', song);
 
+                // Update album cover and song name in the HTML
+                console.log('Song image:', song.musicImg);
+                document.getElementById('music-cover').src = song.musicImg || 'default_cover.png'; // Ensure valid image URL
+                document.getElementById('song-name').innerText = song.songName || 'Unknown Song'; // Update song name
 
-
-
-    
+                // If available, update artist info too (you can adjust this based on your data)
+                document.getElementById('artist-name').innerText = song.artistName || 'Unknown Artist';
+            }
+    </script>
 </body>
 
 </html>
