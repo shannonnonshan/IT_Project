@@ -6,7 +6,6 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
     background-color: #1e1e2e;
     color: #ffffff;
 }
@@ -27,7 +26,7 @@ main {
     background: linear-gradient(to bottom, #956580, #171414);
 }
 
-.album-cover {
+.album-list .album-cover {
     width: 150px;
     height: 150px;
     border-radius: 10px;
