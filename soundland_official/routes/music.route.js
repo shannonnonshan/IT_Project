@@ -16,17 +16,19 @@ router.get('/albumrank', (req, res) => {
 
 // Route for album song (tracks)
 router.get('/album-song/:title', (req, res) => {
-    const { title } = req.params; // Get album title from the URL parameter
-    const allAlbums = [...albumServiceRank.albumThisMonth(), ...albumServiceRank.albumLastMonth()]; // Combine all albums
+    const { title } = req.params; // Lấy title của album từ tham số URL
+    const allAlbums = [...albumServiceRank.albumThisMonth(), ...albumServiceRank.albumLastMonth()]; // Kết hợp album trong tháng này và tháng trước
 
-    // Find the album that matches the title
+    // Tìm album phù hợp với title
     const album = allAlbums.find(album => album.title === title);
 
     if (album) {
-        res.render('vwAlbum/album-song', { album }); // Render 'album-song.hbs' with album data
+        // Truyền album và danh sách bài hát (album.details.tracks) vào view
+        res.render('vwAlbum/album-song', { album, songs: album.details.tracks });
     } else {
-        res.status(404).send('Album not found'); // Show 404 error if album not found
+        res.status(404).send('Album not found'); // Nếu không tìm thấy album, trả về lỗi 404
     }
 });
+
 
 export default router;

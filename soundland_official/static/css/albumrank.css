@@ -35,7 +35,7 @@ main {
 }
 
 /* Album cover image styling */
-.album-cover {
+.album-list .album-cover {
     width: 50%;           /* Chiều rộng ảnh chiếm 50% chiều rộng của phần tử chứa */
     height: auto;         /* Chiều cao tự động điều chỉnh để giữ tỷ lệ ảnh */
     max-width: 100%;      /* Giới hạn chiều rộng tối đa ảnh bằng chiều rộng của phần tử chứa */
