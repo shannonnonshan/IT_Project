@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" >
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     {{{_sections.css}}}
@@ -25,7 +26,10 @@
                 <div id="nav-left">
                     {{#if auth}}
                     <div class="d-flex flex-column" style="padding:0px;">
+                    <div class="d-flex flex-column" style="padding:0px;">
                         <form id="frmLogout" action="/account/logout" method="post"></form>
+                        <a href="javascript:void(0);" id="btn-logout">
+                            <i class="bi bi-arrow-left"></i>
                         <a href="javascript:void(0);" id="btn-logout">
                             <i class="bi bi-arrow-left"></i>
                         </a>
@@ -42,9 +46,11 @@
                     {{else}}
                        <div class="d-flex flex-row justify-between">
                             <a class="btn btn-light" href="/account/signup">
+                            <a class="btn btn-light" href="/account/signup">
                                 <i class=""></i>
                                 Sign up
                             </a>
+                            <a class="btn btn-light" href="/account/signin">
                             <a class="btn btn-light" href="/account/signin">
                                 <i class=""></i>
                                 Sign in
@@ -54,6 +60,7 @@
                     <div class="card-body">
                         <ul class="nav flex-column">
                             <li class="nav-item"><a class="bi bi-exclude nav-link" href="/">Explore</a></li>
+                            <li class="nav-item"><a class="bi bi-exclude nav-link" href="/">Explore</a></li>
                             <li class="nav-item"><a class="bi bi-hearts nav-link" href="#">Love</a></li>
                             <li class="nav-item"><a class="bi bi-calendar-event nav-link" href="#">Events</a></li>
                             <h5>Music</h5>
@@ -62,7 +69,11 @@
                             <li class="nav-item"><a class="bi bi-people-fill nav-link" href="#">Artists</a></li>
                             <li class="nav-item"><a class="bi bi-vinyl nav-link" href="/music/albumrank">Albums</a></li>
                             <li class="nav-item"><a class="bi bi-cloud-arrow-up nav-link" href="/music/upload">Upload</a></li>
+                            <li class="nav-item"><a class="bi bi-vinyl nav-link" href="/music/albumrank">Albums</a></li>
+                            <li class="nav-item"><a class="bi bi-cloud-arrow-up nav-link" href="/music/upload">Upload</a></li>
                             <h5>Your Playlists</h5>
+                            <li class="nav-item"><a class="nav-link" href="/music/lovesong">Love</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Your All</a></li>
                             <li class="nav-item"><a class="nav-link" href="/music/lovesong">Love</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Your All</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Sad Music</a></li>
@@ -104,11 +115,14 @@
             </div>
             
             <div id="player-container"  class="d-flex flex-col"> 
+            <div id="player-container"  class="d-flex flex-col"> 
                 <div id="player" class="d-flex flex-column align-items-center justify-content-center">
                     <div id="audio-controls">
                         <button class="amplitude-prev">
                             <i class="bi bi-skip-start-fill component-player"></i>
                         </button>
+                        <button id="playPauseButton" class="amplitude-play-pause">
+                            <i id="playPauseIcon" class="bi bi-play-circle-fill component-player"></i>
                         <button id="playPauseButton" class="amplitude-play-pause">
                             <i id="playPauseIcon" class="bi bi-play-circle-fill component-player"></i>
                         </button>
@@ -132,6 +146,9 @@
                 <button class="bi bi-list component-player"></button>
             </div>
             
+                <button class="bi bi-list component-player"></button>
+            </div>
+            
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
@@ -145,6 +162,7 @@
      {{{_sections.js}}}
     <!-- Link file custom -->
     <script src="/static/js/audio-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         
@@ -179,7 +197,13 @@
             function syncProgressBar() {
                 const currentTime = Amplitude.getSongPlayedSeconds(); // Lấy thời gian hiện tại
                 const duration = Amplitude.getSongDuration(); // Lấy tổng thời lượng bài hát
+            function syncProgressBar() {
+                const currentTime = Amplitude.getSongPlayedSeconds(); // Lấy thời gian hiện tại
+                const duration = Amplitude.getSongDuration(); // Lấy tổng thời lượng bài hát
 
+                const progressBar = document.querySelector('.amplitude-song-slider');
+                progressBar.max = duration;
+                progressBar.value = currentTime;
                 const progressBar = document.querySelector('.amplitude-song-slider');
                 progressBar.max = duration;
                 progressBar.value = currentTime;
@@ -190,7 +214,15 @@
                 // Yêu cầu trình duyệt cập nhật lại
                 requestAnimationFrame(syncProgressBar);
             }
+                const percentage = (currentTime / duration) * 100;
+                progressBar.style.background = `linear-gradient(to right, #1db954 ${percentage}%, #444 ${percentage}%)`;
 
+                // Yêu cầu trình duyệt cập nhật lại
+                requestAnimationFrame(syncProgressBar);
+            }
+
+            // Cập nhật thanh tiến trình khi bài hát đang chơi
+            requestAnimationFrame(syncProgressBar);
             // Cập nhật thanh tiến trình khi bài hát đang chơi
             requestAnimationFrame(syncProgressBar);
 

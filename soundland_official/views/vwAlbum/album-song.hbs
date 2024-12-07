@@ -1,7 +1,7 @@
 {{#section "css"}}
     <link href="/static/css/album.css" rel="stylesheet">
 {{/section}}
-<div class="album-header">
+<div class="album-header" id="album-song-header">
     <img src="{{album.img}}" alt="{{album.title}} Cover" class="playlist-cover-header">
     <div class="playlist-info">
         <p class="playlist-type">Public Playlist</p>
@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<div class="album-content">
+<div class="album-content" id="album-song-content">
     <table class="song-table">
         <thead>
             <tr>
@@ -49,4 +49,3 @@
         </tbody>
     </table>
 </div>
-
