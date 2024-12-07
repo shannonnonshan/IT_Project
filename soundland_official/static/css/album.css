@@ -1,8 +1,5 @@
 /* Tổng quan */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
 body {
-    font-family: 'Poppins', Arial, sans-serif; /* Font chữ hiện đại */
     background-color: #1e1e2e; /* Nền tối */
     color: #000; /* Chữ màu đen */
     margin: 0;

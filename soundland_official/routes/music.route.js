@@ -48,7 +48,8 @@ router.get('/songs', async function (req, res) {
                     SongName: song.SongName,
                     urlAudio: `/static/songs/${song.SongID}/main.mp3`,  // URL hợp lệ cho bài hát
                     urlImage: `/static/imgs/song/${song.SongID}/main.jpg`,  // Đảm bảo có ảnh bìa
-                    artistName: artist ? artist.ArtistName : 'Unknown Artist'
+                    artistName: artist ? artist.ArtistName : 'Unknown Artist',
+ 
                 };
             }));
 
@@ -63,6 +64,23 @@ router.get('/songs', async function (req, res) {
         res.status(500).json({ message: "Error loading songs" });
     }
 });
+
+router.get('/listsongs', async function (req, res) {
+    const listSong = await musicService.findAll();
+
+    // Kết hợp thông tin bài hát và nghệ sĩ
+    const combinedList = await Promise.all(listSong.map(async (song, index) => {
+        const artist = await musicService.findArtistBySongId(song.SongID);
+        return {
+            ...song, // Thêm toàn bộ thông tin bài hát
+            artistName: artist ? artist.ArtistName : "Unknown Artist", // Nghệ sĩ hoặc giá trị mặc định
+            displayIndex: index + 1 // Bắt đầu từ 1
+        };
+    }));
+
+    res.render('vwSong/listSong', { listSong: combinedList });
+});
+
 
 
 

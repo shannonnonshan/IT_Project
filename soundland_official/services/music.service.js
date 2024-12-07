@@ -4,8 +4,11 @@ export default {
     findAll() {
         return db('songs');
     },
-    findSongById(id){
+    findSongById(id) {
         return db('songs').where('SongID', id).first();
+    },
+    findSongAlbumId(albumId) {
+        return db('songs').where('', albumId);
     },
     async findArtistBySongId(songId) {
     const songArtist = await db('song_artists').where('SongID', songId).first();
