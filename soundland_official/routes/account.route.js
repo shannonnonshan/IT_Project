@@ -58,18 +58,28 @@ router.post('/signup', async function (req, res) {
 });
 
 router.get('/profile', async function(req, res){
-    const user = req.session.authUser
-    const Artistlist = await userProfileService.Artist();
-    const Albumlist = await userProfileService.Album();
-    const UserDashboardlist = await userProfileService.Dashboard();
-    res.render('vwAccount/userProfile', 
-        {
-            user:user,
-            artists:Artistlist.slice(0, 5),
-            album: Albumlist,
+    if (!req.session.authUser) {
+        return res.redirect('/account/signin'); // Nếu session không tồn tại, redirect đến trang đăng nhập
+    }
+
+    try {
+        const user = req.session.authUser; // Lấy thông tin user từ session
+        const Artistlist = await userProfileService.Artist();
+        const Albumlist = await userProfileService.Album();
+        const UserDashboardlist = await userProfileService.Dashboard();
+        const UserSong = await userProfileService.FindSongOfUser(user);
+
+        res.render('vwAccount/userProfile', {
+            user: user,
+            artists: Artistlist.slice(0, 5),
+            albums: Albumlist.slice(0, 5),
             userdashboard: UserDashboardlist,
+            userSong: UserSong,
         });
-    
+    } catch (error) {
+        console.error("Lỗi trong quá trình lấy dữ liệu:", error);
+        res.status(500).send("Có lỗi xảy ra. Vui lòng thử lại sau.");
+    }
 });
 router.get('/artist', async (req, res) => {
     const { limit = 5, offset = 0 } = req.query; // Parse limit và offset từ query string
@@ -83,14 +93,32 @@ router.get('/artist', async (req, res) => {
   
       res.json({
         artists: paginatedArtists,
-        hasMore: parseInt(offset) + parseInt(limit) < 10 // Kiểm tra nếu còn dữ liệu
+        hasMore: parseInt(offset) + parseInt(limit) < 30 // Kiểm tra nếu còn dữ liệu
       });
     } catch (error) {
       console.error('Error fetching artists:', error);
       res.status(500).json({ artists: [], hasMore: false });
     }
   });
+router.get('/album', async (req, res) => {
+    const { limit = 5, offset = 0 } = req.query; // Parse limit và offset từ query string
   
+    try {
+      const allAlbums = await userProfileService.Album(); // Lấy toàn bộ dữ liệu từ database
+      const paginatedAlbums = allAlbums.slice(parseInt(offset), parseInt(offset) + parseInt(limit));
+  
+      console.log('Offset:', offset);
+      console.log('Returning albums:', paginatedAlbums);
+  
+      res.json({
+        albums: paginatedAlbums,
+        hasMore: parseInt(offset) + parseInt(limit) < 30 // Kiểm tra nếu còn dữ liệu
+      });
+    } catch (error) {
+      console.error('Error fetching albums:', error);
+      res.status(500).json({ albums: [], hasMore: false });
+    }
+  });
 router.get('/upload', async function(req, res){
     const list = await accountService.findCat();
     res.render('vwAccount/uploadSong',
@@ -173,7 +201,7 @@ router.post('/upload', upload, async (req, res) => {
         fs.writeFileSync(audioFilePath, audioFile.buffer);
 
         // Lưu file hình ảnh
-        const imageFilePath = `${imagePath}/cover.jpg`;
+        const imageFilePath = `${imagePath}/main.jpg`;
         fs.writeFileSync(imageFilePath, imageFile.buffer);
 
         // Tạo đường dẫn để render

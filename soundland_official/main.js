@@ -7,7 +7,7 @@ import hbs_sections from 'express-handlebars-sections';
 import accountRouter from './routes/account.route.js'
 import musicRouter from './routes/music.route.js'
 import configurePassport from './passport.config.js';
-
+import moment from 'moment';
 import passport from 'passport';
 
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
@@ -22,7 +22,8 @@ app.use(session({
     cookie: {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+    },
+    
 }))
 
 app.use(passport.initialize());
@@ -38,6 +39,9 @@ app.engine('hbs', engine({
             return numeral(value).format('0,0') + ' đ'
         },
         section: hbs_sections(),
+        formatDate: function (date) {
+            return moment(date).format('YYYY-MM-DD HH:mm:ss'); // Định dạng ngày theo YYYY-MM-DD
+        }
     }
 }));
 app.use(express.urlencoded({

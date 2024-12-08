@@ -61,7 +61,7 @@
           {{#each this.artists}}
                 <div class="w-[200px] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
                   <img class="w-[100px] h-[100px] rounded-full self-center mb-2" src="/static/imgs/artist/{{ArtistID}}/main.jpg" />
-                  <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3">{{ArtistName}}</div>
+                  <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3 truncate">{{ArtistName}}</div>
                   <div class="w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">Nghệ sỹ</div>
                 </div>
           {{/each}}
@@ -83,21 +83,52 @@
             </span>
           </div>
       </div>
-      <div class="flex flex-row overflow-x-auto max-w-[100%] mt-8 mb-20"
+      <div id="albums-container" class="flex flex-row overflow-x-auto max-w-[100%] mt-8"
       style=" -ms-overflow-style: none; scrollbar-width: none; ">
-          {{#each this.album}}
+          {{#each this.albums}}
                 <div class="w-[200px] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
                   <img class="w-[100px] h-[100px] rounded-full self-center mb-2" src="/static/imgs/album/{{AlbumID}}/main.jpg" />
-                  <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3">{{AlbumName}}</div>
+                  <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3 truncate">{{AlbumName}}</div>
                   <div class="w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">Album</div>
                 </div>
           {{/each}}
-          <a href="#" class="btn btn-sm btn-outline-light flex flex-col justify-center rounded-[30px] font-spartan">
+          <a href="#" id="load-more-album" class="btn btn-sm btn-outline-light flex flex-col justify-center rounded-[30px] font-spartan">
             <i class="bi bi-plus-square-dotted">
                 Xem thêm
             </i>
           </a>
       </div>
+  </div>
+  <div class="flex flex-col mt-3">
+      <div class="px-5">  
+          <div>
+            <span class="block text-[20px] text-white  font-bold font-spartan">
+            Bài hát được bạn đăng tải
+            </span>
+          </div>
+      </div>
+      <div id="albums-container" class="flex flex-row overflow-x-auto max-w-[100%] mt-8 mb-20"
+      style=" -ms-overflow-style: none; scrollbar-width: none; ">
+      {{#if this.userSong.length}}
+          {{#each this.userSong}}
+                <div class="w-[200px] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4">
+                  <img class="w-[100px] h-[100px] rounded-full self-center mb-2" src="/static/imgs/song/{{SongID}}/main.jpg" />
+                  <div class="w-[168px] text-white text-xl font-bold font-spartan mt-2 truncate">{{SongName}}</div>
+                  <span class="block w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">Ngày đăng:</span>
+                  <span class="block w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">{{formatDate CreatedDate}}</span>
+                </div>
+          {{/each}}
+        {{else}}
+          <div class="w-full text-center text-stone-400 text-[15px] h-[200px] font-normal font-spartan mt-4">
+            Chưa có bài hát nào được upload bởi bạn
+          </div>
+        {{/if}}
+          {{!-- <a href="#" id="load-more-album" class="btn btn-sm btn-outline-light flex flex-col justify-center rounded-[30px] font-spartan">
+            <i class="bi bi-plus-square-dotted">
+                Xem thêm
+            </i>
+          </a> --}}
+      </div>  
   </div>
   </div>
   </div>
@@ -192,4 +223,50 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 </script>
+
+<script>
+  let currentOffset2 = 5;
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('load-more-album').addEventListener('click', function () {
+      const button2 = this;
+      const limit2 = 5; // Mỗi lần load thêm 5 bản ghi
+
+      fetch(`/account/album?offset=${currentOffset2}&limit=${limit2}`)
+        .then(response => {
+          if (!response.ok) {
+            console.error('Response not OK:', response.status);
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Data fetched:', data);
+
+          if (!data.albums || !Array.isArray(data.albums)) {
+            throw new Error('Invalid data format: `albums` is missing or not an array');
+          }
+
+          const container = document.getElementById('albums-container');
+          data.albums.forEach(album => {
+            const albumDiv = document.createElement('div');
+            albumDiv.className = 'w-[200px] h-[220px] mr-2 bg-black/25 rounded-[30px] flex flex-col items-start p-4';
+            albumDiv.innerHTML = `
+              <img class="w-[100px] h-[100px] rounded-full self-center mb-2" src="/static/imgs/album/${album.AlbumID}/main.jpg" alt="${album.AlbumName}" />
+              <div class="w-[168px] text-white text-xl font-bold font-spartan mt-3">${album.AlbumName}</div>
+              <div class="w-[262.56px] text-stone-400 text-[15px] font-normal font-spartan">Nghệ sỹ</div>
+            `;
+            container.prepend(albumDiv);
+          });
+
+          currentOffset2 += limit2;
+
+          if (!data.hasMore) {
+            button2.style.display = 'none';
+          }
+        })
+        .catch(error => console.error('Error loading more albums:', error));
+    });
+  });
+</script>
+
 {{/section}}

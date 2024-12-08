@@ -30,5 +30,6 @@ export default {
     FindArtist(user)
     {
         return db('artists').where({ ArtistName: user }).first();
-    }
+    },
+    
 };
