@@ -1,9 +1,9 @@
-{{#section "cssDatetime"}}
+{{#section "signupcss"}}
 <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
 {{/section}}
 
-{{#section "js"}}
+{{#section "signupjs"}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
     </script>
     <script>
@@ -52,48 +52,48 @@
         });
     </script>
 {{/section}}
-<div id="card-contain" class="card">
-    <div id="signup-card"class="card-body">
-        <div class="card-header d-flex flex-column justify-content-center align-items-center">
-            <img id="logo-img" src="../images/universe.jpg" alt="" class="img-fluid rounded-circle">
-            <h1>Đăng ký vào SoundLand</h1>
-        </div>
-        <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
-            <button type="button" class="btn btn btn-light btn-connect" onclick="window.location.href='/account/signup/githubAuth'">
-                <i class="bi bi-github"></i> Tiếp tục với Github
-            </button>
-            <button type="button" class="btn btn btn-light btn-connect">
-                <i class="bi bi-facebook"></i> Tiếp tục với Facebook
-            </button>
-            <button type="button" class="btn btn-light btn-connect">
-                <i class="bi bi-apple"></i> Tiếp tục với Apple
-            </button>
-            <button type="button" class="btn btn-light btn-connect">Đăng nhập với số điện thoại</button>
-            <hr id="line">
-            <form id="fmSignup" action="" method="post">
-                <div class="mb-2 form-group">
-                    <label class="form-label"for="txtUsername">UserName</label>
-                    <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">
-                </div>
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtPassword">Password</label>
-                    <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input" placeholder="">
-                </div>
-                <div class="mb-2 form-group">
-                    <label class="form-label" for="txtConfirmPassword">Confirm Password</label>
-                    <input type="password" name="confirm_password" id="txtConfirmPassword" class="form-control txt-input" placeholder="">
-                </div>
-                <div class="form-group">
-                    <label for="txtDOB">Day of Birth</label>
-                    <input type="text" name="raw_dob" id="txtDOB" class="form-control txt-input" placeholder="" >
-                </div>
-            
-                <button type="submit" class="btn btn-info btn-connect ">Sign Up</button>
-                <div class="d-flex justify-content-center align-items-center gap-10">
-                    <label>Bạn đã có tài khoản?</label>
-                    <label><a href="/account/signin" class="link-underline-dark link-pw">Đăng nhập</a></label>
-                </div>
-            </form>
+    <div id="card-contain" class="card">
+        <div id="signup-card"class="card-body">
+            <div class="card-header d-flex flex-column justify-content-center align-items-center">
+                <img id="logo-img" src="../images/universe.jpg" alt="" class="img-fluid rounded-circle">
+                <h1>Đăng ký vào SoundLand</h1>
+            </div>
+            <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
+                <button type="button" class="btn btn btn-light btn-connect" onclick="window.location.href='/account/signup/githubAuth'">
+                    <i class="bi bi-github"></i> Tiếp tục với Github
+                </button>
+                <button type="button" class="btn btn btn-light btn-connect">
+                    <i class="bi bi-facebook"></i> Tiếp tục với Facebook
+                </button>
+                <button type="button" class="btn btn-light btn-connect">
+                    <i class="bi bi-apple"></i> Tiếp tục với Apple
+                </button>
+                <button type="button" class="btn btn-light btn-connect">Đăng nhập với số điện thoại</button>
+                <hr id="line">
+                <form id="fmSignup" action="" method="post">
+                    <div class="mb-2 form-group">
+                        <label class="form-label"for="txtUsername">UserName</label>
+                        <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">
+                    </div>
+                    <div class="mb-2 form-group">
+                        <label class="form-label" for="txtPassword">Password</label>
+                        <input type="password" name="raw_password" id="txtPassword" class="form-control txt-input" placeholder="">
+                    </div>
+                    <div class="mb-2 form-group">
+                        <label class="form-label" for="txtConfirmPassword">Confirm Password</label>
+                        <input type="password" name="confirm_password" id="txtConfirmPassword" class="form-control txt-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDOB">Day of Birth</label>
+                        <input type="text" name="raw_dob" id="txtDOB" class="form-control txt-input" placeholder="" >
+                    </div>
+                
+                    <button type="submit" class="btn btn-info btn-connect ">Sign Up</button>
+                    <div class="d-flex justify-content-center align-items-center gap-10">
+                        <label>Bạn đã có tài khoản?</label>
+                        <label><a href="/account/signin" class="link-underline-dark link-pw">Đăng nhập</a></label>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
