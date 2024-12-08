@@ -554,6 +554,7 @@ video {
   display: none;
 }
 
+<<<<<<< HEAD
 .container {
   width: 100%;
 }
@@ -593,6 +594,8 @@ video {
   margin-right: 0.5rem;
 }
 
+=======
+>>>>>>> f69544014e6d6ebf72d784a649c5ea789e32b728
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
@@ -618,6 +621,10 @@ video {
 
 .mb-20 {
   margin-bottom: 5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
 }
 
 .mb-4 {
@@ -688,6 +695,10 @@ video {
   display: table;
 }
 
+.hidden {
+  display: none;
+}
+
 .h-1\/2 {
   height: 50%;
 }
@@ -732,6 +743,7 @@ video {
   max-height: 14px;
 }
 
+<<<<<<< HEAD
 .max-h-\[200px\] {
   max-height: 200px;
 }
@@ -744,6 +756,12 @@ video {
   min-height: 60vh;
 }
 
+=======
+.min-h-\[60vh\] {
+  min-height: 60vh;
+}
+
+>>>>>>> f69544014e6d6ebf72d784a649c5ea789e32b728
 .min-h-\[700px\] {
   min-height: 700px;
 }

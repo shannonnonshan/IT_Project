@@ -69,6 +69,7 @@ app.use('/static', express.static('static'));
 
 app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
 app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
+// Node.js với Express: phục vụ các tệp trong thư mục services
 
 app.get('/', function(req,res)
 {
