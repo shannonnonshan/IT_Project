@@ -554,6 +554,40 @@ video {
   display: none;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -674,10 +708,6 @@ video {
   height: 80px;
 }
 
-.h-\[80vh\] {
-  height: 80vh;
-}
-
 .h-auto {
   height: auto;
 }
@@ -690,20 +720,20 @@ video {
   max-height: 14px;
 }
 
-.max-h-\[80vh\] {
-  max-height: 80vh;
+.max-h-\[200px\] {
+  max-height: 200px;
 }
 
-.min-h-\[700px\] {
-  min-height: 700px;
-}
-
-.min-h-\[80vh\] {
-  min-height: 80vh;
+.min-h-\[200px\] {
+  min-height: 200px;
 }
 
 .min-h-\[60vh\] {
   min-height: 60vh;
+}
+
+.min-h-\[700px\] {
+  min-height: 700px;
 }
 
 .w-40 {
@@ -734,10 +764,6 @@ video {
   width: 200px;
 }
 
-.w-\[220px\] {
-  width: 220px;
-}
-
 .w-\[262\.56px\] {
   width: 262.56px;
 }
@@ -750,8 +776,8 @@ video {
   width: 50%;
 }
 
-.w-\[60\%\] {
-  width: 60%;
+.w-\[63\%\] {
+  width: 63%;
 }
 
 .w-\[80px\] {
@@ -766,8 +792,16 @@ video {
   width: 100%;
 }
 
+.min-w-\[200px\] {
+  min-width: 200px;
+}
+
 .max-w-\[100\%\] {
   max-width: 100%;
+}
+
+.max-w-\[200px\] {
+  max-width: 200px;
 }
 
 .max-w-\[80vh\] {
@@ -808,10 +842,6 @@ video {
 
 .gap-3 {
   gap: 0.75rem;
-}
-
-.gap-5 {
-  gap: 1.25rem;
 }
 
 .space-x-1 > :not([hidden]) ~ :not([hidden]) {
@@ -948,6 +978,11 @@ video {
   padding-right: 0.25rem;
 }
 
+.px-1\.5 {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+}
+
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -981,10 +1016,6 @@ video {
 
 .font-spartan {
   font-family: "League Spartan", sans-serif;
-}
-
-.text-\[110px\] {
-  font-size: 110px;
 }
 
 .text-\[15px\] {

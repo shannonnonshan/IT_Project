@@ -42,7 +42,7 @@ export default function configurePassport() {
             // Nếu không tìm thấy user, tạo user mới
             user = await User.add({
               githubId: profile.id,
-              username: username,
+              username: profile.username,
               name: profile.displayName || profile.username || 'No Name',
               email: email
             });

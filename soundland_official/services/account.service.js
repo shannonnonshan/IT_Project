@@ -15,8 +15,20 @@ export default {
     {
         return db('categories');
     },
-    // findSong(entity)
-    // {
-    //     return db('songs').where(entity).first();
-    // }
+    uploadSongArtist(entity)
+    {
+        return db('song_artists').insert(entity);
+    },
+    findbyID(userId)
+    {
+        return db('users').where({ id: userId }).first()
+    },
+    AddArtist(user)
+    {
+        return db('artists').insert(user);
+    },
+    FindArtist(user)
+    {
+        return db('artists').where({ ArtistName: user }).first();
+    }
 };
