@@ -58,21 +58,67 @@ router.post('/signup', async function (req, res) {
 });
 
 router.get('/profile', async function(req, res){
-    
-// res.send('hello world');
-    const list = await userProfileService.findAll();
-    const Artistlist = await userProfileService.Artist();
-    const Albumlist = await userProfileService.Album();
-    const UserDashboardlist = await userProfileService.Dashboard();
-    res.render('vwAccount/userProfile', 
-        {
-            list:list,
-            artists:Artistlist,
-            album: Albumlist,
+    if (!req.session.authUser) {
+        return res.redirect('/account/signin'); // Nếu session không tồn tại, redirect đến trang đăng nhập
+    }
+
+    try {
+        const user = req.session.authUser; // Lấy thông tin user từ session
+        const Artistlist = await userProfileService.Artist();
+        const Albumlist = await userProfileService.Album();
+        const UserDashboardlist = await userProfileService.Dashboard();
+        const UserSong = await userProfileService.FindSongOfUser(user);
+
+        res.render('vwAccount/userProfile', {
+            user: user,
+            artists: Artistlist.slice(0, 5),
+            albums: Albumlist.slice(0, 5),
             userdashboard: UserDashboardlist,
+            userSong: UserSong,
         });
-    
+    } catch (error) {
+        console.error("Lỗi trong quá trình lấy dữ liệu:", error);
+        res.status(500).send("Có lỗi xảy ra. Vui lòng thử lại sau.");
+    }
 });
+router.get('/artist', async (req, res) => {
+    const { limit = 5, offset = 0 } = req.query; // Parse limit và offset từ query string
+  
+    try {
+      const allArtists = await userProfileService.Artist(); // Lấy toàn bộ dữ liệu từ database
+      const paginatedArtists = allArtists.slice(parseInt(offset), parseInt(offset) + parseInt(limit));
+  
+      console.log('Offset:', offset);
+      console.log('Returning artists:', paginatedArtists);
+  
+      res.json({
+        artists: paginatedArtists,
+        hasMore: parseInt(offset) + parseInt(limit) < 30 // Kiểm tra nếu còn dữ liệu
+      });
+    } catch (error) {
+      console.error('Error fetching artists:', error);
+      res.status(500).json({ artists: [], hasMore: false });
+    }
+  });
+router.get('/album', async (req, res) => {
+    const { limit = 5, offset = 0 } = req.query; // Parse limit và offset từ query string
+  
+    try {
+      const allAlbums = await userProfileService.Album(); // Lấy toàn bộ dữ liệu từ database
+      const paginatedAlbums = allAlbums.slice(parseInt(offset), parseInt(offset) + parseInt(limit));
+  
+      console.log('Offset:', offset);
+      console.log('Returning albums:', paginatedAlbums);
+  
+      res.json({
+        albums: paginatedAlbums,
+        hasMore: parseInt(offset) + parseInt(limit) < 30 // Kiểm tra nếu còn dữ liệu
+      });
+    } catch (error) {
+      console.error('Error fetching albums:', error);
+      res.status(500).json({ albums: [], hasMore: false });
+    }
+  });
 router.get('/upload', async function(req, res){
     const list = await accountService.findCat();
     res.render('vwAccount/uploadSong',
@@ -107,7 +153,7 @@ router.post('/upload', upload, async (req, res) => {
         if (!req.files || !req.files.FilePath || !req.files.ImagePath) {
             return res.status(400).send('Both audio and image files are required.');
         }
-
+        
         // Lấy dữ liệu file
         const audioFile = req.files.FilePath[0]; // Lấy file âm thanh
         const imageFile = req.files.ImagePath[0]; // Lấy file hình ảnh
@@ -121,11 +167,25 @@ router.post('/upload', upload, async (req, res) => {
             CatID: selectedid,
             ReleaseDate: ymd_ReleaseDate
         };
-
+        
         // Lưu dữ liệu vào database và lấy SongID
+        const name = req.session.authUser.name;
+
+        const user = 
+        { 
+            ArtistName: name
+        }
+        const artist = await accountService.AddArtist(user)
+        const retArtist = await accountService.FindArtist(name)
+        console.log(retArtist)
+        //const userID = await accountService.findbyID(user);
         const ret = await accountService.upload(entity);
         const SongID = ret.SongID;
-
+        const songArtistentity={
+            SongID: SongID,
+            ArtistID:retArtist.ArtistID
+        }
+        const retSongArtist = await accountService.uploadSongArtist(songArtistentity);
         // Tạo thư mục dựa trên SongID
         const songPath = `./static/songs/${SongID}`;
         if (!fs.existsSync(songPath)) {
@@ -141,7 +201,7 @@ router.post('/upload', upload, async (req, res) => {
         fs.writeFileSync(audioFilePath, audioFile.buffer);
 
         // Lưu file hình ảnh
-        const imageFilePath = `${imagePath}/cover.jpg`;
+        const imageFilePath = `${imagePath}/main.jpg`;
         fs.writeFileSync(imageFilePath, imageFile.buffer);
 
         // Tạo đường dẫn để render

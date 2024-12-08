@@ -1,35 +1,17 @@
+import db from '../utils/db.js'
 export default
 {
     findAll()
     {
-        return[
-            {UserID: 1, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:2},
-            {UserID: 2, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:3},
-            {UserID: 3, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:4},
-            {UserID: 4, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:5},
-            {UserID: 5, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:6},
-            {UserID: 6, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:7},
-            {UserID: 7, UserName: 'Cam', NoOfFollower:2, NoOfFollowing: 5, PublicPlaylist:8},
-        ];
+        return db('user');
     },
     Artist()
     {
-        return[
-            {ArtistName: "Gracie Abrams", ArtistID: 1, ArtistPic:"/static/imgs/artist/1/main.jpg"},
-            {ArtistName: "Gracie Abrams", ArtistID: 2, ArtistPic:"/static/imgs/artist/1/main.jpg"},
-            {ArtistName: "Gracie Abrams", ArtistID: 3, ArtistPic:"/static/imgs/artist/1/main.jpg"},
-            {ArtistName: "Gracie Abrams", ArtistID: 4, ArtistPic:"/static/imgs/artist/1/main.jpg"},
-            {ArtistName: "Gracie Abrams", ArtistID: 5, ArtistPic:"/static/imgs/artist/1/main.jpg"},
-        ];
+        return db('artists');
     },
     Album()
     {
-        return[
-            {AlbumName: "Chill", AlbumID: 1, AlbumPic:"/static/imgs/album/1/main.jpg"},
-            {AlbumName: "Study", AlbumID: 2, AlbumPic:"/static/imgs/album/1/main.jpg"},
-            {AlbumName: "Pop", AlbumID: 3, AlbumPic:"/static/imgs/album/1/main.jpg"},
-            {AlbumName: "Kpop", AlbumID: 4, AlbumPic:"/static/imgs/album/1/main.jpg"},
-        ];
+        return db('albums');
     },
     Dashboard()
     {
@@ -40,6 +22,14 @@ export default
             {userID: 4, NoListenPrevious: 10345,  TimeChange:5},
             {userID: 5, NoListenPrevious: 10345,  TimeChange:5},
         ]
+    },
+    FindSongOfUser(user) {
+        return db('songs')
+            .join('song_artists', 'songs.SongID', 'song_artists.SongID') // Join songs và songs_artists
+            .join('artists', 'song_artists.ArtistID', 'artists.ArtistID') // Join songs_artists và artists
+            .join('users', 'artists.ArtistName', 'users.name') // Join artists và users
+            .select('songs.*') // Chọn toàn bộ cột từ bảng songs
+            .where('users.username', user.username); // Điều kiện lọc theo username
     }
 
 }
