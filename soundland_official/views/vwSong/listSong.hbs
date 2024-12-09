@@ -1,8 +1,9 @@
-
 {{#section "css"}}
     <link href="/static/css/album.css" rel="stylesheet">
 {{/section}}
+
 <div class="album-content" id="album-song-content">
+    <h1>Song List</h1>
     <table class="song-table">
         <thead>
             <tr>
@@ -10,7 +11,8 @@
                 <th>Title</th>
                 <th>Artist</th>
                 <th>Date Added</th>
-                <th><i class="fas fa-clock"></i></th>
+                <th>Duration</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody id="song-list">
@@ -28,21 +30,109 @@
                 <td>{{artistName}}</td>
                 <td>{{DateAdded}}</td>
                 <td>{{duration}}</td>
+                <td><button class="add-to-album-btn">Add to Album</button></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
+
+        <!-- Modal chọn album -->
+    <div id="albumModal" class="modal">
+        <div class="modal-content">
+            <h2>Select Album</h2>
+            <ul id="album-list">
+                <!-- Các album sẽ được hiển thị ở đây -->
+            </ul>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+
 </div>
+
 {{#section "script"}}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const songRows = document.querySelectorAll('.song-row');
+            const albumModal = document.getElementById('albumModal');
+            const closeModalButton = document.getElementById('closeModal');
+            const albumList = document.getElementById('album-list');
+            const selectedSongData = {}; // Dùng để lưu metadata bài hát khi chọn
+
+            // Thêm sự kiện cho nút "Add to Album"
+            songRows.forEach(row => {
+                const addToAlbumButton = row.querySelector('.add-to-album-btn');
+                
+                addToAlbumButton.addEventListener('click', () => {
+                    // Lấy dữ liệu của bài hát
+                    selectedSongData.songIndex = parseInt(row.getAttribute('data-song-index'), 10);
+                    selectedSongData.songName = row.getAttribute('data-song-name');
+                    selectedSongData.albumName = row.getAttribute('data-album-name');
+                    
+                    // Mở modal để chọn album
+                    albumModal.style.display = 'block';
+
+                    // Tải danh sách album vào modal
+                    fetch('/api/albums') // API trả về danh sách album (thay bằng endpoint của bạn)
+                        .then(response => response.json())
+                        .then(data => {
+                            albumList.innerHTML = ''; // Xóa danh sách cũ
+                            data.albums.forEach(album => {
+                                const albumItem = document.createElement('li');
+                                albumItem.textContent = album.name; // Hiển thị tên album
+                                albumItem.addEventListener('click', () => {
+                                    // Thêm bài hát vào album
+                                    addSongToAlbum(selectedSongData, album.id);
+                                    albumModal.style.display = 'none'; // Đóng modal
+                                });
+                                albumList.appendChild(albumItem);
+                            });
+                        })
+                        .catch(error => console.error('Error loading albums:', error));
+                });
+            });
+
+            // Đóng modal khi nhấn "Close"
+            closeModalButton.addEventListener('click', () => {
+                albumModal.style.display = 'none';
+            });
+
+            // Đóng modal khi nhấn ra ngoài modal
+            window.addEventListener('click', (event) => {
+                if (event.target === albumModal) {
+                    albumModal.style.display = 'none';
+                }
+            });
+
+            // Hàm thêm bài hát vào album
+            function addSongToAlbum(songData, albumId) {
+                // Gửi request để thêm bài hát vào album
+                fetch(`/api/albums/${albumId}/add-song`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        songIndex: songData.songIndex,
+                        songName: songData.songName,
+                        albumName: songData.albumName
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Song added to album successfully!');
+                })
+                .catch(error => {
+                    console.error('Error adding song:', error);
+                    alert('Failed to add song.');
+                });
+            }
+        });
             // Lấy tất cả các hàng bài hát
             const songRows = document.querySelectorAll('.song-row');
-            const playPauseButton = document.getElementById('playPauseButton');
-            const playPauseIcon = document.getElementById('playPauseIcon');
+            const addToAlbumButtons = document.querySelectorAll('.add-to-album-btn');
+
             songRows.forEach(row => {
                 row.addEventListener('click', () => {
-                    // Lấy metadata từ data-* attributes
                     const songIndex = parseInt(row.getAttribute('data-song-index'), 10);
                     const songName = row.getAttribute('data-song-name');
                     const artistName = row.getAttribute('data-artist-name');
@@ -63,12 +153,49 @@
                     Amplitude.setSongMetaData(songIndex, newMetaData);
 
                     // Phát bài hát ngay
-                    
                     Amplitude.playSongAtIndex(songIndex);
 
-                    // Tuỳ chọn: Highlight bài hát đang phát
+                    // Highlight bài hát đang phát
                     songRows.forEach(r => r.classList.remove('active'));
                     row.classList.add('active');
+                });
+            });
+
+            // Thêm chức năng cho nút "Add to Album"
+            addToAlbumButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation(); // Ngừng sự kiện click trên dòng bài hát
+                    const row = this.closest('tr');
+                    const songId = row.getAttribute('data-song-id');
+                    const songName = row.getAttribute('data-song-name');
+                    const artistName = row.getAttribute('data-artist-name');
+                    const albumName = row.getAttribute('data-album-name');
+
+                    // Gửi thông tin bài hát để thêm vào album
+                    fetch('/add-to-album', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            songId: songId,
+                            songName: songName,
+                            artistName: artistName,
+                            albumName: albumName,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Song added to album!');
+                        } else {
+                            alert('Failed to add song to album!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error adding song to album!');
+                    });
                 });
             });
         });

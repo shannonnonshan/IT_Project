@@ -1,0 +1,67 @@
+/* albumRankList.css */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background: linear-gradient(to bottom, #ff9bb3, #ffedf3); /* Gradient màu hồng */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #000; /* Chữ màu đen */
+}
+
+.album-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.album-item {
+    background-color: #fff;
+    padding: 20px;
+    width: 200px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    color: #000; /* Chữ màu đen */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.album-item:hover {
+    transform: scale(1.05); /* Tăng kích thước nhẹ */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hiệu ứng shadow mạnh hơn */
+    background-color: #ff9bb3; /* Màu nền thay đổi khi hover */
+    border-color: #ff6fa1; /* Border đổi màu */
+}
+
+.album-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000; /* Chữ màu đen */
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}

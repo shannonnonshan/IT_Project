@@ -1,8 +1,8 @@
 import express from 'express';
 import moment from 'moment'; // format from '../services/account.service.js';
-import albumServiceRank from '../services/albumrank.service.js';  // Using default import
+import * as albumServiceRank from '../services/albumrank.service.js';
 import musicService from '../services/music.service.js';
-
+import { createAlbum, getAllAlbums, getAlbumById, addSongToAlbum } from '../services/music.service.js';
 const router = express.Router();
 
 router.get('/albumrank', (req, res) => {
@@ -81,9 +81,6 @@ router.get('/listsongs', async function (req, res) {
     res.render('vwSong/listSong', { listSong: combinedList });
 });
 
-
-
-
 // Endpoint để nhận yêu cầu POST khi người dùng click vào bài hát
 router.get('/song/play', async function(req, res) {
     // Lấy songId từ request body
@@ -116,8 +113,118 @@ router.get('/song/play', async function(req, res) {
     res.json(songData);
 });
 
-router.post('/song/play', async function (req, res) {
-    
+router.post('/song/play', async (req, res) => {
+    const { songId } = req.body;
+
+    if (!songId) {
+        return res.status(400).json({ message: 'Song ID is required' });
+    }
+
+    try {
+        const song = await musicService.findSongById(songId);
+
+        if (!song) {
+            return res.status(404).json({ message: 'Song not found' });
+        }
+
+        const artist = await musicService.findArtistBySongId(songId);
+
+        const songData = {
+            SongID: song.SongID,
+            songName: song.SongName,
+            audioUrl: `/static/songs/${songId}/main.mp3`,
+            imgUrl: `/static/imgs/song/${songId}/main.jpg`,
+            artistName: artist ? artist.ArtistName : 'Unknown Artist',
+        };
+
+        res.json(songData);
+    } catch (error) {
+        console.error('Error fetching song details:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// Route to render the form for creating an album
+router.get('/albums/create', (req, res) => {
+    console.log('Rendering create album form');
+    res.render('vwAlbum/createAlbum');
+});
+
+// Route to handle POST form when creating an album
+router.post('/albums/create', async (req, res) => {
+    const { albumName, description, releaseDate } = req.body;
+    console.log(`Creating album: ${albumName}`);
+
+    try {
+        const newAlbum = await createAlbum({
+            name: albumName,
+            description,
+            releaseDate,
+        });
+        console.log('Album created successfully:', newAlbum);
+        res.redirect('/music/albums'); // Redirect to the album list
+    } catch (error) {
+        console.error('Error creating album:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Route to view the list of albums
+router.get('/albums', async (req, res) => {
+    try {
+        const albums = await getAllAlbums(); // Fetch the list of albums
+        res.render('vwAlbum/albumRankList', { albums });
+    } catch (error) {
+        console.error('Error fetching albums:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Route to view album details
+router.get('/album/:id', async (req, res) => {
+    const albumId = req.params.id;
+    console.log(`Requested album ID: ${albumId}`);
+
+    try {
+        const album = await getAlbumById(albumId);
+        console.log('Fetched album:', album);
+
+        if (!album) {
+            return res.status(404).render('vwAlbum/album-create-song-detail', { album: null });
+        }
+
+        res.render('vwAlbum/album-create-song-detail', { album });
+    } catch (error) {
+        console.error('Error fetching album:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// API Route: Get all albums
+router.get('/api/albums', async (req, res) => {
+    try {
+        const albums = await getAllAlbums();
+        res.json(albums);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// API Route: Add a song to an album
+router.post('/api/albums/:albumId/add-song', async (req, res) => {
+    const albumId = req.params.albumId;
+    const { songName, artistName } = req.body;
+
+    if (!songName || !artistName) {
+        return res.status(400).json({ error: 'Song name and artist name are required' });
+    }
+
+    try {
+        const songId = await addSongToAlbum(songName, artistName, albumId);
+        res.json({ success: true, songId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 

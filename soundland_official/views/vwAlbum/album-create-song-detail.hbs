@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{album.name}} - Details</title>
+
+    {{#section "css"}}
+        <link href="/static/css/album-create-song-detail.css" rel="stylesheet">
+    {{/section}}
+
+</head>
+<body>
+    <main>
+        <section class="album-create-song-detail">
+            {{#if album}}
+                <h1>{{album.name}}</h1>
+                <h2>by {{album.artist}}</h2>
+                <img src="/static/imgs/albums/{{album.id}}.jpg" alt="{{album.name}} by {{album.artist}}" class="album-create-song-detail-cover">
+                
+                <h3>Tracks:</h3>
+                <div class="album-create-song-detail-content">
+                    <table class="album-create-song-detail-song-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Artist</th>
+                                <th>Date Added</th>
+                                <th><i class="fas fa-clock"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="song-list">
+                            {{#each album.tracks}}
+                            <tr class="album-create-song-detail-song-row" data-song-index="{{@index}}" data-song-name="{{this.songName}}" data-artist-name="{{this.artistName}}"
+                                data-album-name="{{album.name}}" data-song-url="/static/songs/{{this.songID}}/main.mp3"
+                                data-cover-url="/static/imgs/song/{{this.songID}}/main.jpg">
+                                <td>{{@index}}</td>
+                                <td>
+                                    <div class="album-create-song-detail-album-row">
+                                        <img src="/static/imgs/song/{{this.songID}}/main.jpg" alt="{{this.songName}} Cover" class="album-create-song-detail-playlist-cover">
+                                        <p class="album-create-song-detail-album-title">{{this.songName}}</p>
+                                    </div>
+                                </td>
+                                <td>{{this.artistName}}</td>
+                                <td>{{this.dateAdded}}</td>
+                                <td>{{this.duration}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            {{else}}
+                <p>Album not found.</p>
+            {{/if}}
+
+            <a href="/music/albums" class="album-create-song-detail-back-btn">Back to Album List</a>
+        </section>
+    </main>
+
+    {{#section "script"}}
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Lấy tất cả các hàng bài hát
+                const songRows = document.querySelectorAll('.album-create-song-detail-song-row');
+                const playPauseButton = document.getElementById('playPauseButton');
+                const playPauseIcon = document.getElementById('playPauseIcon');
+                
+                songRows.forEach(row => {
+                    row.addEventListener('click', () => {
+                        // Lấy metadata từ data-* attributes
+                        const songIndex = parseInt(row.getAttribute('data-song-index'), 10);
+                        const songName = row.getAttribute('data-song-name');
+                        const artistName = row.getAttribute('data-artist-name');
+                        const albumName = row.getAttribute('data-album-name');
+                        const songUrl = row.getAttribute('data-song-url');
+                        const coverUrl = row.getAttribute('data-cover-url');
+
+                        // Metadata mới
+                        const newMetaData = {
+                            name: songName,
+                            artist: artistName,
+                            album: albumName,
+                            url: songUrl,
+                            cover_art_url: coverUrl,
+                        };
+
+                        // Cập nhật metadata cho bài hát
+                        Amplitude.setSongMetaData(songIndex, newMetaData);
+
+                        // Phát bài hát ngay
+                        Amplitude.playSongAtIndex(songIndex);
+
+                        // Tuỳ chọn: Highlight bài hát đang phát
+                        songRows.forEach(r => r.classList.remove('active'));
+                        row.classList.add('active');
+                    });
+                });
+            });
+        </script>
+    {{/section}}
+</body>
+</html>

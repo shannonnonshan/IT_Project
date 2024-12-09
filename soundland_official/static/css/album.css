@@ -1,9 +1,10 @@
 /* Tổng quan */
 body {
-    background-color: #1e1e2e; /* Nền tối */
-    color: #000; /* Chữ màu đen */
+    background-color: #ffffff; /* Nền sáng */
+    color: #000000; /* Chữ màu đen để tương phản với nền sáng */
     margin: 0;
     padding: 0;
+    font-family: 'Arial', sans-serif; /* Chọn font chữ đẹp */
 }
 
 /* Header album */
@@ -13,108 +14,150 @@ body {
     gap: 20px;
     padding: 20px;
     background: linear-gradient(to bottom, #ff9bb3, #ffedf3); /* Gradient từ hồng đậm tới nhạt */
-    border-bottom: 1px solid #ff9bb3; /* Viền hồng đậm */
-    border-radius: 8px; /* Tùy chọn bo góc */
+    border-bottom: 2px solid #ff9bb3; /* Viền hồng đậm */
+    border-radius: 12px; /* Bo góc mềm mại hơn */
 }
 
 .playlist-cover-header {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px; /* Bo góc ảnh */
+    width: 160px;
+    height: 160px;
+    border-radius: 12px; /* Bo góc ảnh */
     object-fit: cover;
-    border: 2px solid #ffb9c8; /* Viền hồng nhạt */
+    border: 3px solid #ffb9c8; /* Viền hồng nhạt */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Thêm hiệu ứng bóng cho ảnh */
 }
 
 .playlist-info {
     flex: 1;
+    color: #333; /* Màu chữ tối để dễ đọc */
 }
 
 .playlist-type {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: bold;
     color: #444; /* Màu xám đậm */
     margin-bottom: 10px;
 }
 
 .playlist-title {
-    font-size: 2rem;
-    font-weight: 600; /* In đậm hơn */
+    font-size: 2.2rem;
+    font-weight: 700; /* Tăng độ đậm */
     margin: 10px 0;
-    color: #000; /* Chữ màu đen */
+    color: #000;
 }
 
 .playlist-description,
 .playlist-genre,
 .playlist-release-date {
     font-size: 1rem;
-    font-weight: 400; /* Chữ thanh thoát hơn */
+    font-weight: 400; 
     margin: 5px 0;
-    color: #333; /* Màu xám đậm */
+    color: #444; /* Màu chữ xám nhẹ */
 }
 
 /* Nội dung album */
 .album-content {
     margin: 20px;
-    padding: 20px;
+    padding: 25px;
     background: linear-gradient(to bottom, #ffedf3, #ff9bb3); /* Gradient ngược lại */
-    border-radius: 8px; /* Tùy chọn bo góc */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tăng hiệu ứng nổi */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Hiệu ứng nổi mạnh mẽ hơn */
 }
 
-/* Bảng bài hát */
 /* Bảng bài hát */
 .song-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .song-table th {
-    background-color: #ffb9c8; /* Màu hồng nhạt */
-    font-weight: 600; /* Chữ in đậm hơn */
-    color: #000; /* Chữ màu đen */
+    background-color: #ffb9c8;
+    font-weight: bold;
+    color: #000000; /* Đổi màu chữ trong bảng thành đen */
     text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #ffb9c8;
+    padding: 12px;
+    border-bottom: 2px solid #ff9bb3; /* Viền dày hơn cho header */
 }
 
 .song-table td {
-    padding: 10px;
-    color: #000; /* Chữ màu đen */
-    border-bottom: 1px solid #ffb9c8; /* Viền hồng nhạt */
+    padding: 12px;
+    color: #333; /* Chữ xám nhạt */
+    border-bottom: 1px solid #ffb9c8;
 }
 
-/* Chỉ áp dụng hover cho các hàng trong tbody */
+/* Hover cho các hàng trong tbody */
 .song-table tbody tr:hover {
-    transform: scale(0.985); /* Thu nhỏ 1.5% */
-    transition: transform 0.3s ease; /* Hiệu ứng mượt */
+    transform: scale(0.98); /* Thu nhỏ 2% */
+    transition: transform 0.3s ease;
+    background-color: #ffe3ea; /* Chuyển màu khi hover */
 }
 
 /* Các hàng lẻ */
 .song-table tr:nth-child(even) {
-    background-color: #ffe3ea; /* Màu hồng nhạt */
+    background-color: #f8d9e1; /* Hồng nhạt hơn */
 }
-
 
 /* Hàng bài hát */
 .album-row {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px; /* Tăng khoảng cách giữa các phần */
 }
 
 .playlist-cover {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px; /* Bo góc ảnh bài hát */
+    width: 55px;
+    height: 55px;
+    border-radius: 8px; /* Bo góc nhẹ */
     object-fit: cover;
-    border: 2px solid #ffb9c8; /* Viền hồng nhạt */
+    border: 2px solid #ffb9c8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng bóng cho ảnh bài hát */
 }
 
 .album-title {
     font-size: 1rem;
-    font-weight: 400; /* Chữ mảnh hơn */
-    color: #000; /* Chữ màu đen */
+    font-weight: 500; /* Tăng độ đậm một chút */
+    color: #000;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Giới hạn chiều dài chữ */
+    white-space: nowrap; /* Ngăn chữ tràn sang dòng tiếp theo */
+}
+/* Modal Style */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+}
+
+#album-list {
+    list-style: none;
+    padding: 0;
+}
+
+#album-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+#album-list li:hover {
+    background-color: #f0f0f0;
 }
 
 /* Responsive */
@@ -129,12 +172,25 @@ body {
     }
 
     .album-content {
-        padding: 10px;
+        padding: 15px;
     }
 
     .song-table th,
     .song-table td {
         font-size: 0.9rem;
-        padding: 8px;
+        padding: 10px;
+    }
+
+    .playlist-title {
+        font-size: 1.8rem;
+    }
+
+    .album-row {
+        gap: 15px;
+    }
+
+    .playlist-cover {
+        width: 45px;
+        height: 45px;
     }
 }

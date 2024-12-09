@@ -224,6 +224,7 @@ html,body {
     max-height: 100%; /* Chiếm toàn bộ chiều cao vùng bên phải */
     overflow: hidden; /* Tránh cuộn không cần thiết */
     border-radius: 0; /* Nếu có lỗi từ góc bo */
+    padding-bottom: 80px; /* Kích thước phù hợp với chiều cao footer */
 }
 
 #music-inf{

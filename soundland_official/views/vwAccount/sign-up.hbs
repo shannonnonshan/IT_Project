@@ -1,57 +1,100 @@
 {{#section "cssDatetime"}}
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
 {{/section}}
 
 {{#section "js"}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script>
-        $('#txtDOB').datetimepicker(
-            {
-                timepicker:false,
+        $(document).ready(function () {
+            $.getScript("https://code.jquery.com/jquery-3.6.4.min.js", function() {
+            console.log("jQuery loaded");
+            // Place your jQuery-dependent code here
+            $('#txtDOB').datetimepicker({
+                timepicker: false,
                 format: 'd/m/Y',
-                mask:true
-            }
-        );
-
-        $('#fmSignup').on('submit', function (e) {
-            e.preventDefault();
-            const username = $('#txtUsername').val();
-            const dob = $('#txtDOB').val(); // Lấy giá trị ngày sinh
-            const password = $('#txtPassword').val();
-            const confirmPassword = $('#txtConfirmPassword').val();
-
-            // Kiểm tra trường ngày tháng
-            if (!moment(dob, 'DD/MM/YYYY', true).isValid()) {
-                alert('Ngày sinh không hợp lệ. Vui lòng nhập đúng định dạng DD/MM/YYYY.');
-                return;
-            }
-
-            // Kiểm tra mật khẩu
-            if (password !== confirmPassword) {
-                alert('Mật khẩu xác nhận không khớp.');
-                return;
-            }
-
-            // Kiểm tra tên người dùng
-            if (username.length === 0) {
-                alert('Tên người dùng không được để trống.');
-                return;
-            }
-
-            // Kiểm tra username khả dụng qua AJAX
-            $.getJSON(`/account/is-available?username=${username}`, function (data) {
-                if (data === false) {
-                    alert('Tên người dùng không khả dụng.');
-                } else {
-                    // Submit form
-                    $('#fmSignup').off('submit').submit();
-                }
+                mask: true
             });
-        });
+            }).fail(function() {
+            console.log("Lỗi khi tải jQuery");
+            });
+
+
+            $('#txtDOB').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y',
+                mask: true
+            });
+
+            $('#fmSignup').on('submit', function (e) {
+                e.preventDefault();  // Ngừng gửi form để kiểm tra trước
+
+                const name = $('#txtname').val().trim();
+                const email = $('#txtEmail').val().trim();
+                const username = $('#txtUsername').val().trim();
+                const dob = $('#txtDOB').val().trim();
+                const password = $('#txtPassword').val();
+                const confirmPassword = $('#txtConfirmPassword').val();
+
+                if (!name || !email || !username || !dob || !password || !confirmPassword) {
+                    alert('Tất cả các trường đều là bắt buộc.');
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Email không hợp lệ. Vui lòng nhập đúng định dạng.');
+                    return;
+                }
+
+                if (!moment(dob, 'DD/MM/YYYY', true).isValid()) {
+                    alert('Ngày sinh không hợp lệ. Vui lòng nhập đúng định dạng DD/MM/YYYY.');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    alert('Mật khẩu phải có ít nhất 6 ký tự.');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    alert('Mật khẩu xác nhận không khớp.');
+                    return;
+                }
+
+                // Kiểm tra username khả dụng qua AJAX
+                $.getJSON(`/account/is-available?username=${username}`, function (data) {
+                    if (!data) {
+                        alert('Tên người dùng không khả dụng.');
+                    } else {
+                        // Gửi form qua AJAX
+                        $.ajax({
+                            url: '/account/signup',  // Địa chỉ gửi yêu cầu POST
+                            method: 'POST',
+                            data: {
+                                name: name,
+                                email: email,
+                                username: username,
+                                dob: dob,
+                                password: password,
+                                confirm_password: confirmPassword
+                            },
+                            success: function(response) {
+                                // Xử lý nếu form gửi thành công
+                                window.location.href = "/account/signin";  // Chuyển hướng đến trang đăng nhập
+                            },
+                            error: function(error) {
+                                // Xử lý lỗi nếu gửi form không thành công
+                                alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                            }
+                        });
+                    }
+                });
+            });
     </script>
 {{/section}}
+
 <div id="card-contain" class="card">
     <div id="signup-card"class="card-body">
         <div class="card-header d-flex flex-column justify-content-center align-items-center">
@@ -59,18 +102,15 @@
             <h1>Đăng ký vào SoundLand</h1>
         </div>
         <div id="card-btn-connect" class="card-body d-flex flex-column justify-content-center align-items-center">
-            <button type="button" class="btn btn btn-light btn-connect" onclick="window.location.href='/account/signup/githubAuth'">
-                <i class="bi bi-github"></i> Tiếp tục với Github
-            </button>
-            <button type="button" class="btn btn btn-light btn-connect">
-                <i class="bi bi-facebook"></i> Tiếp tục với Facebook
-            </button>
-            <button type="button" class="btn btn-light btn-connect">
-                <i class="bi bi-apple"></i> Tiếp tục với Apple
-            </button>
-            <button type="button" class="btn btn-light btn-connect">Đăng nhập với số điện thoại</button>
-            <hr id="line">
             <form id="fmSignup" action="" method="post">
+                <div class="mb-2 form-group">
+                    <label class="form-label"for="txtName">Your Full Name</label>
+                    <input type="text" name="name" id="txtName" class="form-control txt-input" placeholder="Yue Minamoto">
+                </div>
+                <div class="mb-2 form-group">
+                    <label class="form-label"for="txtEmail">Your Email</label>
+                    <input type="text" name="email" id="txtEmail" class="form-control txt-input" placeholder="yueminamoto@gmail.com">
+                </div>
                 <div class="mb-2 form-group">
                     <label class="form-label"for="txtUsername">UserName</label>
                     <input type="text" name="username" id="txtUsername" class="form-control txt-input" placeholder="">

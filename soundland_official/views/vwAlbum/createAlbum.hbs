@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Album</title>
+    <link rel="stylesheet" href="/static/css/createAlbum.css"> <!-- Liên kết tới file CSS -->
+</head>
+<body>
+
+    <div class="container-create-album" id="create-album-container">
+        <h1 id="create-album-title">Create New Album</h1>
+        
+        <!-- Form để tạo album mới -->
+        <form action="/music/albums/create" method="POST" id="create-album-form">
+            <label for="albumName" id="album-name-label">Album Name:</label>
+            <input type="text" id="albumName" name="albumName" required>
+            
+            <button type="submit" class="button-create-albums">Create Album</button>
+        </form>
+
+        <!-- Link trở về danh sách album -->
+        <div class="back-link-create-albums" id="back-to-list-link">
+            <a href="/music/albums" id="back-link">Back to Album List</a>
+        </div>
+    </div>
+
+</body>
+</html>

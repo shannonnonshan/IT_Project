@@ -34,11 +34,6 @@ CREATE TABLE `userRefreshTokenExt` (
   CONSTRAINT `fk_user_id` FOREIGN KEY (`ID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-
-
-
-
 -- ----------------------------
 -- Table structure for categories
 -- ----------------------------
@@ -72,7 +67,6 @@ INSERT INTO `categories` (`CatName`) VALUES
 ('Techno'),
 ('Opera'),
 ('Gospel');
-
 
 -- ----------------------------
 -- Table structure for artists

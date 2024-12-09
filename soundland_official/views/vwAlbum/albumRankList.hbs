@@ -1,0 +1,31 @@
+<!-- albumRankList.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album List</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/albumRankList.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+
+    <div class="container">
+        <h1>Album List</h1>
+        
+        <!-- Danh sách album -->
+        <div class="album-list">
+            {{#each albumRanks}}
+                <a href="/music/album/{{this.AlbumID}}" class="album-item">
+                    <div class="album-name">{{this.AlbumName}}</div>
+                </a>
+            {{/each}}
+        </div>
+
+        <!-- Link trở về form tạo album -->
+        <div class="back-link">
+            <a href="/music/albums/create">Create New Album</a>
+        </div>
+    </div>
+
+</body>
+</html>
