@@ -38,7 +38,6 @@ export default {
     {
         return db('categories');
     },
-<<<<<<< HEAD
     uploadSongArtist(entity)
     {
         return db('song_artists').insert(entity);
@@ -57,11 +56,5 @@ export default {
     },
     
 };
-=======
-    // findSong(entity)
-    // {
-    //     return db('songs').where(entity).first();
-    // }
-};
 
->>>>>>> f69544014e6d6ebf72d784a649c5ea789e32b728
+
