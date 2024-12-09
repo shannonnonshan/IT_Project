@@ -2,10 +2,10 @@
     <link href="/static/css/album.css" rel="stylesheet">
 {{/section}}
 <div class="album-header" id="album-song-header">
-    <img src="{{album.img}}" alt="{{album.title}} Cover" class="playlist-cover-header">
+    {{!-- <img src="/static/albums/{{AlbumID}}/main.jpg" alt="{{AlbumName}} Cover" class="playlist-cover-header"> --}}
+    <img src="/static/imgs/top1.png" alt="{{AlbumName}} Cover" class="playlist-cover-header">
     <div class="playlist-info">
-        <p class="playlist-type">Public Playlist</p>
-        <h1 class="playlist-title">{{album.title}}</h1>
+        <h1 class="playlist-title">{{this.album.AlbumName}}</h1>
         <p class="playlist-description">
             {{#if album.description}}
                 {{album.description}}
@@ -33,19 +33,25 @@
         </thead>
         <tbody id="song-list">
             {{#each songs}}
-                <tr>
-                    <td>{{@index}}</td> <!-- Dùng {{@index}} để tự động đánh số -->
-                    <td>
-                        <div class="album-row">
-                            <img src="{{cover}}" alt="{{title}} Cover" class="playlist-cover">
-                            <p class="album-title">{{title}}</p>
-                        </div>
-                    </td>
-                    <td>{{artist}}</td>
-                    <td>{{dateAdded}}</td>
-                    <td>{{duration}}</td>
-                </tr>
+            <tr class="song-row" data-song-id="{{SongID}}" data-song-index="{{@index}}" data-song-name="{{SongName}}" data-artist-name="{{artistName}}"
+                data-album-name="{{AlbumName}}" data-song-url="/static/songs/{{SongID}}/main.mp3"
+                data-cover-url="/static/imgs/song/{{SongID}}/main.jpg" onclick="Amplitude.playNow({{this.SongID}})">
+                <td>{{displayIndex}}</td>
+                <td>
+                    <div class="album-row">
+                        <img src="/static/imgs/song/{{SongID}}/main.jpg" alt="{{SongName}} Cover" class="playlist-cover">
+                        <p class="album-title">{{SongName}}</p>
+                    </div>
+                </td>
+                <td>{{artistName}}</td>
+                <td>{{DateAdded}}</td>
+                <td>{{duration}}</td>
+            </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
+
+<input type="hidden" id="albumid" value="{{this.album.AlbumID}}">
+
+

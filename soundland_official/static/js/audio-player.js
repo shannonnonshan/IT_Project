@@ -1,11 +1,22 @@
 async function loadSongs() {
     try {
-        // Fetch songs from the API
-        const response = await fetch('/music/songs');
+        
+        let response;
+        console.log("hehee", albumIdToSearch);
+        if (albumIdToSearch !== null) {
+            response = await fetch(`/music/songs?albumid=${albumIdToSearch}`);
+            
+        }
+        else {
+            response = await fetch("/music/songs");
+        }
+        // const response = await fetch("/music/songs");
+        // console.log("hehee");
         if (!response.ok) {
             throw new Error('Failed to fetch songs data');
         }
         const data = await response.json();
+        
         console.log("API Response:", data);
 
         if (Array.isArray(data.songs)) {
@@ -42,8 +53,9 @@ async function loadSongs() {
         console.error("Error loading songs:", error);
     }
 }
+ const albumElement = document.querySelector('#albumid');
+const albumIdToSearch = albumElement ? albumElement.value : null;
 
-
-
+// console.log(albumId);
 // Call loadSongs() to initialize the Amplitude player and load songs
 loadSongs();

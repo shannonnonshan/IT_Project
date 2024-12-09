@@ -7,41 +7,56 @@
     <div class="row ">
         {{#each this.albums}}
             <div class="col-sm-6">
-                <div class="card card-top-chart">
-                    <div class="card-body title-music d-flex flex-row">
-                        <img class="img-music-format" src="/static/imgs/images/apt.png" alt="">
-                        <div class="title d-flex flex-column">
-                            <h4 class="card-title">{{AlbumName}}</h4>
-                            <p class="card-text">{{artistName}}</p>
+                <form action="/music/songs?albumid={{AlbumID}}" method="POST"></form>
+                <a href="/music/album-detail?albumid={{AlbumID}}" class="text-decoration-none">
+                    <div class="card card-top-chart">
+                        <div class="card-body title-music d-flex flex-row">
+                            <img class="img-music-format" src="/static/imgs/images/apt.png" alt="">
+                            <div class="title d-flex flex-column">
+                                <h4 class="card-title">{{AlbumName}}</h4>
+                                <p class="card-text">{{artistName}}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer feature-foot">
+                            <i class="bi bi-plus-circle component-player-add"></i>
+                            <i class="bi bi-shuffle component-player-shuffle"></i>
+                            <i class="bi bi-play-circle-fill component-player-start"></i>
                         </div>
                     </div>
-                    <div class="card-footer feature-foot">
-                        <i class="bi bi-plus-circle component-player-add"></i>
-                        <i class="bi bi-shuffle component-player-shuffle"></i>
-                        <i class="bi bi-play-circle-fill component-player-start"></i>
-                    </div>
-                </div>
+                </a>
             </div>
+
         {{/each}}
     </div>
-    <h1>Top Music</h1>
-    <div class="row">
+    <h1 class="mt-5">Top Music</h1>
+    <div class="row ">
         {{#each this.songs}}
         <div class="col-sm-6">
             <table class="table table-striped">
                 <tr>
                     <td>
-                        <div class="album-row">
-                            <img src="{{cover}}" alt="{{title}} Cover" class="playlist-cover"
-                                style="width: 50px; height: 50px; object-fit: cover;">
-                            <p class="album-title">{{SongID}}</p>
+                        <div class="d-flex align-items-center gap-10" >
+                            <!-- Hình ảnh bên trái -->
+                            <img src="/static/imgs/song/{{SongID}}/main.jpg" alt="{{title}} Cover" class="playlist-cover"
+                                style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
+    
+                            <!-- Thông tin bài hát bên phải -->
+                            <div class="font-music">
+                                <p class="album-title" style="margin: 0; font-weight: bold;">{{SongName}}</p>
+                                <p style="margin: 0;">{{artistName}}</p>
+                            </div>
                         </div>
                     </td>
-                    <td>{{artistName}}</td>
                 </tr>
             </table>
         </div>
         {{/each}}
     </div>
 
+
 </div>
+{{#section "script"}}
+    <script>
+        
+    </script>
+{{/section}}

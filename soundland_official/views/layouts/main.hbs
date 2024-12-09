@@ -229,6 +229,46 @@
         });
     </script>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lấy tất cả các hàng bài hát
+            const songRows = document.querySelectorAll('.song-row');
+            const playPauseButton = document.getElementById('playPauseButton');
+            const playPauseIcon = document.getElementById('playPauseIcon');
+            songRows.forEach(row => {
+                row.addEventListener('click', () => {
+                    // Lấy metadata từ data-* attributes
+                    const songIndex = parseInt(row.getAttribute('data-song-index'), 10);
+                    const songName = row.getAttribute('data-song-name');
+                    const artistName = row.getAttribute('data-artist-name');
+                    const albumName = row.getAttribute('data-album-name');
+                    const songUrl = row.getAttribute('data-song-url');
+                    const coverUrl = row.getAttribute('data-cover-url');
+
+                    // Metadata mới
+                    const newMetaData = {
+                        name: songName,
+                        artist: artistName,
+                        album: albumName,
+                        url: songUrl,
+                        cover_art_url: coverUrl,
+                    };
+                    console.log(newMetaData);
+                    console.log(songIndex);
+                    // Cập nhật metadata cho bài hát
+                    Amplitude.setSongMetaData(songIndex, newMetaData);
+                    
+                    // Phát bài hát ngay
+
+                    Amplitude.playSongAtIndex(songIndex);
+
+                    // Tuỳ chọn: Highlight bài hát đang phát
+                    songRows.forEach(r => r.classList.remove('active'));
+                    row.classList.add('active');
+                });
+            });
+        });
+    </script>
+    <script>
         // Đảm bảo đã tải SweetAlert2 bằng cách thêm các script và link trong HTML
 
         // Khi nhấn vào nút logout
@@ -380,16 +420,6 @@
                         resultsContainer.style.display = 'none';
                     });
             });
-
-            // Update footer song info
-            function updateSongInfo() {
-                const song = Amplitude.getActiveSongMetadata();
-                if (song) {
-                    document.getElementById('music-cover').src = song.cover_art_url || 'default_cover.png';
-                    document.getElementById('song-name').innerText = song.name || 'Unknown Song';
-                    //document.getElementById('artist-name').innerText = song.artist || 'Unknown Artist';
-                }
-            }
         });
 </script>
 

@@ -2,6 +2,7 @@ import express from 'express';
 import moment from 'moment'; // format from '../services/account.service.js';
 import albumServiceRank from '../services/albumrank.service.js';  // Using default import
 import musicService from '../services/music.service.js';
+import albumService from '../services/album.service.js';
 // import controllers from '../controllers/artistController.js'
 const router = express.Router();
 
@@ -30,38 +31,78 @@ router.get('/album-song/:title', (req, res) => {
     }
 });
 
+router.get('/album-detail', async function (req, res) {
+    const albumid = req.query.albumid || '0';  // Sửa từ req.body sang req.query
+    const songs = await musicService.findSongByAlbumId(albumid);
+    const album = await albumService.findAlbumById(albumid);
+    if (songs.length > 0) {
+        const songList = await Promise.all(songs.map(async (song) => {
+            const artistName = await musicService.findNameArtistBySongId(song.SongID);
+            return {
+                SongID: song.SongID,
+                SongName: song.SongName,
+                urlAudio: `/static/songs/${song.SongID}/main.mp3`,
+                urlImage: `/static/imgs/song/${song.SongID}/main.jpg`,
+                artistName: artistName || 'Unknown Artist',
+            };
+        }));
+        res.render('vwAlbum/album-song', {
+            songs: songList, 
+            album: album
+        });
+    } else {
+        res.render('vwAlbum/album-song', { songs: [] }); // Xử lý nếu không có bài hát
+    }
+});
+
+
+    
 
 // Endpoint trả danh sách bài hát dưới dạng JSON
 router.get('/songs', async function (req, res) {
+     const albumId = req.query.albumid || '0';
+    let album = null;
+
+    async function createSongList(songs) {
+        return await Promise.all(songs.map(async (song) => {
+            const artistName = await musicService.findNameArtistBySongId(song.SongID);
+            return {
+                SongID: song.SongID,
+                SongName: song.SongName,
+                urlAudio: `/static/songs/${song.SongID}/main.mp3`,
+                urlImage: `/static/imgs/song/${song.SongID}/main.jpg`,
+                artistName: artistName || 'Unknown Artist',
+            };
+        }));
+    }
+
     try {
-        // Lấy danh sách bài hát từ dịch vụ
-        const listSong = await musicService.findAll();
+        if (albumId !== '0') {
+            album = await albumService.findAlbumById(albumId);
+            if (!album) {
+                return res.status(404).json({ error: 'Album not found' });
+            }
 
-        // Kiểm tra nếu listSong không rỗng
-        if (listSong.length > 0) {
-            // Tạo một mảng songList với đầy đủ thông tin bài hát
-            const songList = await Promise.all(listSong.map(async (song) => {
-                const artist = await musicService.findArtistBySongId(song.SongID);
-                
-                return {
-                    SongID: song.SongID,
-                    SongName: song.SongName,
-                    urlAudio: `/static/songs/${song.SongID}/main.mp3`,  // URL hợp lệ cho bài hát
-                    urlImage: `/static/imgs/song/${song.SongID}/main.jpg`,  // Đảm bảo có ảnh bìa
-                    artistName: artist ? artist.ArtistName : 'Unknown Artist',
- 
-                };
-            }));
+            const songs = await musicService.findSongByAlbumId(albumId);
+            const songList = await createSongList(songs);
 
-            // Trả dữ liệu songList cho client dưới dạng JSON
-            res.json({ songs: songList });
-
+            res.json({ album, songs: songList });
+            res.render('vwAlbum/album-song', {
+                album: album,
+                songs: songList
+            })
         } else {
-            res.status(404).json({ message: "No songs found" });
+            const allSongs = await musicService.findAll();
+            if (allSongs.length === 0) {
+                return res.status(404).json({ message: "No songs found" });
+            }
+
+            const songList = await createSongList(allSongs);
+            return res.json({ songs: songList });
         }
     } catch (error) {
-        console.error("Error loading songs:", error);
-        res.status(500).json({ message: "Error loading songs" });
+        console.error("Error loading album or songs:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 });
 

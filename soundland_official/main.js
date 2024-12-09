@@ -92,10 +92,10 @@ app.get('/', async function(req, res) {
         };
     }));
     const songList = await Promise.all(songs.map(async (song) => {
-        const artistName = await musicService.findArtistBySongId(song.SongID);  // Gọi đúng hàm tìm nghệ sĩ
+        const artist = await musicService.findArtistBySongId(song.SongID);  // Gọi đúng hàm tìm nghệ sĩ
         return {
             ...song,  // Giữ nguyên thông tin album
-            artistName: artistName || "Unknown Artist",  // Thêm thông tin nghệ sĩ vào
+            artistName: artist.ArtistName || "Unknown Artist",  // Thêm thông tin nghệ sĩ vào
         };
     }));
 
