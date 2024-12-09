@@ -674,10 +674,6 @@ video {
   height: 80px;
 }
 
-.h-\[80vh\] {
-  height: 80vh;
-}
-
 .h-auto {
   height: auto;
 }
@@ -690,20 +686,12 @@ video {
   max-height: 14px;
 }
 
-.max-h-\[80vh\] {
-  max-height: 80vh;
+.min-h-\[60vh\] {
+  min-height: 60vh;
 }
 
 .min-h-\[700px\] {
   min-height: 700px;
-}
-
-.min-h-\[80vh\] {
-  min-height: 80vh;
-}
-
-.min-h-\[60vh\] {
-  min-height: 60vh;
 }
 
 .w-40 {
