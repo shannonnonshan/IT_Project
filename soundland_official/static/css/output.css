@@ -642,8 +642,6 @@ video {
   display: table;
 }
 
-<<<<<<< HEAD
-=======
 .h-1\/2 {
   height: 50%;
 }
@@ -652,7 +650,6 @@ video {
   height: 33.333333%;
 }
 
->>>>>>> 3de3c9be083e3370af19146e9ae7531868f52c50
 .h-8 {
   height: 2rem;
 }
@@ -1027,31 +1024,4 @@ video {
 
 /* Ví dụ sử dụng font */
 
-<<<<<<< HEAD
-body {
-  height: auto;
-  overflow: -moz-scrollbars-none;
-  /* Cho trình duyệt Firefox */
-  -ms-overflow-style: none;
-  /* Cho IE và Edge */
-}
-
-body::-webkit-scrollbar {
-  display: none;
-  /* Ẩn thanh cuộn cho trình duyệt WebKit */
-}
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-=======
->>>>>>> 3de3c9be083e3370af19146e9ae7531868f52c50
   
