@@ -80,16 +80,19 @@
             <div class="col-sm-10 h-100">
                 <div id="card-right" class="card h-100 ">
                     <div id="header-right" class="d-flex justify-content-between align-items-center">
-                        <form id="searchform" class="input-group w-75">
-                            <span class="bi bi-search input-group-text" id="basic-addon1"></span>
-                            <input id="search-bar" type="text" class="form-control" placeholder="Search"
-                                aria-label="Search" aria-describedby="basic-addon1">
-                        </form>
+                        <div class="search-container">
+                            <form class="d-flex" method="post" role="search" action="/music/search">
+                                <input id="searchInput" name="searchInput" class="form-control me-2 search-input" type="search"
+                                    placeholder="Search" aria-label="Search" autocomplete="off">
+                                <a type="submit">
+                                    <img class="search-icon" src="/static/imgs/btn-search.png" alt="Search">
+                                </a>
+                            </form>
+                            <ul id="searchResults" class="dropdown-menu"></ul>
+                        </div>
                         <button type="button" class="btn btn-outline-warning">
-                            <i class="bi bi-bell-fill"></i>
-                            Read More
+                            <i class="bi bi-bell-fill"></i> Read More
                         </button>
-
                     </div>
                     <div class="card-body display-card">
                         {{{body}}}
@@ -271,9 +274,6 @@
             }
 
             console.log('Current active song:', song);
-
-            // Update album cover and song name in the HTML
-            console.log('Song image:', song.musicImg);
             document.getElementById('music-cover').src = song.musicImg || 'default_cover.png'; // Ensure valid image URL
             document.getElementById('song-name').innerText = song.songName || 'Unknown Song'; // Update song name
 
@@ -281,6 +281,118 @@
             document.getElementById('artist-name').innerText = song.artistName || 'Unknown Artist';
         }
     </script>
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+            const songRows = document.querySelectorAll('.song-row');
+            const searchInput = document.getElementById('searchInput');
+            const resultsContainer = document.getElementById('searchResults');
+
+            let searchResults = [];
+
+            // Handle search input
+            searchInput.addEventListener('input', function () {
+                const keyword = this.value.trim();
+
+                if (keyword.length === 0) {
+                    resultsContainer.style.display = 'none';
+                    return;
+                }
+
+                fetch(`/music/autocomplete?keyword=${encodeURIComponent(keyword)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResults = data; // Save search results
+                        // Clear previous results
+                        resultsContainer.innerHTML = '';
+
+                        if (data.length > 0) {
+                            resultsContainer.style.display = 'block';
+                            data.forEach((item, index) => {
+                                const li = document.createElement('li');
+                                li.classList.add('dropdown-item');
+
+                                // Create a div to display song info
+                                const songItem = document.createElement('div');
+                                songItem.classList.add('d-flex', 'align-items-center');
+
+                                // Image
+                                const img = document.createElement('img');
+                                img.src = `/static/imgs/song/${item.id}/main.jpg`; // Ensure correct image path
+                                img.alt = item.name;
+                                img.style.width = '40px';
+                                img.style.height = '40px';
+                                img.classList.add('rounded-circle', 'mr-2');
+
+                                // Song name
+                                const songName = document.createElement('span');
+                                songName.textContent = item.name;
+
+                                // Append image and name to song item
+                                songItem.appendChild(img);
+                                songItem.appendChild(songName);
+                                li.appendChild(songItem);
+
+                                // Add click event for each song in the search results
+                                li.addEventListener('click', () => {
+                                    // Update search input with song name
+                                    searchInput.value = item.name;
+                                    resultsContainer.style.display = 'none';
+
+                                    // Construct song metadata
+                                    const songUrl = `/static/songs/${item.id}/main.mp3`; // Make sure the path is correct
+                                    const coverUrl = `/static/imgs/song/${item.id}/main.jpg`; // Make sure the cover image path is correct
+
+                                    if (!songUrl || !coverUrl) {
+                                        console.error("Missing song URL or cover image URL");
+                                        return;
+                                    }
+
+                                    // Create metadata for the song
+                                    const newMetaData = {
+                                        name: item.name,
+                                        cover_art_url: coverUrl,
+                                        url: songUrl
+                                    };
+
+                                    // Add song to Amplitude (this is for single song)
+                                    Amplitude.addSong(newMetaData);
+
+                                    // Play the song immediately
+                                    Amplitude.playSongAtIndex(item.id - 1); // Play the clicked song
+
+                                    // Update footer with song info
+                                    updateSongInfo();
+
+                                    // Highlight the active song in the search results
+                                    const allResults = resultsContainer.querySelectorAll('li');
+                                    allResults.forEach(res => res.classList.remove('active'));
+                                    li.classList.add('active');
+                                });
+
+                                resultsContainer.appendChild(li);
+                            });
+                        } else {
+                            resultsContainer.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching search results:', error);
+                        resultsContainer.style.display = 'none';
+                    });
+            });
+
+            // Update footer song info
+            function updateSongInfo() {
+                const song = Amplitude.getActiveSongMetadata();
+                if (song) {
+                    document.getElementById('music-cover').src = song.cover_art_url || 'default_cover.png';
+                    document.getElementById('song-name').innerText = song.name || 'Unknown Song';
+                    //document.getElementById('artist-name').innerText = song.artist || 'Unknown Artist';
+                }
+            }
+        });
+</script>
+
 </body>
 
 </html>

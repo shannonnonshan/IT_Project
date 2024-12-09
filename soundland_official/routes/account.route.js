@@ -246,14 +246,156 @@ router.post('/logout', auth, function(req, res){
     res.redirect(req.headers.referer);
 })
 
-router.get('/forgot-password', function (req, res) {
-     res.render('vwAccount/forgot-password', {
-        layout: 'sign-up-layout'  // Sử dụng layout signUpLayout cho trang đăng ký
+router.get('/forgot-password', (req, res) => {
+    res.render('vwAccount/forgot-password', {
+        layout: 'sign-up-layout',
     });
-})
-router.post('/forgot-password', function(req, res){
+});
 
-})
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        // Kiểm tra email tồn tại trong cơ sở dữ liệu
+        const user = await db.User.findOne({ where: { email } });
+        if (!user) {
+            return res.render('vwAccount/forgot-password', {
+                layout: 'sign-up-layout',
+                errorMessage: 'Email không tồn tại trong hệ thống',
+            });
+        }
+
+        // Tạo OTP và thời gian hết hạn
+        const otp = Math.floor(100000 + Math.random() * 900000); // Mã OTP 6 chữ số
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // Hết hạn sau 10 phút
+
+        // Lưu OTP vào database
+        await db.Otp.create({ email, otp, expiresAt });
+
+        // Cấu hình gửi email qua Nodemailer
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'your-email@gmail.com', // Thay bằng email của bạn
+                pass: 'your-email-password', // Thay bằng mật khẩu của bạn
+            },
+        });
+
+        // Nội dung email
+        const mailOptions = {
+            from: 'your-email@gmail.com',
+            to: email,
+            subject: 'Mã OTP để khôi phục mật khẩu',
+            text: `Mã OTP của bạn là: ${otp}. Mã sẽ hết hạn sau 10 phút.`,
+        };
+
+        // Gửi email
+        await transporter.sendMail(mailOptions);
+
+        // Chuyển đến trang nhập OTP
+        res.redirect(`/account/otp?email=${email}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
+    }
+});
+
+// Trang OTP (GET)
+router.get('/otp', (req, res) => {
+    const { email } = req.query; // Nhận email từ URL query
+    res.render('vwAccount/otp', {
+        layout: 'sign-up-layout',
+        email,
+    });
+});
+
+router.post('/otp', async (req, res) => {
+    const { email, otp } = req.body;
+
+    try {
+        // Kiểm tra OTP từ database
+        const otpRecord = await db.Otp.findOne({ where: { email, otp } });
+
+        if (!otpRecord) {
+            return res.render('vwAccount/otp', {
+                layout: 'sign-up-layout',
+                email,
+                errorMessage: 'Mã OTP không hợp lệ.',
+            });
+        }
+
+        // Kiểm tra thời gian hết hạn
+        if (new Date() > otpRecord.expiresAt) {
+            return res.render('vwAccount/otp', {
+                layout: 'sign-up-layout',
+                email,
+                errorMessage: 'Mã OTP đã hết hạn.',
+            });
+        }
+
+        // Nếu hợp lệ, chuyển đến trang đặt lại mật khẩu
+        res.redirect(`/account/reset-password?email=${email}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
+    }
+});
+
+// Trang xử lý OTP (POST)
+router.post('/verify-otp', async function (req, res) {
+    const { email, otp } = req.body;
+
+    try {
+        // Kiểm tra OTP trong cơ sở dữ liệu
+        const storedOtp = await db.Otp.findOne({ where: { email: email, otp: otp } });
+
+        if (!storedOtp) {
+            return res.render('vwAccount/otp', {
+                layout: 'sign-up-layout',
+                email: email,
+                errorMessage: 'Mã OTP không chính xác',
+            });
+        }
+
+        // Nếu OTP hợp lệ, chuyển hướng đến trang đặt lại mật khẩu
+        res.redirect(`/account/reset-password?email=${email}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại');
+    }
+});
+
+// Route POST reset-password (to handle resetting the password)
+router.get('/reset-password', (req, res) => {
+    const { email } = req.query;
+    res.render('vwAccount/reset-password', {
+        layout: 'sign-up-layout',
+        email,
+    });
+});
+
+router.post('/reset-password', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Hash mật khẩu mới
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        // Cập nhật mật khẩu trong database
+        await db.User.update({ password: hashedPassword }, { where: { email } });
+
+        // Xóa OTP sau khi sử dụng
+        await db.Otp.destroy({ where: { email } });
+
+        res.render('vwAccount/reset-password', {
+            layout: 'sign-up-layout',
+            successMessage: 'Mật khẩu đã được thay đổi thành công.',
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
+    }
+});
 
 configurePassport();
 router.get('/signin/githubAuth',

@@ -2,7 +2,7 @@ import express from 'express';
 import moment from 'moment'; // format from '../services/account.service.js';
 import albumServiceRank from '../services/albumrank.service.js';  // Using default import
 import musicService from '../services/music.service.js';
-
+// import controllers from '../controllers/artistController.js'
 const router = express.Router();
 
 router.get('/albumrank', (req, res) => {
@@ -83,6 +83,38 @@ router.get('/listsongs', async function (req, res) {
 
 
 
+router.get('/autocomplete', async (req, res) => {
+    const keyword = req.query.keyword || '';
+    
+    // Kiểm tra từ khóa tìm kiếm
+    if (!keyword.trim()) {
+        return res.json([]); // Trả về mảng rỗng nếu không có từ khóa
+    }
+
+    try {
+        // Sử dụng searchAll để tìm kiếm bài hát, nghệ sĩ và album
+        const { songs, artists, albums } = await musicService.searchAll(keyword);
+
+        // Kết hợp kết quả tìm kiếm từ bài hát, nghệ sĩ và album
+        const results = [
+            ...songs.map(song => ({ 
+                name: song.SongName, 
+                id: song.SongID,  // Trả về SongID để sử dụng trong frontend
+                type: 'song' 
+            })),
+            ...artists.map(artist => ({ name: artist.ArtistName, type: 'artist' })),
+            ...albums.map(album => ({ name: album.AlbumName, type: 'album' }))
+        ];
+
+        // Trả về kết quả tìm kiếm dưới dạng JSON
+        res.json(results);
+    } catch (err) {
+        console.error("Error in autocomplete:", err);
+        res.status(500).json([]);
+    }
+});
+
+
 
 // Endpoint để nhận yêu cầu POST khi người dùng click vào bài hát
 router.get('/song/play', async function(req, res) {
@@ -115,6 +147,26 @@ router.get('/song/play', async function(req, res) {
     // Trả về dữ liệu cho frontend
     res.json(songData);
 });
+
+// router.post('/search', async function(req, res) {
+//     const keyword = req.body.searchInput || ''; // Lấy từ khóa tìm kiếm
+//     console.log("Từ khóa tìm kiếm:", keyword);
+//     const song = await musicService.searchSongs(keyword) || 'null';
+//     const artist = await musicService.searchArtists(keyword) || 'null';
+//     if (song != 'null')
+//     {
+//         res.render('vwSong/searchSong', {
+//             song: song,
+//             artistName: await musicService.findArtistBySongId(song.SongID) ||'null'
+//         })
+//     }
+// });
+
+
+
+router.get('/findImage', async function (req, res) {
+    
+})
 
 router.post('/song/play', async function (req, res) {
     
