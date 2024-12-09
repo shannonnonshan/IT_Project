@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<html lang="en">
 
 <head>
     <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>Soundland</title>
     <link rel="icon" href="/static/imgs/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
-    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     {{{_sections.css}}}
@@ -23,7 +22,8 @@
 <body>
     <div id="body-div" class="container-fluid">
         <div id="test" class="row no-gutters h-100">
-            <div class="col-sm-2 p-0 h-100" style="background: linear-gradient(to bottom, #1A1C3D, #234B9C) !important;">
+            <div class="col-sm-2 p-0 h-100"
+                style="background: linear-gradient(to bottom, #1A1C3D, #234B9C) !important;">
                 <div id="nav-left">
                     {{#if auth}}
                     <div class="d-flex flex-column" style="padding:0px;">
@@ -31,7 +31,7 @@
                         <a href="javascript:void(0);" id="btn-logout">
                             <i class="bi bi-arrow-left"></i>
                         </a>
-                        
+
                         <div id="accountinf" class="d-flex align-items-center mt-3">
                             <img src="/static/imgs/avatar.jpg" alt="Profile Picture" class="img-fluid rounded-circle"
                                 style="width: 50px; height: 50px; margin-right: 10px;">
@@ -42,28 +42,29 @@
                         </div>
                     </div>
                     {{else}}
-                       <div class="d-flex flex-row justify-between">
-                            <a class="btn btn-light" href="/account/signup">
-                                <i class=""></i>
-                                Sign up
-                            </a>
-                            <a class="btn btn-light" href="/account/signin">
-                                <i class=""></i>
-                                Sign in
-                            </a>
-                       </div>
-                       {{/if}}
+                    <div class="d-flex flex-row justify-between">
+                        <a class="btn btn-light" href="/account/signup">
+                            <i class=""></i>
+                            Sign up
+                        </a>
+                        <a class="btn btn-light" href="/account/signin">
+                            <i class=""></i>
+                            Sign in
+                        </a>
+                    </div>
+                    {{/if}}
                     <div class="card-body">
                         <ul class="nav flex-column">
                             <li class="nav-item"><a class="bi bi-exclude nav-link" href="/">Explore</a></li>
                             <li class="nav-item"><a class="bi bi-hearts nav-link" href="#">Love</a></li>
                             <li class="nav-item"><a class="bi bi-calendar-event nav-link" href="#">Events</a></li>
                             <h5>Music</h5>
-                            <li class="nav-item"><a class="bi bi-file-earmark-music-fill nav-link" href="#">Songs</a>
+                            <li class="nav-item"><a class="bi bi-file-earmark-music-fill nav-link" href="/music/listsongs">Songs</a>
                             </li>
                             <li class="nav-item"><a class="bi bi-people-fill nav-link" href="#">Artists</a></li>
                             <li class="nav-item"><a class="bi bi-vinyl nav-link" href="/music/albumrank">Albums</a></li>
-                            <li class="nav-item"><a class="bi bi-cloud-arrow-up nav-link" href="/music/upload">Upload</a></li>
+                            <li class="nav-item"><a class="bi bi-cloud-arrow-up nav-link"
+                                    href="/music/upload">Upload</a></li>
                             <h5>Your Playlists</h5>
                             <li class="nav-item"><a class="nav-link" href="/music/lovesong">Love</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Your All</a></li>
@@ -77,16 +78,20 @@
             <div class="col-sm-10 h-100">
                 <div id="card-right" class="card h-100 ">
                     <div id="header-right" class="d-flex justify-content-between align-items-center">
-                        <form id="searchform" class="input-group w-75">
-                            <span class="bi bi-search input-group-text" id="basic-addon1"></span>
-                            <input id="search-bar" type="text" class="form-control" placeholder="Search"
-                                aria-label="Search" aria-describedby="basic-addon1">
+                        <form class="d-flex search-container" role="search" method="POST" id="searchForm">
+                            <input class="form-control me-2 search-input" name="searchInput" type="search" placeholder="Search"
+                                aria-label="Search" id="searchInput">
+                            <button type="submit">
+                                <img class="search-icon" src="/static/imgs/btn-search.png" alt="Search">
+                            </button>
                         </form>
-                        <button type="button" class="btn btn-outline-warning">
+                        
+                        <div class="results-container" id="resultsContainer"></div>
+                        <button type="button" class="btn btn-outline-warning" href="/artist/recognize">
                             <i class="bi bi-bell-fill"></i>
                             Read More
                         </button>
-                        
+
                     </div>
                     <div class="card-body display-card">
                         {{{body}}}
@@ -97,15 +102,15 @@
 
         <!-- Footer Music Player -->
         <div id="footer-music" class="d-flex flex-row align-items-center justify-content-between text-light">
-            <div id="music-inf" class="d-flex flex-row align-items-center"> 
-                <img src="static/imgs/song/{{id_song}}/main.jpg" alt="Album Cover" class="album-cover me-3">
+            <div id="music-inf" class="d-flex flex-row align-items-center">
+                <img id="music-cover" src="" alt="Album Cover" class="album-cover me-3">
                 <div class="title-music me-3">
-                    <span class="font-weight-bold">{{songname}}APT</span><br>
-                    <small class="fontaccount">{{artist}}ROSE, BRUNOR MARS</small>
+                    <span id="song-name" class="font-weight-bold text-uppercase"></span><br>
+                    <small id="artist-name" class="fontaccount text-uppercase"></small>
                 </div>
             </div>
-            
-            <div id="player-container"  class="d-flex flex-col"> 
+
+            <div id="player-container" class="d-flex flex-col">
                 <div id="player" class="d-flex flex-column align-items-center justify-content-center">
                     <div id="audio-controls">
                         <button class="amplitude-prev">
@@ -120,11 +125,7 @@
                     </div>
                     <div id="progress-bar">
                         <span class="amplitude-current-time">00:00</span>
-                        <input type="range" 
-                                class="amplitude-song-slider" 
-                                min="0" 
-                                max="100" 
-                                value="0"/>
+                        <input type="range" class="amplitude-song-slider" min="0" max="100" value="0" />
                         <span class="amplitude-duration-time">00:00</span>
                     </div>
                 </div>
@@ -133,13 +134,11 @@
                 <button class="bi bi-heart component-player"></button>
                 <button class="bi bi-list component-player"></button>
             </div>
-            
+
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.js"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
         integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
         crossorigin="anonymous"></script>
@@ -147,54 +146,60 @@
     <!-- Link file custom -->
     <script src="/static/js/audio-player.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src"/static/js/search.js"></script>
+    {{{_sections.script}}}
     <script>
         const playPauseButton = document.getElementById('playPauseButton');
         const playPauseIcon = document.getElementById('playPauseIcon');
-
         let isPlaying = false;
 
         playPauseButton.addEventListener('click', () => {
             if (isPlaying) {
-                playPauseIcon.classList.remove('bi-pause-circle-fill');
-                playPauseIcon.classList.add('bi-play-circle-fill');
-                Amplitude.pause();
+                // Khi bài hát đang phát, dừng bài hát
+                playPauseIcon.classList.remove('bi-play-circle-fill'); // Remove biểu tượng pause
+                playPauseIcon.classList.add('bi-pause-circle-fill'); // Thêm biểu tượng play
+                Amplitude.pause();  // Dừng bài hát khi đang phát
             } else {
-                playPauseIcon.classList.remove('bi-play-circle-fill');
-                playPauseIcon.classList.add('bi-pause-circle-fill');
-                Amplitude.play();
+                // Khi bài hát đang dừng, phát bài hát
+                playPauseIcon.classList.remove('bi-pause-circle-fill'); // Remove biểu tượng play
+                playPauseIcon.classList.add('bi-play-circle-fill'); // Thêm biểu tượng pause
+                Amplitude.play();  // Phát bài hát khi đang dừng
             }
+
+            // Đảo trạng thái của isPlaying sau mỗi lần nhấn
             isPlaying = !isPlaying;
         });
     </script>
+
     <script>
         // Hàm cập nhật giá trị của progress bar theo trạng thái bài hát
-            function syncProgressBar() {
-                const currentTime = Amplitude.getSongPlayedSeconds(); // Lấy thời gian hiện tại
-                const duration = Amplitude.getSongDuration(); // Lấy tổng thời lượng bài hát
+        function syncProgressBar() {
+            const currentTime = Amplitude.getSongPlayedSeconds(); // Lấy thời gian hiện tại
+            const duration = Amplitude.getSongDuration(); // Lấy tổng thời lượng bài hát
 
-                const progressBar = document.querySelector('.amplitude-song-slider');
-                progressBar.max = duration;
-                progressBar.value = currentTime;
-
-                const percentage = (currentTime / duration) * 100;
-                progressBar.style.background = `linear-gradient(to right, #1db954 ${percentage}%, #444 ${percentage}%)`;
-
-                // Yêu cầu trình duyệt cập nhật lại
-                requestAnimationFrame(syncProgressBar);
-            }
-
-            // Cập nhật thanh tiến trình khi bài hát đang chơi
-            requestAnimationFrame(syncProgressBar);
-
-            // Gắn sự kiện 'input' để người dùng kéo thanh tay
             const progressBar = document.querySelector('.amplitude-song-slider');
-            progressBar.addEventListener('input', function () {
-                const seekTime = progressBar.value; // Lấy giá trị mà người dùng kéo đến
-                Amplitude.setSongPlayedSeconds(seekTime); // Cập nhật thời gian phát
-            });
+            progressBar.max = duration;
+            progressBar.value = currentTime;
+
+            const percentage = (currentTime / duration) * 100;
+            progressBar.style.background = `linear-gradient(to right, #1db954 ${percentage}%, #444 ${percentage}%)`;
+
+            // Yêu cầu trình duyệt cập nhật lại
+            requestAnimationFrame(syncProgressBar);
+        }
+
+        // Cập nhật thanh tiến trình khi bài hát đang chơi
+        requestAnimationFrame(syncProgressBar);
+
+        // Gắn sự kiện 'input' để người dùng kéo thanh tay
+        const progressBar = document.querySelector('.amplitude-song-slider');
+        progressBar.addEventListener('input', function () {
+            const seekTime = progressBar.value; // Lấy giá trị mà người dùng kéo đến
+            Amplitude.setSongPlayedSeconds(seekTime); // Cập nhật thời gian phát
+        });
     </script>
     <script>
-      // Lấy tất cả các nút nav-item
+        // Lấy tất cả các nút nav-item
         const navItems = document.querySelectorAll('.nav-item');
 
         // Lặp qua tất cả các nút và thêm sự kiện click
@@ -226,37 +231,59 @@
     <script>
         // Đảm bảo đã tải SweetAlert2 bằng cách thêm các script và link trong HTML
 
-            // Khi nhấn vào nút logout
-                document.getElementById('btn-logout').addEventListener('click', function () {
-                    // Hiển thị SweetAlert2 xác nhận logout
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "Do you really want to log out?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, log me out!',
-                        cancelButtonText: 'No, keep me logged in',
-                        reverseButtons: true // Đảo vị trí các nút
-                    }).then((result) => {
-                        // Nếu người dùng chọn "Yes"
-                        if (result.isConfirmed) {
-                            // Gửi form logout
-                            document.getElementById('frmLogout').submit();
-                            Swal.fire(
-                                'Logged out!',
-                                'You have been logged out successfully.',
-                                'success'
-                            );
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            // Nếu người dùng chọn "Cancel"
-                            Swal.fire(
-                                'Cancelled',
-                                'You are still logged in.',
-                                'error'
-                            );
-                        }
-                    });
-                });
-    </script>  
+        // Khi nhấn vào nút logout
+        document.getElementById('btn-logout').addEventListener('click', function () {
+            // Hiển thị SweetAlert2 xác nhận logout
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to log out?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, log me out!',
+                cancelButtonText: 'No, keep me logged in',
+                reverseButtons: true // Đảo vị trí các nút
+            }).then((result) => {
+                // Nếu người dùng chọn "Yes"
+                if (result.isConfirmed) {
+                    // Gửi form logout
+                    document.getElementById('frmLogout').submit();
+                    Swal.fire(
+                        'Logged out!'
+                    );
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Nếu người dùng chọn "Cancel"
+                    Swal.fire(
+                        'Cancelled',
+                        'You are still logged in.',
+                        'error'
+                    );
+                }
+            });
+        });
+    </script>
+    <script>
+        function updateSongInfo() {
+            console.log("Updating song info...");
+
+            // Access the active song using Amplitude.active_song (not getActiveSong)
+            const song = Amplitude.getActiveSongMetadata(); // Accessing active_song directly
+            console.log(song);
+            if (!song) {
+                console.error('No active song found!');
+                return;
+            }
+
+            console.log('Current active song:', song);
+
+            // Update album cover and song name in the HTML
+            console.log('Song image:', song.musicImg);
+            document.getElementById('music-cover').src = song.musicImg || 'default_cover.png'; // Ensure valid image URL
+            document.getElementById('song-name').innerText = song.songName || 'Unknown Song'; // Update song name
+
+            // If available, update artist info too (you can adjust this based on your data)
+            document.getElementById('artist-name').innerText = song.artistName || 'Unknown Artist';
+        }
+    </script>
 </body>
+
 </html>

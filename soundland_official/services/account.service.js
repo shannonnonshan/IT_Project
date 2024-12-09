@@ -14,9 +14,7 @@ export default {
     // Thêm người dùng mới
     add(entity) {
         return db('users').insert(entity);
-    },
-
-    // Lưu OTP vào cơ sở dữ liệu
+    }, 
     async saveOTP(email, otp) {
         const expireTime = Date.now() + 10 * 60 * 1000; // OTP hết hạn sau 10 phút
         await db('otp_table').insert({ email, otp, expire_time: expireTime });
@@ -32,4 +30,17 @@ export default {
     async updatePassword(email, hashedPassword) {
         return db('users').where('email', email).update({ password: hashedPassword });
     },
+    upload(song)
+    {
+        return db('songs').insert(song).then(([id]) => ({ SongID: id }));;
+    },
+    findCat()
+    {
+        return db('categories');
+    },
+    // findSong(entity)
+    // {
+    //     return db('songs').where(entity).first();
+    // }
 };
+

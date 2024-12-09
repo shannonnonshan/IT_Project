@@ -7,7 +7,10 @@ import hbs_sections from 'express-handlebars-sections';
 import accountRouter from './routes/account.route.js'
 import musicRouter from './routes/music.route.js'
 import configurePassport from './passport.config.js';
-
+import albumService from './services/album.service.js';
+import musicService from './services/music.service.js';
+import multer from 'multer';
+// import artistRouter from './routes/artist.route.js';
 import passport from 'passport';
 
 const __dirname = dirname(fileURLToPath(import.meta.url)); // Sử dụng __dirname với ES module
@@ -65,19 +68,45 @@ app.use('/static', express.static('static'));
 
 app.use('/css', express.static(path.join(__dirname, 'views', 'css')));
 app.use('/images', express.static(path.join(__dirname, 'views', 'images')));
+// Node.js với Express: phục vụ các tệp trong thư mục services
 
-app.get('/', function(req,res)
-{
+
+
+app.get('/', async function(req, res) {
     if (req.session.views) {
         req.session.views++;
-    }else req.session.views = 1;
+    } else req.session.views = 1;
+
+    // Lấy danh sách album
+    const albums = await albumService.findTopAlbum();
+    const songs = await musicService.findTopSong();
+    // Lấy thông tin nghệ sĩ cho từng album
+    const albumList = await Promise.all(albums.map(async (album) => {
+        const artistName = await albumService.findArtistByAlbumId(album.AlbumID);  // Gọi đúng hàm tìm nghệ sĩ
+        return {
+            ...album,  // Giữ nguyên thông tin album
+            artistName: artistName || "Unknown Artist",  // Thêm thông tin nghệ sĩ vào
+        };
+    }));
+    const songList = await Promise.all(songs.map(async (song) => {
+        const artistName = await musicService.findArtistBySongId(song.SongID);  // Gọi đúng hàm tìm nghệ sĩ
+        return {
+            ...song,  // Giữ nguyên thông tin album
+            artistName: artistName || "Unknown Artist",  // Thêm thông tin nghệ sĩ vào
+        };
+    }));
+
+    // Render ra giao diện với thông tin album và nghệ sĩ
     res.render('home', {
-        user: req.session.authUser
+        user: req.session.authUser,
+        albums: albumList,
+        songs: songList
     });
 });
+
 app.use('/account', accountRouter);
 // Khởi động server
-
+// app.use('/artist', artistRouter);
 
 app.use('/music', musicRouter);
 app.listen(3000, function () {

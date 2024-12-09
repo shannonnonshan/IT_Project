@@ -19,7 +19,6 @@ export default function configurePassport() {
 
       async function (accessToken, refreshToken, profile, done) {
         try {
-          console.log('GitHub Profile:', profile); // Debug profile trả về
           // Lấy email (nếu có)
           const email = profile.emails && profile.emails.length > 0 
             ? profile.emails[0].value 
@@ -42,7 +41,7 @@ export default function configurePassport() {
             // Nếu không tìm thấy user, tạo user mới
             user = await User.add({
               githubId: profile.id,
-              username: username,
+              username: profile.username,
               name: profile.displayName || profile.username || 'No Name',
               email: email
             });
@@ -57,6 +56,7 @@ export default function configurePassport() {
       }
     )
   );
+  
   passport.serializeUser(function(user, done) {
     done(null, user.username);  // Chỉ lưu trữ ID (hoặc username) của người dùng vào session
   });

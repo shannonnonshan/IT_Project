@@ -2,13 +2,12 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment'; // format month day
 import multer from 'multer';
-import  { v4 as uuidv }  from 'uuid';
 import accountService from '../services/account.service.js';
 import userProfileService from '../services/userProfile.service.js';
 import auth from '../middleware/auth.mdw.js';
 import configurePassport from '../passport.config.js';
 import passport from 'passport';
-import nodemailer from 'nodemailer'; // Thư viện gửi email
+import fs from 'fs';
 const router = express.Router();
 
 router.get('/signin', function (req, res) {
@@ -75,43 +74,85 @@ router.get('/profile', async function(req, res){
     
 });
 router.get('/upload', async function(req, res){
-        res.render('vwAccount/uploadSong');
+    const list = await accountService.findCat();
+    res.render('vwAccount/uploadSong',
+        {list:list},
+    );
 });
 
-// Cấu hình multer với bộ lọc file
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'static/songs');
-        },
-    filename: (req, file, cb) => {
-        const uniqueName = uuidv(); // UUID ngẫu nhiên, không có phần mở rộng
-        cb(null, uniqueName); // Lưu tên file
-    },
-  });
-  
-  // Kiểm tra định dạng file
-  const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/ogg'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true); // Đồng ý upload
-    } else {
-      cb(new Error('Only audio files are allowed!'), false); // Từ chối file
-    }
-  };
-  
-  // Khởi tạo multer với bộ lọc
-  const upload = multer({
+const storage = multer.memoryStorage();
+const uploadFiles = multer({
     storage,
-    fileFilter,
-    limits: { fileSize: 10 * 1024 * 1024 }, // Tăng kích thước file tải lên 10 MB
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowedAudioTypes = ['audio/mp3', 'audio/mpeg', 'audio/wav'];
+        const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+        if (allowedAudioTypes.includes(file.mimetype) || allowedImageTypes.includes(file.mimetype)) {
+            cb(null, true); // Chấp nhận file
+        } else {
+            cb(new Error('Only audio and image files are allowed!'), false); // Từ chối file
+        }
+    }
 });
 
-router.post('/upload', upload.single('FilePath'), async function (req, res) {
-    if (!req.file) {
-        return res.status(400).render('vwAccount/uploadSong', { errorMessage: 'No file uploaded.' });
+const upload = uploadFiles.fields([
+    { name: 'FilePath', maxCount: 1 }, // Trường cho file âm thanh
+    { name: 'ImagePath', maxCount: 1 } // Trường cho file hình ảnh
+]);
+
+router.post('/upload', upload, async (req, res) => {
+    try {
+        // Kiểm tra file
+        if (!req.files || !req.files.FilePath || !req.files.ImagePath) {
+            return res.status(400).send('Both audio and image files are required.');
+        }
+
+        // Lấy dữ liệu file
+        const audioFile = req.files.FilePath[0]; // Lấy file âm thanh
+        const imageFile = req.files.ImagePath[0]; // Lấy file hình ảnh
+
+        // Xử lý dữ liệu từ form
+        const selectedid = Array.isArray(req.body.catid) ? req.body.catid.join(",") : req.body.catid;
+        console.log( selectedid );
+        const ymd_ReleaseDate = moment(req.body.ReleaseDate, "DD/MM/YY").format('YYYY-MM-DD');
+        const entity = {
+            SongName: req.body.songname,
+            CatID: selectedid,
+            ReleaseDate: ymd_ReleaseDate
+        };
+
+        // Lưu dữ liệu vào database và lấy SongID
+        const ret = await accountService.upload(entity);
+        const SongID = ret.SongID;
+
+        // Tạo thư mục dựa trên SongID
+        const songPath = `./static/songs/${SongID}`;
+        if (!fs.existsSync(songPath)) {
+            fs.mkdirSync(songPath, { recursive: true });
+        }
+        const imagePath = `./static/imgs/song/${SongID}`;
+        if (!fs.existsSync(imagePath)) {
+            fs.mkdirSync(imagePath, { recursive: true });
+        }
+
+        // Lưu file âm thanh
+        const audioFilePath = `${songPath}/main.mp3`;
+        fs.writeFileSync(audioFilePath, audioFile.buffer);
+
+        // Lưu file hình ảnh
+        const imageFilePath = `${imagePath}/cover.jpg`;
+        fs.writeFileSync(imageFilePath, imageFile.buffer);
+
+        // Tạo đường dẫn để render
+        const fileUrl = `/static/songs/${SongID}/main.mp3`;
+        const imageUrl = `/static/imgs/song/${SongID}/cover.jpg`;
+
+        res.render('vwAccount/uploadSong', { fileUrl, imageUrl });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error processing upload.');
     }
-    const fileUrl = `/static/songs/${req.file.filename}`;
-    res.render('vwAccount/uploadSong', { fileUrl, successMessage: 'File uploaded successfully!' });
 });
     
 router.post('/signup', async function (req, res) {
@@ -145,41 +186,38 @@ router.post('/logout', auth, function(req, res){
     res.redirect(req.headers.referer);
 })
 
-// Route GET forgot-password (to display the forgot password form)
-router.get('/forgot-password', function (req, res) {
+router.get('/forgot-password', (req, res) => {
     res.render('vwAccount/forgot-password', {
-        layout: 'sign-up-layout', // Use the sign-up layout for the forgot-password page
+        layout: 'sign-up-layout',
     });
 });
 
-// Có lỗi, tạm thời push lên trước
-router.post('/forgot-password', async function (req, res) {
+router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
 
     try {
-        // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu không
+        // Kiểm tra email tồn tại trong cơ sở dữ liệu
         const user = await db.User.findOne({ where: { email } });
-    
         if (!user) {
-            // Nếu email không tồn tại trong cơ sở dữ liệu
             return res.render('vwAccount/forgot-password', {
                 layout: 'sign-up-layout',
                 errorMessage: 'Email không tồn tại trong hệ thống',
             });
         }
 
-        // Tạo mã OTP ngẫu nhiên
+        // Tạo OTP và thời gian hết hạn
         const otp = Math.floor(100000 + Math.random() * 900000); // Mã OTP 6 chữ số
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // Hết hạn sau 10 phút
 
-        // Lưu OTP vào cơ sở dữ liệu (có thể là trong bảng User hoặc tạo bảng riêng)
-        await db.Otp.create({ email: email, otp: otp });
+        // Lưu OTP vào database
+        await db.Otp.create({ email, otp, expiresAt });
 
-        // Cấu hình nodemailer để gửi email
+        // Cấu hình gửi email qua Nodemailer
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: 'your-email@gmail.com', // Thay bằng email của bạn
-                pass: 'your-email-password', // Thay bằng mật khẩu email của bạn
+                pass: 'your-email-password', // Thay bằng mật khẩu của bạn
             },
         });
 
@@ -188,77 +226,58 @@ router.post('/forgot-password', async function (req, res) {
             from: 'your-email@gmail.com',
             to: email,
             subject: 'Mã OTP để khôi phục mật khẩu',
-            text: `Mã OTP của bạn là: ${otp}`,
+            text: `Mã OTP của bạn là: ${otp}. Mã sẽ hết hạn sau 10 phút.`,
         };
 
-        // Gửi email với mã OTP
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                return console.log(error);
-            }
-            console.log('Email sent: ' + info.response);
-        });
+        // Gửi email
+        await transporter.sendMail(mailOptions);
 
-        // Chuyển hướng đến trang otp.hbs với email đã được truyền vào
+        // Chuyển đến trang nhập OTP
         res.redirect(`/account/otp?email=${email}`);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại');
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
 
 // Trang OTP (GET)
-router.get('/otp', function (req, res) {
-    const { email } = req.query;
+router.get('/otp', (req, res) => {
+    const { email } = req.query; // Nhận email từ URL query
     res.render('vwAccount/otp', {
         layout: 'sign-up-layout',
-        email: email,
+        email,
     });
 });
 
-// Route POST otp (to handle OTP verification)
-router.post('/otp', async function (req, res) {
-    const { email } = req.body;
-
-    const user = await accountService.findByEmail(email);
-    if (!user) {
-        return res.render('vwAccount/forgot-password', {
-            layout: 'sign-up-layout',
-            errorMessage: 'Email không tồn tại trong hệ thống.',
-        });
-    }
-
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    await accountService.saveOTP(email, otp);
-
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });
-
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Your OTP Code',
-        text: `Your OTP code is: ${otp}`,
-    };
+router.post('/otp', async (req, res) => {
+    const { email, otp } = req.body;
 
     try {
-        await transporter.sendMail(mailOptions);
-        res.render('vwAccount/otp', {
-            layout: 'sign-up-layout',
-            successMessage: 'OTP đã được gửi đến email của bạn.',
-            email,
-        });        
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.render('vwAccount/forgot-password', {
-            layout: 'sign-up-layout',
-            errorMessage: 'Có lỗi khi gửi email. Vui lòng thử lại sau.',
-        });
+        // Kiểm tra OTP từ database
+        const otpRecord = await db.Otp.findOne({ where: { email, otp } });
+
+        if (!otpRecord) {
+            return res.render('vwAccount/otp', {
+                layout: 'sign-up-layout',
+                email,
+                errorMessage: 'Mã OTP không hợp lệ.',
+            });
+        }
+
+        // Kiểm tra thời gian hết hạn
+        if (new Date() > otpRecord.expiresAt) {
+            return res.render('vwAccount/otp', {
+                layout: 'sign-up-layout',
+                email,
+                errorMessage: 'Mã OTP đã hết hạn.',
+            });
+        }
+
+        // Nếu hợp lệ, chuyển đến trang đặt lại mật khẩu
+        res.redirect(`/account/reset-password?email=${email}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
     }
 });
 
@@ -287,17 +306,35 @@ router.post('/verify-otp', async function (req, res) {
 });
 
 // Route POST reset-password (to handle resetting the password)
-router.post('/reset-password', async function (req, res) {
+router.get('/reset-password', (req, res) => {
+    const { email } = req.query;
+    res.render('vwAccount/reset-password', {
+        layout: 'sign-up-layout',
+        email,
+    });
+});
+
+router.post('/reset-password', async (req, res) => {
     const { email, password } = req.body;
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(password, 10); // Use bcrypt.hash() for async hashing
+    try {
+        // Hash mật khẩu mới
+        const hashedPassword = bcrypt.hashSync(password, 10);
 
-    // Update the password in the database
-    await accountService.updatePassword(email, hashedPassword);
+        // Cập nhật mật khẩu trong database
+        await db.User.update({ password: hashedPassword }, { where: { email } });
 
-    // Redirect to the sign-in page after password reset
-    res.redirect('/account/sign-in');
+        // Xóa OTP sau khi sử dụng
+        await db.Otp.destroy({ where: { email } });
+
+        res.render('vwAccount/reset-password', {
+            layout: 'sign-up-layout',
+            successMessage: 'Mật khẩu đã được thay đổi thành công.',
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau.');
+    }
 });
 
 configurePassport();
@@ -312,7 +349,7 @@ router.get('/signin/githubAuth/callback',
 
     if (!user) {
       return res.redirect('/login');
-    }
+     }
 
     // Đánh dấu người dùng đã đăng nhập
     req.session.auth = true;

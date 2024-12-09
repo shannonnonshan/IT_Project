@@ -27,6 +27,29 @@
     margin-right: 10%;
 }
 
+.search-container {
+    position: relative;
+    width: 50%; /* Đảm bảo thanh tìm kiếm chiếm toàn bộ chiều ngang */
+    max-width: 600px; /* Tùy chỉnh chiều rộng tối đa cho thanh tìm kiếm */
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    height: 40px;
+    padding-right: 40px; /* Dành chỗ cho biểu tượng */
+    font-size: 14px; /* Cân chỉnh font nếu cần */
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+    width: 24px;
+    height: 24px;
+    cursor: pointer; 
+}
 
 .img-music-format{
     width: 120px;
