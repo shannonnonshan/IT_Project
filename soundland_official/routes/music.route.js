@@ -83,6 +83,38 @@ router.get('/listsongs', async function (req, res) {
 
 
 
+router.get('/autocomplete', async (req, res) => {
+    const keyword = req.query.keyword || '';
+    
+    // Kiểm tra từ khóa tìm kiếm
+    if (!keyword.trim()) {
+        return res.json([]); // Trả về mảng rỗng nếu không có từ khóa
+    }
+
+    try {
+        // Sử dụng searchAll để tìm kiếm bài hát, nghệ sĩ và album
+        const { songs, artists, albums } = await musicService.searchAll(keyword);
+
+        // Kết hợp kết quả tìm kiếm từ bài hát, nghệ sĩ và album
+        const results = [
+            ...songs.map(song => ({ 
+                name: song.SongName, 
+                id: song.SongID,  // Trả về SongID để sử dụng trong frontend
+                type: 'song' 
+            })),
+            ...artists.map(artist => ({ name: artist.ArtistName, type: 'artist' })),
+            ...albums.map(album => ({ name: album.AlbumName, type: 'album' }))
+        ];
+
+        // Trả về kết quả tìm kiếm dưới dạng JSON
+        res.json(results);
+    } catch (err) {
+        console.error("Error in autocomplete:", err);
+        res.status(500).json([]);
+    }
+});
+
+
 
 // Endpoint để nhận yêu cầu POST khi người dùng click vào bài hát
 router.get('/song/play', async function(req, res) {
@@ -116,31 +148,21 @@ router.get('/song/play', async function(req, res) {
     res.json(songData);
 });
 
-router.post('/search', async function (req, res) {
-    const query = req.query.q ? req.query.q.trim() : ''; // Lấy query từ URL
+// router.post('/search', async function(req, res) {
+//     const keyword = req.body.searchInput || ''; // Lấy từ khóa tìm kiếm
+//     console.log("Từ khóa tìm kiếm:", keyword);
+//     const song = await musicService.searchSongs(keyword) || 'null';
+//     const artist = await musicService.searchArtists(keyword) || 'null';
+//     if (song != 'null')
+//     {
+//         res.render('vwSong/searchSong', {
+//             song: song,
+//             artistName: await musicService.findArtistBySongId(song.SongID) ||'null'
+//         })
+//     }
+// });
 
-    if (!query) {
-        // Nếu không có input tìm kiếm, trả về dữ liệu trống
-        return res.json({ songs: [], artists: [], albums: [] });
-    }
 
-    try {
-        // Gọi service để tìm kiếm trong các bảng
-        const songs = await searchService.searchSongs(query);
-        const artists = await searchService.searchArtists(query);
-        const albums = await searchService.searchAlbums(query);
-
-        // Trả kết quả về dạng JSON
-        res.json({
-            songs: songs,
-            artists: artists,
-            albums: albums,
-        });
-    } catch (error) {
-        console.error("Error fetching search results:", error);
-        res.status(500).json({ message: 'Error fetching search results' });
-    }
-});
 
 router.get('/findImage', async function (req, res) {
     

@@ -12,6 +12,7 @@ async function loadSongs() {
             // Initialize Amplitude with the song data
             Amplitude.init({
                 songs: data.songs.map(song => ({
+                    id: song.SongID,
                     songName: song.SongName,
                     artistName: song.artistName,
                     url: song.urlAudio, // Ensure valid URL

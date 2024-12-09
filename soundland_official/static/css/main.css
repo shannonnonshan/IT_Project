@@ -8,6 +8,26 @@ html,body {
     padding: 0px; /* Tránh tràn ngang */
     height: 100%;    
 }
+
+.dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        background-color: white;
+        z-index: 1000;
+        display: none;
+    }
+.dropdown-menu li {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+.dropdown-menu li:hover {
+    background-color: #f0f0f0;
+}
 .display-card{
     max-width: 100%; /* Đặt chiều rộng tối đa */
     overflow-y: auto !important;
@@ -51,6 +71,38 @@ html,body {
     margin-top: 10px;
     text-transform: uppercase;
 }
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.volume-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.volume-progress-container {
+    position: relative;
+    flex: 1;
+    height: 10px;
+    background: #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.volume-progress {
+    height: 100%;
+    background: #555;
+    border-radius: 5px;
+    transition: width 0.1s;
+}
+
 
 .nav-item a {
     display: flex;

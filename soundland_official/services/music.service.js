@@ -23,28 +23,17 @@ export default {
         const artist = await db('artists').where('ArtistID', songArtist.ArtistID).first();
         return artist;  
     },
-    async findArtistBySongId(songId) {
-        const musicArtist = await db('song_artists').where('SongID', songId).first();
-        if (!musicArtist) {
-            return null;  // Nếu không tìm thấy thông tin nghệ sĩ cho album
-        }
-
-        const artist = await db('artists').where('ArtistID', musicArtist.ArtistID).first();
-        return artist ? artist.ArtistName : "Unknown Artist";  // Trả về tên nghệ sĩ hoặc giá trị mặc định
-    },
     
-    async searchSongs(query) {
-        return await db('songs')
-            .where('SongName', 'like', `%${query}%`);
-    },
+    async searchAll(query) {
+        const songs = await db('songs').where('SongName', 'like', `%${query}%`);
+        const artists = await db('artists').where('ArtistName', 'like', `%${query}%`);
+        const albums = await db('albums').where('AlbumName', 'like', `%${query}%`);
 
-    async searchArtists(query) {
-        return await db('artists')
-            .where('ArtistName', 'like', `%${query}%`);
-    },
-
-    async searchAlbums(query) {
-        return await db('albums')
-            .where('AlbumName', 'like', `%${query}%`);
+        return {
+            songs,
+            artists,
+            albums
+        };
     }
+
 };
