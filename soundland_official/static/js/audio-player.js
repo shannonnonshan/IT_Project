@@ -1,63 +1,141 @@
 let isAmplitudeInitialized = false; // Biến trạng thái kiểm soát Amplitude init
+
+// async function loadSongs() {
+//     try {
+//         let response;
+//         console.log("hehee", albumIdToSearch);
+//         if (albumIdToSearch !== null) {
+//             response = await fetch(`/music/songs?albumid=${albumIdToSearch}`);
+//         }
+//         else {
+//             response = await fetch("/music/songs");
+//         }
+//         // const response = await fetch("/music/songs");
+//         // console.log("hehee");
+//         if (!response.ok) {
+//             throw new Error('Failed to fetch songs data');
+//         }
+
+//         const data = await response.json();
+        
+//         console.log("API Response:", data);
+
+//         if (Array.isArray(data.songs) && data.songs.length > 0) {
+//             if (!isAmplitudeInitialized) {
+//                 Amplitude.init({
+//                     songs: data.songs.map(song => ({
+//                         id: song.SongID || 'unknown-id', // Giá trị mặc định nếu thiếu
+//                         songName: song.SongName || 'Unknown Song',
+//                         artistName: song.artistName || 'Unknown Artist',
+//                         url: song.urlAudio || '',
+//                         musicImg: song.urlImage || '/static/imgs/logo.png',
+//                     })),
+//                     callbacks: {
+//                         play: function () {
+//                             console.log('Song is playing!');
+//                             updateSongInfo();
+//                             saveState()
+//                         },
+//                         song_change: function () {
+//                             console.log("Song changed!");
+//                             const activeSong = Amplitude.get.activeSong();
+//                             console.log("Active song after change:", activeSong);
+//                             updateSongInfo();
+//                             saveState();
+//                         },
+//                         time_update: function () {
+//                             const playedPercentage = Amplitude.getSongPlayedPercentage();
+//                             console.log("Played percentage:", playedPercentage);
+                      
+//                             // Giả sử bạn có một thanh tiến trình (progress bar) trong giao diện
+//                             const progressBar = document.getElementById("progress-bar");
+//                             if (progressBar) {
+//                               progressBar.style.width = `${playedPercentage}%`;
+//                             }
+//                           },
+//                     }
+//                 });
+//                 isAmplitudeInitialized = true;
+//                 console.log("Amplitude initialized and ready.");
+//                 restoreState();
+            
+//             }
+//         } else {
+//             console.error("No songs available from the server.");
+//         }
+//     } catch (error) {
+//         console.error("Error loading songs:", error);
+//     }
+// }
+
+//  const albumElement = document.querySelector('#albumid');
+// const albumIdToSearch = albumElement ? albumElement.value : null;
+
+// // console.log(albumId);
+// // Call loadSongs() to initialize the Amplitude player and load songs
+// loadSongs();
+// Lưu trạng thái của Amplitude vào localStorage
 async function loadSongs() {
     try {
-        const response = await fetch('/music/songs');
+        
+        let response;
+        console.log("hehee", albumIdToSearch);
+        if (albumIdToSearch !== null) {
+            response = await fetch(`/music/songs?albumid=${albumIdToSearch}`);
+            
+        }
+        else {
+            response = await fetch("/music/songs");
+        }
+        // const response = await fetch("/music/songs");
+        // console.log("hehee");
         if (!response.ok) {
             throw new Error('Failed to fetch songs data');
         }
-
         const data = await response.json();
+        
         console.log("API Response:", data);
 
-        if (Array.isArray(data.songs) && data.songs.length > 0) {
-            if (!isAmplitudeInitialized) {
-                Amplitude.init({
-                    songs: data.songs.map(song => ({
-                        id: song.SongID || 'unknown-id', // Giá trị mặc định nếu thiếu
-                        songName: song.SongName || 'Unknown Song',
-                        artistName: song.artistName || 'Unknown Artist',
-                        url: song.urlAudio || '',
-                        musicImg: song.urlImage || '/static/imgs/logo.png',
-                    })),
-                    callbacks: {
-                        play: function () {
-                            console.log('Song is playing!');
-                            updateSongInfo();
-                            saveState()
-                        },
-                        song_change: function () {
-                            console.log("Song changed!");
-                            const activeSong = Amplitude.get.activeSong();
-                            console.log("Active song after change:", activeSong);
-                            updateSongInfo();
-                            saveState();
-                        },
-                        time_update: function () {
-                            const playedPercentage = Amplitude.getSongPlayedPercentage();
-                            console.log("Played percentage:", playedPercentage);
-                      
-                            // Giả sử bạn có một thanh tiến trình (progress bar) trong giao diện
-                            const progressBar = document.getElementById("progress-bar");
-                            if (progressBar) {
-                              progressBar.style.width = `${playedPercentage}%`;
-                            }
-                          },
+        if (Array.isArray(data.songs)) {
+            // Initialize Amplitude with the song data
+            Amplitude.init({
+                songs: data.songs.map(song => ({
+                    id: song.SongID,
+                    songName: song.SongName,
+                    artistName: song.artistName,
+                    url: song.urlAudio, // Ensure valid URL
+                    musicImg: song.urlImage // Ensure valid URL
+                })),
+                callbacks: {
+                    // When a song starts playing
+                    play: function () {
+                        console.log('Hello, song is playing!');
+                        // Call updateSongInfo() only after the song has started playing
+                        setTimeout(updateSongInfo, 300); // Delay to ensure Amplitude is fully initialized
+                    },
+                    // When the song changes (next/prev)
+                    song_change: function () {
+                        console.log("Song changed!");
+                        // Update song info when the song changes
+                        setTimeout(updateSongInfo, 300); // Delay to ensure song change is processed
                     }
-                });
-                isAmplitudeInitialized = true;
-                console.log("Amplitude initialized and ready.");
-                restoreState();
-            
-            }
+                }
+            });
+
+            console.log("Songs data sent to Amplitude!");
         } else {
-            console.error("No songs available from the server.");
+            console.error("No songs found in API response");
         }
     } catch (error) {
         console.error("Error loading songs:", error);
     }
 }
+ const albumElement = document.querySelector('#albumid');
+const albumIdToSearch = albumElement ? albumElement.value : null;
 
-// Lưu trạng thái của Amplitude vào localStorage
+// console.log(albumId);
+// Call loadSongs() to initialize the Amplitude player and load songs
+loadSongs();
 function saveState() {
     try {
         if (!isAmplitudeInitialized) {
@@ -127,7 +205,7 @@ function restoreState() {
       }
     }
     
-  
+
 window.addEventListener('beforeunload', saveState);
 
 document.addEventListener('DOMContentLoaded', () => {

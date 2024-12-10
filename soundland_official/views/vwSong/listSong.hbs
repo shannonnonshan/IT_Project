@@ -34,43 +34,5 @@
     </table>
 </div>
 {{#section "script"}}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Lấy tất cả các hàng bài hát
-            const songRows = document.querySelectorAll('.song-row');
-            const playPauseButton = document.getElementById('playPauseButton');
-            const playPauseIcon = document.getElementById('playPauseIcon');
-            songRows.forEach(row => {
-                row.addEventListener('click', () => {
-                    // Lấy metadata từ data-* attributes
-                    const songIndex = parseInt(row.getAttribute('data-song-index'), 10);
-                    const songName = row.getAttribute('data-song-name');
-                    const artistName = row.getAttribute('data-artist-name');
-                    const albumName = row.getAttribute('data-album-name');
-                    const songUrl = row.getAttribute('data-song-url');
-                    const coverUrl = row.getAttribute('data-cover-url');
-
-                    // Metadata mới
-                    const newMetaData = {
-                        name: songName,
-                        artist: artistName,
-                        album: albumName,
-                        url: songUrl,
-                        cover_art_url: coverUrl,
-                    };
-
-                    // Cập nhật metadata cho bài hát
-                    Amplitude.setSongMetaData(songIndex, newMetaData);
-
-                    // Phát bài hát ngay
-                    
-                    Amplitude.playSongAtIndex(songIndex);
-
-                    // Tuỳ chọn: Highlight bài hát đang phát
-                    songRows.forEach(r => r.classList.remove('active'));
-                    row.classList.add('active');
-                });
-            });
-        });
-    </script>
+    
 {{/section}}
