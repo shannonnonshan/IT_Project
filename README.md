@@ -5,13 +5,17 @@
 
 Step 1: git clone this project through: https://github.com/shannonnonshan/IT_Project.git
 
-Step 2: Open the terminal set up use npm
+Step 2: Run database (My SQL)
 
-2.1: Set up the library
+
+Step 3: Open the terminal set up and use npm
+
+3.1: Set up the library
 
 `npm i`
 
-2.2: Run the project
+3.2: Run the project
 
 `npm run dev`
+
 
