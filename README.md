@@ -17,7 +17,7 @@
 
 #### Step 2: Run database (My SQL)
 
-Run file users.sql in database folder
+Run file `users.sql` in database folder
 
 #### Step 3: Open the terminal set up and use npm
 
