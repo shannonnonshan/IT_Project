@@ -2,7 +2,6 @@ async function loadSongs() {
     try {
         
         let response;
-        console.log("hehee", albumIdToSearch);
         if (albumIdToSearch !== null) {
             response = await fetch(`/music/songs?albumid=${albumIdToSearch}`);
             

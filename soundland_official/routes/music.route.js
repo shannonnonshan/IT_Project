@@ -1,18 +1,25 @@
 import express from 'express';
 import moment from 'moment'; // format from '../services/account.service.js';
-import albumServiceRank from '../services/albumrank.service.js';  // Using default import
 import musicService from '../services/music.service.js';
 import albumService from '../services/album.service.js';
 // import controllers from '../controllers/artistController.js'
 const router = express.Router();
 
-router.get('/albumrank', (req, res) => {
+router.get('/albumrank', async function(req, res){
     // Get album data for this month and last month
-    const albumsThisMonth = albumServiceRank.albumThisMonth();
-    const albumsLastMonth = albumServiceRank.albumLastMonth();
+    const albumsThisMonth = await albumService.findTop10NewAlbum();
 
+    // Kết hợp thông tin bài hát và nghệ sĩ
+    const combinedList = await Promise.all(albumsThisMonth.map(async (album) => {
+        const artist = await albumService.findArtistByAlbumId(album.AlbumID);
+        return {
+            ...album, // Thêm toàn bộ thông tin bài hát
+            artistName: artist || "Unknown Artist", // Nghệ sĩ hoặc giá trị mặc định
+        };
+    }));
     // Render the 'albumrank' view with album data
-    res.render('vwAlbum/albumrank', { albumsThisMonth, albumsLastMonth });
+    res.render('vwAlbum/albumrank', 
+        { albumsThisMonth: combinedList });
 });
 
 // Route for album song (tracks)
