@@ -588,6 +588,14 @@ video {
   }
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;

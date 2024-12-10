@@ -8,9 +8,9 @@
         <div class="col-sm-6">
             <form action="/music/songs?albumid={{AlbumID}}" method="POST"></form>
             <a href="/music/album-detail?albumid={{AlbumID}}" class="text-decoration-none">
-                <div class="card card-top-chart">
+                <div class="card card-top-chart" style="--bg-image: url('/static/imgs/album/{{AlbumID}}/main.jpg')">
                     <div class="card-body title-music d-flex flex-row">
-                        <img class="img-music-format" src="/static/imgs/images/apt.png" alt="">
+                        <img class="img-music-format" src="/static/imgs/album/{{AlbumID}}/main.jpg" alt="">
                         <div class="title d-flex flex-column">
                             <h4 class="card-title">{{AlbumName}}</h4>
                             <p class="card-text">{{artistName}}</p>

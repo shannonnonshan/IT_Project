@@ -2,14 +2,15 @@
     color: white;
     font-size: 13pt;
 }
+.card-homepage{
+    color: white;
+}
+
 .card-top-chart {
     border-radius: 10px;
     border: 1px solid yellow;
     height: 500px;
     background-color: transparent;
-}
-.card-homepage{
-    color: white;
 }
 
 .card-top-chart::before {
@@ -20,7 +21,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/static/imgs/images/apt.png'); /* Đường dẫn đến ảnh */
+    background-image: var(--bg-image, url('/static/imgs/images/apt.png')); /* Biến với giá trị mặc định */
     background-size: contain; /* Hoặc dùng contain tùy mục đích */
     opacity: 0.3; 
     
