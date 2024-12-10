@@ -97,6 +97,10 @@ async function loadSongs() {
         console.log("API Response:", data);
 
         if (Array.isArray(data.songs)) {
+            if (isAmplitudeInitialized) {
+                Amplitude.pause();
+                Amplitude.getSongs().forEach((_, index) => Amplitude.removeSong(index));
+            }        
             // Initialize Amplitude with the song data
             Amplitude.init({
                 songs: data.songs.map(song => ({
@@ -112,17 +116,21 @@ async function loadSongs() {
                         console.log('Hello, song is playing!');
                         // Call updateSongInfo() only after the song has started playing
                         setTimeout(updateSongInfo, 300); // Delay to ensure Amplitude is fully initialized
+                        saveState()
                     },
                     // When the song changes (next/prev)
                     song_change: function () {
                         console.log("Song changed!");
                         // Update song info when the song changes
                         setTimeout(updateSongInfo, 300); // Delay to ensure song change is processed
+                        saveState()
                     }
                 }
             });
-
+            isAmplitudeInitialized = true;
+            //                 console.log("Amplitude initialized and ready.");
             console.log("Songs data sent to Amplitude!");
+            restoreState();
         } else {
             console.error("No songs found in API response");
         }
@@ -194,13 +202,21 @@ function restoreState() {
     
       
         if (activeSong && activeSong.url) {
-            Amplitude.playNow(activeSong);
-            console.log("Attempting to seek to:", seekTime);
-            Amplitude.skipTo(seekTime,songID-1)
-            } else {
-          console.error("Invalid active song data.");
+            const songExists = Amplitude.getSongs().some(song => song.url === activeSong.url);
+        
+            if (songExists) {
+                console.log("Restoring active song:", activeSong.songName);
+                Amplitude.playNow(activeSong);
+                console.log("Attempting to seek to:", seekTime);
+                Amplitude.skipTo(seekTime, songID - 1);
+            } 
+            else {
+                console.warn("Saved song not found in the new playlist.");
+            }
         }
-      } catch (error) {
+         else {
+            console.error("Invalid active song data.");}}
+        catch (error) {
         console.error("Error restoring state:", error);
       }
     }
