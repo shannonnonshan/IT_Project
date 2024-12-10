@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     {{else}}
-                    <div class="d-flex flex-row justify-between">
+                    <div class="d-flex d-flex-row justify-between">
                         <a class="btn btn-light" href="/account/signup">
                             <i class=""></i>
                             Sign up
@@ -66,7 +66,7 @@
                             <li class="nav-item"><a class="bi bi-people-fill nav-link" href="#">Artists</a></li>
                             <li class="nav-item"><a class="bi bi-vinyl nav-link" href="/music/albumrank">Albums</a></li>
                             <li class="nav-item"><a class="bi bi-cloud-arrow-up nav-link"
-                                    href="/music/upload">Upload</a></li>
+                                    href="/account/upload">Upload</a></li>
                             <h5>Your Playlists</h5>
                             <li class="nav-item"><a class="nav-link" href="/music/lovesong">Love</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Your All</a></li>
@@ -91,7 +91,7 @@
                         </button>
 
                     </div>
-                    <div class="card-body display-card">
+                    <div id="content" class="card-body display-card">
                         {{{body}}}
                     </div>
                 </div>
@@ -99,9 +99,9 @@
         </div>
 
         <!-- Footer Music Player -->
-        <div id="footer-music" class="d-flex d-flex-row align-items-center justify-content-between text-light">
-            <div id="music-inf" class="d-flex flex-row align-items-center">
-                <img id="music-cover" src="" alt="Album Cover" class="album-cover me-3">
+        <footer id="footer-music" class="d-flex d-flex-row align-items-center justify-content-between text-light">
+            <div id="music-inf" class="d-flex d-flex-col align-items-center">
+                <img id="music-cover" src="/static/imgs/logo.png" alt="Album Cover" class="album-cover me-3">
                 <div class="title-music me-3">
                     <span id="song-name" class="font-weight-bold text-uppercase"></span><br>
                     <small id="artist-name" class="fontaccount text-uppercase"></small>
@@ -121,9 +121,10 @@
                             <i class=" bi bi-skip-end-fill component-player"></i>
                         </button>
                     </div>
+                   {{!-- <audio id="audio-player" src="/static/songs/1/main.mp3" preload="auto" controls></audio> --}}
                     <div id="progress-bar">
                         <span class="amplitude-current-time">00:00</span>
-                        <input type="range" class="amplitude-song-slider" min="0" max="100" value="0" />
+                        <input type="range" class="amplitude-song-slider" min="0" max="100" value="0" />  
                         <span class="amplitude-duration-time">00:00</span>
                     </div>
                 </div>
@@ -132,8 +133,7 @@
                 <button class="bi bi-heart component-player"></button>
                 <button class="bi bi-list component-player"></button>
             </div>
-
-        </div>
+        </footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.js" crossorigin="anonymous"></script>
@@ -274,13 +274,48 @@
 
             // Update album cover and song name in the HTML
             console.log('Song image:', song.musicImg);
-            document.getElementById('music-cover').src = song.musicImg || 'default_cover.png'; // Ensure valid image URL
+            document.getElementById('music-cover').src = song.musicImg || '/static/imgs/logo.png'; // Ensure valid image URL
             document.getElementById('song-name').innerText = song.songName || 'Unknown Song'; // Update song name
 
             // If available, update artist info too (you can adjust this based on your data)
             document.getElementById('artist-name').innerText = song.artistName || 'Unknown Artist';
         }
     </script>
+    {{!-- <script>
+  const audioPlayer = document.getElementById('audio-player');
+
+  // Hàm lưu trạng thái nhạc vào localStorage
+  function saveAudioState() {
+    if (audioPlayer) {
+      localStorage.setItem('audioTime', audioPlayer.currentTime);
+      localStorage.setItem('isPlaying', audioPlayer.paused ? 'false' : 'true');
+    }
+  }
+
+  // Hàm khôi phục trạng thái nhạc từ localStorage
+  function restoreAudioState() {
+    const savedTime = parseFloat(localStorage.getItem('audioTime')) || 0;
+    const wasPlaying = localStorage.getItem('isPlaying') === 'true';
+
+    audioPlayer.currentTime = savedTime; // Di chuyển đến thời gian lưu trữ
+    if (wasPlaying) {
+      audioPlayer.play();
+    }
+  }
+
+  // Lắng nghe sự kiện để lưu trạng thái khi thay đổi
+  audioPlayer.addEventListener('pause', saveAudioState);
+  audioPlayer.addEventListener('timeupdate', saveAudioState);
+  audioPlayer.addEventListener('play', saveAudioState);
+
+  // Khôi phục trạng thái khi trang load
+  window.addEventListener('load', () => {
+    restoreAudioState();
+  });
+
+  // Optional: Clear trạng thái sau một khoảng thời gian
+  window.addEventListener('beforeunload', saveAudioState);
+</script> --}}
 </body>
 
 </html>
