@@ -1,11 +1,11 @@
-Class: 241PROJ215879E_10FIE
+- Class: 241PROJ215879E_10FIE
 
-ID: 02.
+- ID: 02.
 
-Students:
-- Doan Minh Khanh: 22110042
-- Nguyen Thanh Tinh: 22110077
-- Dinh Thi Thanh Vy: 22110093
+- Students:
+  - Doan Minh Khanh: 22110042
+  - Nguyen Thanh Tinh: 22110077
+  - Dinh Thi Thanh Vy: 22110093
 ---
 
 ## This is SOUNDLAND website 
