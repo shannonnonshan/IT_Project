@@ -74,7 +74,8 @@ router.get('/listsongs', async function (req, res) {
         return {
             ...song, // Thêm toàn bộ thông tin bài hát
             artistName: artist ? artist.ArtistName : "Unknown Artist", // Nghệ sĩ hoặc giá trị mặc định
-            displayIndex: index + 1 // Bắt đầu từ 1
+            displayIndex: index + 1, // Bắt đầu từ 1
+            SongURL: `/music/${song.SongID}.mp3`,
         };
     }));
 
