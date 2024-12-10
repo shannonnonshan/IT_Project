@@ -128,22 +128,6 @@ function restoreState() {
     }
     
   
-// // Cập nhật thông tin bài hát hiện tại
-// function updateSongInfo() {
-//     console.log("Updating song info...");
-
-//     const activeSong = Amplitude.get.activeSong();
-//     if (!activeSong) {
-//         console.error('No active song found!');
-//         return;
-//     }
-
-//     document.getElementById('music-cover').src = activeSong.musicImg || '/static/imgs/logo.png';
-//     document.getElementById('song-name').innerText = activeSong.songName || 'Unknown Song';
-//     document.getElementById('artist-name').innerText = activeSong.artistName || 'Unknown Artist';
-// }
-
-// Lắng nghe các sự kiện lưu trạng thái khi rời khỏi trang
 window.addEventListener('beforeunload', saveState);
 
 document.addEventListener('DOMContentLoaded', () => {
