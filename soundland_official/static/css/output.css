@@ -627,6 +627,10 @@ video {
   margin-bottom: 1.25rem;
 }
 
+.me-2 {
+  margin-inline-end: 0.5rem;
+}
+
 .me-3 {
   margin-inline-end: 0.75rem;
 }
@@ -669,10 +673,6 @@ video {
 
 .mt-\[3\%\] {
   margin-top: 3%;
-}
-
-.me-2 {
-  margin-inline-end: 0.5rem;
 }
 
 .block {

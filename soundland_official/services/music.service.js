@@ -7,7 +7,7 @@ export default {
     findTopSong() {
         return db('songs')
             .orderBy('ReleaseDate', 'desc') // Sắp xếp theo cột `created_at` giảm dần
-            .limit(4); // Lấy 4 bản ghi đầu tiên
+            .limit(10); // Lấy 4 bản ghi đầu tiên
     },
     findSongById(id) {
         return db('songs').where('SongID', id).first();

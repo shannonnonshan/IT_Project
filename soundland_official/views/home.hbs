@@ -1,30 +1,29 @@
-
 {{#section "css"}}
-    <link href="/static/css/homepage.css" rel="stylesheet">
+<link href="/static/css/homepage.css" rel="stylesheet">
 {{/section}}
 <div class="card-homepage mb-5">
     <h1>Top Chart</h1>
     <div class="row ">
         {{#each this.albums}}
-            <div class="col-sm-6">
-                <form action="/music/songs?albumid={{AlbumID}}" method="POST"></form>
-                <a href="/music/album-detail?albumid={{AlbumID}}" class="text-decoration-none">
-                    <div class="card card-top-chart">
-                        <div class="card-body title-music d-flex flex-row">
-                            <img class="img-music-format" src="/static/imgs/images/apt.png" alt="">
-                            <div class="title d-flex flex-column">
-                                <h4 class="card-title">{{AlbumName}}</h4>
-                                <p class="card-text">{{artistName}}</p>
-                            </div>
-                        </div>
-                        <div class="card-footer feature-foot">
-                            <i class="bi bi-plus-circle component-player-add"></i>
-                            <i class="bi bi-shuffle component-player-shuffle"></i>
-                            <i class="bi bi-play-circle-fill component-player-start"></i>
+        <div class="col-sm-6">
+            <form action="/music/songs?albumid={{AlbumID}}" method="POST"></form>
+            <a href="/music/album-detail?albumid={{AlbumID}}" class="text-decoration-none">
+                <div class="card card-top-chart">
+                    <div class="card-body title-music d-flex flex-row">
+                        <img class="img-music-format" src="/static/imgs/images/apt.png" alt="">
+                        <div class="title d-flex flex-column">
+                            <h4 class="card-title">{{AlbumName}}</h4>
+                            <p class="card-text">{{artistName}}</p>
                         </div>
                     </div>
-                </a>
-            </div>
+                    <div class="card-footer feature-foot">
+                        <i class="bi bi-plus-circle component-player-add"></i>
+                        <i class="bi bi-shuffle component-player-shuffle"></i>
+                        <i class="bi bi-play-circle-fill component-player-start"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         {{/each}}
     </div>
@@ -33,13 +32,16 @@
         {{#each this.songs}}
         <div class="col-sm-6">
             <table class="table table-striped">
-                <tr>
+                <tr  data-song-index="{{SongID}}" data-song-name="{{SongName}}" data-artist-name="{{artistName}}"
+                data-album-name="{{AlbumName}}" data-song-url="/static/songs/{{SongID}}/main.mp3"
+                data-cover-url="/static/imgs/song/{{SongID}}/main.jpg" onclick="Amplitude.playNow({{this.SongID}})">
                     <td>
-                        <div class="d-flex align-items-center gap-10" >
+                        <div class="d-flex align-items-center gap-10">
                             <!-- Hình ảnh bên trái -->
-                            <img src="/static/imgs/song/{{SongID}}/main.jpg" alt="{{title}} Cover" class="playlist-cover"
+                            <img src="/static/imgs/song/{{SongID}}/main.jpg" alt="{{title}} Cover"
+                                class="playlist-cover"
                                 style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
-    
+
                             <!-- Thông tin bài hát bên phải -->
                             <div class="font-music">
                                 <p class="album-title" style="margin: 0; font-weight: bold;">{{SongName}}</p>
@@ -55,8 +57,3 @@
 
 
 </div>
-{{#section "script"}}
-    <script>
-        
-    </script>
-{{/section}}

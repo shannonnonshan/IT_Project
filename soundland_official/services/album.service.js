@@ -18,6 +18,13 @@ export default {
         const artist = await db('artists').where('ArtistID', albumArtist.ArtistID).first();
         return artist ? artist.ArtistName : "Unknown Artist";  // Trả về tên nghệ sĩ hoặc giá trị mặc định
     },
-    
+    findTop10NewAlbum() {
+        return db('albums')
+            .orderBy('ReleaseDate', 'desc') // Sắp xếp theo cột `created_at` giảm dần
+            .limit(10); // Lấy 4 bản ghi đầu tiên
+    },
+    addAlbum(entity) {
+        
+    }
 
 };

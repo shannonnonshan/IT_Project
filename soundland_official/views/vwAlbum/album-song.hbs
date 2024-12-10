@@ -33,7 +33,7 @@
         </thead>
         <tbody id="song-list">
             {{#each songs}}
-            <tr class="song-row" data-song-id="{{SongID}}" data-song-index="{{@index}}" data-song-name="{{SongName}}" data-artist-name="{{artistName}}"
+            <tr class="song-row"  data-song-index="{{SongID}}" data-song-name="{{SongName}}" data-artist-name="{{artistName}}"
                 data-album-name="{{AlbumName}}" data-song-url="/static/songs/{{SongID}}/main.mp3"
                 data-cover-url="/static/imgs/song/{{SongID}}/main.jpg" onclick="Amplitude.playNow({{this.SongID}})">
                 <td>{{displayIndex}}</td>
